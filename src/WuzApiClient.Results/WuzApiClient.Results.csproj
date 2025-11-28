@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <PackageId>WuzApiClient.Results</PackageId>
+        <Authors>Perim</Authors>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Include="..\WuzApiClient\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Memory" Version="4.6.3" />
+    </ItemGroup>
+
+</Project>

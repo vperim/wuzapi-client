@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+
+		<PackageId>WuzApiClient</PackageId>
+		<Authors>Perim</Authors>
+		<Description>WuzAPI .NET client library for for .NET Standard 2.0+</Description>
+		<PackageTags>whatsapp;wuzapi;api;client;messaging</PackageTags>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryType>git</RepositoryType>
+		<PackageProjectUrl>https://github.com/vperim/wuzapi-client</PackageProjectUrl>
+	</PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="WuzApiClient.UnitTests" />
+    </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+		<PackageReference Include="System.Text.Json" Version="10.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WuzApiClient.Results\WuzApiClient.Results.csproj" />
+	</ItemGroup>
+
+</Project>

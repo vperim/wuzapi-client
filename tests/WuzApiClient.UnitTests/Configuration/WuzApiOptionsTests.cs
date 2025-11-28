@@ -1,0 +1,124 @@
+using AwesomeAssertions;
+using WuzApiClient.Configuration;
+using WuzApiClient.Exceptions;
+
+namespace WuzApiClient.UnitTests.Configuration;
+
+/// <summary>
+/// Unit tests for <see cref="WuzApiOptions"/> validation and configuration.
+/// </summary>
+[Trait("Category", "Unit")]
+public sealed class WuzApiOptionsTests
+{
+    private readonly WuzApiOptions sut = new();
+
+    [Fact]
+    public void Validate_ValidConfiguration_DoesNotThrow()
+    {
+        this.sut.BaseUrl = "https://api.example.com/";
+        this.sut.UserToken = "valid-token";
+
+        var act = () => this.sut.Validate();
+
+        act.Should().NotThrow();
+    }
+
+    [Theory]
+    [InlineData(null, "BaseUrl is required.")]
+    [InlineData("", "BaseUrl is required.")]
+    [InlineData("   ", "BaseUrl is required.")]
+    public void Validate_InvalidBaseUrl_ThrowsConfigurationException(string? baseUrl, string expectedMessage)
+    {
+        this.sut.BaseUrl = baseUrl!;
+        this.sut.UserToken = "valid-token";
+
+        var act = () => this.sut.Validate();
+
+        act.Should().Throw<WuzApiConfigurationException>()
+            .WithMessage(expectedMessage);
+    }
+
+    [Theory]
+    [InlineData(null, "UserToken is required.")]
+    [InlineData("", "UserToken is required.")]
+    [InlineData("   ", "UserToken is required.")]
+    public void Validate_InvalidUserToken_ThrowsConfigurationException(string? userToken, string expectedMessage)
+    {
+        this.sut.BaseUrl = "https://api.example.com/";
+        this.sut.UserToken = userToken!;
+
+        var act = () => this.sut.Validate();
+
+        act.Should().Throw<WuzApiConfigurationException>()
+            .WithMessage(expectedMessage);
+    }
+
+    [Fact]
+    public void Validate_InvalidBaseUrlFormat_ThrowsConfigurationException()
+    {
+        this.sut.BaseUrl = "not-a-valid-uri";
+        this.sut.UserToken = "valid-token";
+
+        var act = () => this.sut.Validate();
+
+        act.Should().Throw<WuzApiConfigurationException>()
+            .WithMessage("BaseUrl must be a valid absolute URI.");
+    }
+
+    [Fact]
+    public void Validate_NonHttpScheme_ThrowsConfigurationException()
+    {
+        this.sut.BaseUrl = "ftp://files.example.com/";
+        this.sut.UserToken = "valid-token";
+
+        var act = () => this.sut.Validate();
+
+        act.Should().Throw<WuzApiConfigurationException>()
+            .WithMessage("BaseUrl must use http or https scheme.");
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void Validate_NonPositiveTimeout_ThrowsConfigurationException(int timeoutSeconds)
+    {
+        this.sut.BaseUrl = "https://api.example.com/";
+        this.sut.UserToken = "valid-token";
+        this.sut.TimeoutSeconds = timeoutSeconds;
+
+        var act = () => this.sut.Validate();
+
+        act.Should().Throw<WuzApiConfigurationException>()
+            .WithMessage("TimeoutSeconds must be a positive value.");
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(30)]
+    [InlineData(120)]
+    public void Timeout_ReturnsTimeSpanFromSeconds(int seconds)
+    {
+        this.sut.TimeoutSeconds = seconds;
+
+        var result = this.sut.Timeout;
+
+        result.Should().Be(TimeSpan.FromSeconds(seconds));
+    }
+
+    [Fact]
+    public void DefaultValues_AreCorrect()
+    {
+        var options = new WuzApiOptions();
+
+        options.BaseUrl.Should().Be("http://localhost:8080/");
+        options.TimeoutSeconds.Should().Be(30);
+        options.UserToken.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void SectionName_IsWuzApi()
+    {
+        WuzApiOptions.SectionName.Should().Be("WuzApi");
+    }
+}
