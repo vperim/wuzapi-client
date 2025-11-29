@@ -1,5 +1,9 @@
 # WuzAPI Client
 
+[![CI & Publish](https://github.com/vperim/wuzapi-client/actions/workflows/ci.yml/badge.svg)](https://github.com/vperim/wuzapi-client/actions/workflows/ci.yml)
+[![NuGet](https://img.shields.io/nuget/v/WuzApiClient.svg)](https://www.nuget.org/packages/WuzApiClient)
+[![License](https://img.shields.io/github/license/vperim/wuzapi-client)](LICENSE)
+
 > A .NET client library for WhatsApp operations via the WuzAPI gateway, featuring strongly-typed event handling and railway-oriented error handling.
 
 ## 1. What is this?

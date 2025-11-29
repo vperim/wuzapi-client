@@ -23,6 +23,11 @@
     <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
+  <!-- Include LICENSE file in all packages -->
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
   <!-- SourceLink package reference -->
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
