@@ -5,13 +5,11 @@
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
 
+        <!-- Package-specific metadata -->
         <PackageId>WuzApiClient.RabbitMq</PackageId>
-        <Authors>Perim</Authors>
-        <Description>WuzAPI .NET event consumer library for for .NET Standard 2.0+</Description>
-        <PackageTags>whatsapp;wuzapi;api;events;rabbitmq;messaging</PackageTags>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryType>git</RepositoryType>
-        <PackageProjectUrl>https://github.com/vperim/wuzapi-client</PackageProjectUrl>
+        <Description>RabbitMQ event consumer for WuzAPI Client. Provides background service for processing incoming WhatsApp events with strongly-typed event handlers, filtering, and configurable concurrency.</Description>
+        <PackageTags>whatsapp;wuzapi;api;events;rabbitmq;messaging;event-consumer</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,6 +18,10 @@
 
     <ItemGroup>
       <Compile Include="..\WuzApiClient\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
