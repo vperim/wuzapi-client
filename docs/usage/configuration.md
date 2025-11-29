@@ -1,0 +1,485 @@
+# Configuration Reference
+
+Reference for configuring WuzAPI Client HTTP client and RabbitMQ event consumer.
+
+## WuzApiOptions (HTTP Client)
+
+Options for configuring the HTTP client via `AddWuzApiClient()`.
+
+### Properties
+
+| Property | Type | Required | Default | Description |
+|----------|------|----------|---------|-------------|
+| `BaseUrl` | `string` | Yes | - | Base URL of asternic/wuzapi gateway (e.g., `http://localhost:8080`) |
+| `UserToken` | `string` | Yes | - | Authentication token for gateway access |
+| `TimeoutSeconds` | `int` | No | `30` | HTTP request timeout in seconds |
+
+### Basic Configuration
+
+```csharp
+using WuzApiClient.Configuration;
+
+builder.Services.AddWuzApiClient(options =>
+{
+    options.BaseUrl = "http://localhost:8080";
+    options.UserToken = "your-token-here";
+});
+```
+
+### Configuration from appsettings.json
+
+```json
+{
+  "WuzApi": {
+    "BaseUrl": "http://localhost:8080",
+    "UserToken": "your-token-here",
+    "TimeoutSeconds": 45
+  }
+}
+```
+
+```csharp
+builder.Services.AddWuzApiClient(options =>
+{
+    builder.Configuration.GetSection("WuzApi").Bind(options);
+});
+```
+
+### Environment-Specific Configuration
+
+Use environment variables for sensitive values:
+
+```bash
+# .env or system environment
+WUZAPI_BASE_URL=http://localhost:8080
+WUZAPI_USER_TOKEN=your-secure-token
+```
+
+```csharp
+builder.Services.AddWuzApiClient(options =>
+{
+    options.BaseUrl = Environment.GetEnvironmentVariable("WUZAPI_BASE_URL")
+        ?? throw new InvalidOperationException("WUZAPI_BASE_URL not set");
+    options.UserToken = Environment.GetEnvironmentVariable("WUZAPI_USER_TOKEN")
+        ?? throw new InvalidOperationException("WUZAPI_USER_TOKEN not set");
+});
+```
+
+
+## WuzEventOptions (RabbitMQ Consumer)
+
+Options for configuring the RabbitMQ event consumer via `AddWuzEvents()`.
+
+### Properties
+
+#### ConnectionString
+- **Type:** `string`
+- **Required:** Yes
+- **Description:** RabbitMQ connection string in AMQP format (e.g., `amqp://user:pass@host:port/vhost`)
+
+#### QueueName
+- **Type:** `string`
+- **Required:** No
+- **Default:** `whatsapp_events`
+- **Description:** Queue name to consume from
+
+#### ConsumerTagPrefix
+- **Type:** `string`
+- **Required:** No
+- **Default:** `wuzapi-consumer`
+- **Description:** Prefix for consumer tags
+
+#### PrefetchCount
+- **Type:** `ushort`
+- **Required:** No
+- **Default:** `10`
+- **Description:** RabbitMQ prefetch count
+
+#### AutoAck
+- **Type:** `bool`
+- **Required:** No
+- **Default:** `false`
+- **Description:** Automatically acknowledge messages (not recommended for most use cases)
+
+#### MaxReconnectAttempts
+- **Type:** `int`
+- **Required:** No
+- **Default:** `10`
+- **Description:** Maximum number of reconnection attempts
+
+#### ReconnectDelay
+- **Type:** `TimeSpan`
+- **Required:** No
+- **Default:** `3s`
+- **Description:** Delay between reconnection attempts
+
+#### MaxConcurrentMessages
+- **Type:** `int`
+- **Required:** No
+- **Default:** `Environment.ProcessorCount`
+- **Description:** Number of messages to process concurrently (1 = sequential)
+
+#### SubscribedEventTypes
+- **Type:** `HashSet<string>`
+- **Required:** No
+- **Default:** `[]` (all)
+- **Description:** Event types to subscribe to (empty = all events)
+
+#### FilterUserIds
+- **Type:** `HashSet<string>`
+- **Required:** No
+- **Default:** `[]` (all)
+- **Description:** User IDs to filter events for (empty = all users)
+
+#### FilterInstanceNames
+- **Type:** `HashSet<string>`
+- **Required:** No
+- **Default:** `[]` (all)
+- **Description:** Instance names to filter events for (empty = all instances)
+
+### Basic Configuration
+
+```csharp
+using WuzApiClient.Events.Configuration;
+
+builder.Services.AddWuzEvents(options =>
+{
+    options.ConnectionString = "amqp://guest:guest@localhost:5672/";
+    options.QueueName = "wuzapi-events";
+});
+```
+
+### Configuration from appsettings.json
+
+```json
+{
+  "WuzEvents": {
+    "ConnectionString": "amqp://wuzapi-consumer:secure-password@rabbitmq.example.com:5672/wuzapi",
+    "QueueName": "wuzapi-events",
+    "ConsumerTagPrefix": "wuzapi-consumer",
+    "MaxConcurrentMessages": 1,
+    "PrefetchCount": 10,
+    "AutoAck": false,
+    "MaxReconnectAttempts": 10,
+    "ReconnectDelay": "00:00:03",
+    "SubscribedEventTypes": [],
+    "FilterUserIds": [],
+    "FilterInstanceNames": []
+  }
+}
+```
+
+```csharp
+builder.Services.AddWuzEvents(options =>
+{
+    builder.Configuration.GetSection("WuzEvents").Bind(options);
+});
+```
+
+### Environment-Specific Configuration
+
+```bash
+# Development
+RABBITMQ_CONNECTION_STRING=amqp://guest:guest@localhost:5672/
+
+# Production
+RABBITMQ_CONNECTION_STRING=amqp://wuzapi-prod:<secure-password>@rabbitmq-prod.internal:5672/
+```
+
+```csharp
+builder.Services.AddWuzEvents(options =>
+{
+    options.ConnectionString = Environment.GetEnvironmentVariable("RABBITMQ_CONNECTION_STRING")
+        ?? "amqp://guest:guest@localhost:5672/";
+    options.QueueName = "wuzapi-events";
+});
+```
+
+## Configuration Best Practices
+
+### 1. Never Hardcode Secrets
+
+❌ **Bad:**
+```csharp
+options.UserToken = "hardcoded-token-123"; // Never do this!
+```
+
+✅ **Good:**
+```csharp
+options.UserToken = builder.Configuration["WuzApi:UserToken"]
+    ?? throw new InvalidOperationException("Token not configured");
+```
+
+### 2. Use Configuration Providers
+
+ASP.NET Core supports multiple configuration sources in priority order:
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+// Priority (last wins):
+// 1. appsettings.json
+// 2. appsettings.{Environment}.json
+// 3. User secrets (development only)
+// 4. Environment variables
+// 5. Command-line arguments
+
+builder.Configuration
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables()
+    .AddCommandLine(args);
+```
+
+See [ASP.NET Core Configuration](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) for details.
+
+### 3. Validate Configuration
+
+Use options validation:
+
+```csharp
+builder.Services.AddWuzApiClient(options =>
+{
+    builder.Configuration.GetSection("WuzApi").Bind(options);
+})
+.Validate(options =>
+{
+    return !string.IsNullOrEmpty(options.BaseUrl)
+        && !string.IsNullOrEmpty(options.UserToken);
+}, "BaseUrl and UserToken are required");
+```
+
+Or use data annotations:
+
+```csharp
+public sealed class WuzApiOptions
+{
+    [Required]
+    [Url]
+    public string BaseUrl { get; set; }
+
+    [Required]
+    public string UserToken { get; set; }
+}
+```
+
+### 4. Separate by Environment
+
+Use different configuration files per environment:
+
+```
+appsettings.json                   # Defaults
+appsettings.Development.json       # Dev overrides
+appsettings.Staging.json           # Staging overrides
+appsettings.Production.json        # Production overrides
+```
+
+### 5. Use User Secrets in Development
+
+For local development, use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets):
+
+```bash
+dotnet user-secrets init
+dotnet user-secrets set "WuzApi:UserToken" "dev-token-123"
+dotnet user-secrets set "WuzEvents:ConnectionString" "amqp://guest:guest@localhost:5672/"
+```
+
+## Concurrency Configuration
+
+### Sequential Processing
+
+```csharp
+builder.Services.AddWuzEvents(options =>
+{
+    options.MaxConcurrentMessages = 1; // Process one at a time
+});
+```
+
+**Use when:**
+- Message order must be preserved
+- Events have dependencies
+- Shared state requires synchronization
+
+### Parallel Processing (Default)
+
+```csharp
+builder.Services.AddWuzEvents(options =>
+{
+    // Default is Environment.ProcessorCount
+    options.MaxConcurrentMessages = 10; // Process up to 10 in parallel
+    options.PrefetchCount = 20;         // Fetch 20 messages ahead
+});
+```
+
+**Use when:**
+- Events are independent
+- High throughput required
+- Processing is I/O bound
+
+> **Warning:** `MaxConcurrentMessages > 1` breaks message ordering guarantees. Messages may be processed out of order.
+
+### Calculating MaxConcurrentMessages
+
+Formula: `MaxConcurrentMessages = CPU_Cores * 2` (for I/O bound workloads)
+
+Example for 4-core machine:
+```csharp
+options.MaxConcurrentMessages = 8; // 4 cores * 2
+```
+
+Monitor CPU and adjust based on actual load.
+
+## Connection Resilience
+
+### Reconnection Configuration
+
+```csharp
+builder.Services.AddWuzEvents(options =>
+{
+    options.MaxReconnectAttempts = 10;  // Maximum reconnection attempts
+    options.ReconnectDelay = TimeSpan.FromSeconds(3); // Wait between attempts
+});
+```
+
+### Custom Error Handling
+
+Implement `IEventErrorHandler` for custom error handling logic:
+
+```csharp
+public sealed class CustomErrorHandler : IEventErrorHandler
+{
+    private readonly ILogger<CustomErrorHandler> logger;
+
+    public CustomErrorHandler(ILogger<CustomErrorHandler> logger)
+    {
+        this.logger = logger;
+    }
+
+    public async Task HandleErrorAsync(
+        WuzEvent evt,
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        if (exception is BrokerUnreachableException)
+        {
+            this.logger.LogWarning("RabbitMQ unreachable, connection will retry automatically");
+            await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
+        }
+        else
+        {
+            this.logger.LogError(
+                exception,
+                "Error processing event {EventType} for {UserId}/{InstanceName}",
+                evt.Type,
+                evt.UserId,
+                evt.InstanceName);
+        }
+    }
+}
+```
+
+## Health Checks
+
+To monitor RabbitMQ connection health, manually register the health check:
+
+```csharp
+builder.Services.AddWuzEvents(options => { ... });
+
+// Manually add the WuzEvents health check
+builder.Services.AddHealthChecks()
+    .AddWuzEventsHealthCheck(); // Default name: "wuzevents-rabbitmq"
+
+// Add health check endpoint
+app.MapHealthChecks("/health");
+```
+
+Custom health check configuration:
+
+```csharp
+builder.Services.AddHealthChecks()
+    .AddWuzEventsHealthCheck(
+        name: "rabbitmq",
+        tags: "messaging", "rabbitmq");
+```
+
+See [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks) for details.
+
+## Example Configurations
+
+### Development Environment
+
+```json
+{
+  "WuzApi": {
+    "BaseUrl": "http://localhost:8080",
+    "UserToken": "dev-token",
+    "TimeoutSeconds": 30
+  },
+  "WuzEvents": {
+    "ConnectionString": "amqp://guest:guest@localhost:5672/",
+    "QueueName": "wuzapi-events-dev",
+    "MaxConcurrentMessages": 1
+  }
+}
+```
+
+### Production Environment
+
+```json
+{
+  "WuzApi": {
+    "BaseUrl": "https://wuzapi-gateway.production.internal",
+    "UserToken": null,  // From secure configuration provider
+    "TimeoutSeconds": 60
+  },
+  "WuzEvents": {
+    "ConnectionString": null,  // From secure configuration provider (e.g., amqp://user:pass@rabbitmq-cluster.production.internal:5672/production)
+    "QueueName": "wuzapi-events",
+    "ConsumerTagPrefix": "wuzapi-consumer",
+    "MaxConcurrentMessages": 10,
+    "PrefetchCount": 20,
+    "AutoAck": false,
+    "MaxReconnectAttempts": 10,
+    "ReconnectDelay": "00:00:03",
+    "SubscribedEventTypes": [],
+    "FilterUserIds": [],
+    "FilterInstanceNames": []
+  }
+}
+```
+
+## Troubleshooting
+
+### Configuration Not Loaded
+
+**Problem:** Options have default/null values
+
+**Solutions:**
+1. Verify section name matches: `builder.Configuration.GetSection("WuzApi")`
+2. Check file is copied to output: Set `appsettings.json` → `Copy if newer`
+3. Inspect loaded configuration: `builder.Configuration.GetDebugView()`
+
+### Connection Refused
+
+**Problem:** Cannot connect to RabbitMQ
+
+**Solutions:**
+1. Verify `ConnectionString` is in correct AMQP format: `amqp://user:pass@host:port/vhost`
+2. Check network connectivity: `telnet <hostname> 5672`
+3. Verify credentials in connection string
+4. Check firewall rules
+
+### Token Authentication Failed
+
+**Problem:** HTTP 401 Unauthorized from WuzAPI gateway
+
+**Solutions:**
+1. Verify `UserToken` matches gateway configuration
+2. Check token is not empty or whitespace
+3. Verify gateway is running and accessible
+
+## Next Steps
+
+- **Handle Events** → [Event Handling Guide](event-handling.md)
+- **Error Handling** → [Error Handling Guide](error-handling.md)
+

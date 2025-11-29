@@ -370,7 +370,7 @@ The dashboard supports all 44 event types from WhatsApp/wuzapi:
 
 **System (17):** Picture, HistorySync, AppState, AppStateSyncComplete, OfflineSyncCompleted, OfflineSyncPreview, PrivacySettings, PushNameSetting, BlocklistChange, Blocklist, IdentityChange, NewsletterJoin, NewsletterLeave, NewsletterMuteChange, NewsletterLiveUpdate, MediaRetry, UserAbout
 
-For detailed information on each event type, see the [Event Dashboard Proposal](../../docs/dev-guide/event-dashboard-proposal.md#8-supported-event-types).
+For detailed information on each event type, see the [Event Types Reference](../../docs/api/event-types-reference.md).
 
 ## Performance
 
@@ -381,7 +381,7 @@ For detailed information on each event type, see the [Event Dashboard Proposal](
 
 ## References
 
-- **Event Dashboard Proposal:** [../../docs/dev-guide/event-dashboard-proposal.md](../../docs/dev-guide/event-dashboard-proposal.md)
+- **Event Types Reference:** [../../docs/api/event-types-reference.md](../../docs/api/event-types-reference.md)
 - **Blazor Documentation:** [ASP.NET Core Blazor](https://learn.microsoft.com/en-us/aspnet/core/blazor/)
 - **WuzApiClient.RabbitMq:** [../../src/WuzApiClient.RabbitMq/README.md](../../src/WuzApiClient.RabbitMq/README.md)
 - **Docker:** [Building .NET Docker Images](https://learn.microsoft.com/en-us/aspnet/core/host-and-deploy/docker/building-net-docker-images)
