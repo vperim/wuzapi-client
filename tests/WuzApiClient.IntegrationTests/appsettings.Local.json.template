@@ -1,0 +1,13 @@
+{
+  "TestData": {
+    "TestPhoneNumber": "YOUR_PHONE_NUMBER_HERE"
+  },
+  "Container": {
+    "ImageTag": "asternic/wuzapi:latest",
+    "VolumeName": "wuzapi-integration-test-session",
+    "AdminToken": "integration-test-admin-token",
+    "UserToken": "integration-test-user-token",
+    "UserName": "IntegrationTestUser",
+    "HealthCheckTimeoutSeconds": 30
+  }
+}

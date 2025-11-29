@@ -11,6 +11,7 @@ namespace WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 public sealed class WuzApiIntegrationFixture : IAsyncLifetime
 {
     private ServiceProvider? serviceProvider;
+    private WuzApiTestContainer? container;
 
     /// <summary>
     /// Gets the configuration root.
@@ -27,27 +28,51 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
     /// </summary>
     public IWuzApiAdminClient AdminClient { get; private set; } = null!;
 
+    /// <summary>
+    /// Gets the wuzapi test container.
+    /// </summary>
+    public WuzApiTestContainer Container => this.container ?? throw new InvalidOperationException("Container not initialized");
+
     /// <inheritdoc/>
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
+        // Load order: appsettings.json -> env vars -> appsettings.Local.json (highest priority)
         this.Configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false)
             .AddEnvironmentVariables()
+            .AddJsonFile("appsettings.Local.json", optional: true)
             .Build();
 
+        // Initialize container
+        this.container = new WuzApiTestContainer(this.Configuration);
+        await this.container.InitializeAsync();
+
+        // Configure services to use container URL
         var services = new ServiceCollection();
 
         services.AddSingleton(this.Configuration);
-        services.AddWuzApiClient(this.Configuration);
-        services.AddWuzApiAdminClient(this.Configuration);
+
+        // Override WuzApi configuration with container URL and token
+        services.AddWuzApiClient(options =>
+        {
+            options.BaseUrl = this.container.BaseUrl;
+            options.UserToken = this.container.UserToken;
+            options.TimeoutSeconds = this.Configuration.GetValue<int>("WuzApi:TimeoutSeconds", 60);
+        });
+
+        // Override WuzApiAdmin configuration with container URL and token
+        services.AddWuzApiAdminClient(options =>
+        {
+            options.BaseUrl = this.container.BaseUrl;
+            options.AdminToken = this.container.AdminToken;
+            options.TimeoutSeconds = this.Configuration.GetValue<int>("WuzApiAdmin:TimeoutSeconds", 60);
+        });
 
         this.serviceProvider = services.BuildServiceProvider();
 
         this.Client = this.serviceProvider.GetRequiredService<IWuzApiClient>();
         this.AdminClient = this.serviceProvider.GetRequiredService<IWuzApiAdminClient>();
-
-        return Task.CompletedTask;
     }
 
     /// <inheritdoc/>
@@ -56,6 +81,11 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
         if (this.serviceProvider is not null)
         {
             await this.serviceProvider.DisposeAsync();
+        }
+
+        if (this.container is not null)
+        {
+            await this.container.DisposeAsync();
         }
     }
 }

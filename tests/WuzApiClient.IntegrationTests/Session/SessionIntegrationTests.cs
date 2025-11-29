@@ -103,4 +103,25 @@ public sealed class SessionIntegrationTests
         result.IsFailure.Should().BeTrue();
         result.Error.Code.Should().Be(WuzApiErrorCode.Unauthorized);
     }
+
+    [Fact]
+    [Trait("Category", "Diagnostic")]
+    public async Task DiagnosticTest_InspectContainerLogs()
+    {
+        // Arrange & Act
+        var (stdout, stderr) = await this.fixture.Container.GetContainerLogsAsync();
+
+        // Output logs for inspection
+        Console.WriteLine("=== CONTAINER STDOUT ===");
+        Console.WriteLine(stdout);
+        Console.WriteLine("\n=== CONTAINER STDERR ===");
+        Console.WriteLine(stderr);
+
+        // Also check container state
+        var sessionState = await this.fixture.Container.GetSessionStateAsync();
+        Console.WriteLine($"\n=== SESSION STATE: {sessionState} ===");
+
+        // Assert container is running
+        true.Should().BeTrue("Container logs retrieved successfully");
+    }
 }

@@ -25,8 +25,8 @@ public static class TestConfiguration
         ?? throw new InvalidOperationException("TestData:TestPhoneNumber is not configured.");
 
     /// <summary>
-    /// Gets the test group ID from configuration.
+    /// Gets the test group ID from configuration, if configured.
+    /// Returns null if not configured - tests will auto-create a group.
     /// </summary>
-    public static string TestGroupId => Configuration["TestData:TestGroupId"]
-        ?? throw new InvalidOperationException("TestData:TestGroupId is not configured.");
+    public static string? TestGroupId => Configuration["TestData:TestGroupId"];
 }
