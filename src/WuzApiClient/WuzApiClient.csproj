@@ -5,18 +5,20 @@
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 
+		<!-- Package-specific metadata -->
 		<PackageId>WuzApiClient</PackageId>
-		<Authors>Perim</Authors>
-		<Description>WuzAPI .NET client library for for .NET Standard 2.0+</Description>
-		<PackageTags>whatsapp;wuzapi;api;client;messaging</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<RepositoryType>git</RepositoryType>
-		<PackageProjectUrl>https://github.com/vperim/wuzapi-client</PackageProjectUrl>
+		<Description>A .NET client library for WhatsApp operations via the WuzAPI gateway. Provides strongly-typed HTTP client for sending messages, managing contacts, groups, and channels with railway-oriented error handling.</Description>
+		<PackageTags>whatsapp;wuzapi;api;client;messaging;http</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
     <ItemGroup>
         <InternalsVisibleTo Include="WuzApiClient.UnitTests" />
     </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0" />

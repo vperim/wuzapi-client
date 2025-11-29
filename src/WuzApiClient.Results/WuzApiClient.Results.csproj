@@ -5,12 +5,19 @@
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
 
+        <!-- Package-specific metadata -->
         <PackageId>WuzApiClient.Results</PackageId>
-        <Authors>Perim</Authors>
+        <Description>Railway-oriented programming Result pattern library for WuzAPI Client. Provides WuzResult monad for explicit error handling without exceptions.</Description>
+        <PackageTags>result;result-pattern;railway-oriented;error-handling;functional</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
       <Compile Include="..\WuzApiClient\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

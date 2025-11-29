@@ -1,0 +1,30 @@
+<Project>
+  <PropertyGroup>
+    <!-- Common package metadata -->
+    <Authors>Perim</Authors>
+    <Copyright>Copyright © 2025 Perim</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/vperim/wuzapi-client</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vperim/wuzapi-client.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- SourceLink support for source debugging -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <!-- Generate XML documentation for IntelliSense -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Disable missing XML comment warnings -->
+
+    <!-- Deterministic builds -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- SourceLink package reference -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+</Project>
