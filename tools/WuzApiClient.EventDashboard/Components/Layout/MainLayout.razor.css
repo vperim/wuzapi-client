@@ -1,0 +1,26 @@
+.page {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-row {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    justify-content: space-between;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.content {
+    padding-top: 1.1rem;
+    padding-bottom: 1.5rem;
+}

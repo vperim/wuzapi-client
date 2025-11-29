@@ -46,6 +46,11 @@ public sealed class WuzEventJsonConverter : JsonConverter<WuzEvent>
             ? instanceElement.GetString() ?? string.Empty
             : string.Empty;
 
+        // Get state from root (used by ReadReceipt events)
+        var state = root.TryGetProperty("state", out var stateElement)
+            ? stateElement.GetString()
+            : null;
+
         // Map event type string to concrete event class
         var targetType = eventType switch
         {
@@ -156,6 +161,19 @@ public sealed class WuzEventJsonConverter : JsonConverter<WuzEvent>
         var clonedEventDoc = JsonDocument.Parse(eventElement.GetRawText());
 
         // Use 'with' expression to set base properties from root
+        // For ReceiptEvent, also set State from root level
+        if (eventObj is ReceiptEvent receiptEvent)
+        {
+            return receiptEvent with
+            {
+                Type = eventType,
+                UserId = userId,
+                InstanceName = instanceName,
+                RawEvent = clonedEventDoc.RootElement,
+                State = state
+            };
+        }
+
         return eventObj with
         {
             Type = eventType,

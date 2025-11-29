@@ -1,0 +1,13 @@
+# File location: Repository root
+# This file must be at the repository root because docker-compose build context is set to ../..
+
+**/.git
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/node_modules
+**/*.md
+**/tests
+**/.editorconfig
+**/.obsidian

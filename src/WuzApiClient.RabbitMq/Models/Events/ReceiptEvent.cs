@@ -51,7 +51,7 @@ public sealed record ReceiptEvent : WuzEvent
     public DateTimeOffset? Timestamp { get; init; }
 
     /// <summary>
-    /// Gets the receipt type from whatsmeow.
+    /// Gets the receipt type from whatsmeow (e.g., "read", "played").
     /// </summary>
     [JsonPropertyName("Type")]
     public string? ReceiptType { get; init; }
@@ -66,7 +66,9 @@ public sealed record ReceiptEvent : WuzEvent
 
     /// <summary>
     /// Gets the receipt state (added by wuzapi: "Read", "ReadSelf", "Delivered").
+    /// Note: This field is at the root level in wuzapi JSON, not inside the event object.
+    /// It's set by the WuzEventJsonConverter.
     /// </summary>
-    [JsonPropertyName("state")]
+    [JsonIgnore]
     public string? State { get; init; }
 }

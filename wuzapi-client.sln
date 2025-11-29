@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuzApiClient.RabbitMq.UnitT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuzApiClient.IntegrationTests", "tests\WuzApiClient.IntegrationTests\WuzApiClient.IntegrationTests.csproj", "{8789F920-F2F0-48A2-9227-A3FFCF1BC222}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{E8A4D2F7-9B3C-4E1A-8F6D-2C5B7D8E9F0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WuzApiClient.EventDashboard", "tools\WuzApiClient.EventDashboard\WuzApiClient.EventDashboard.csproj", "{FCACE0D0-0D39-430A-B0E1-B353CCAE787E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +58,10 @@ Global
 		{8789F920-F2F0-48A2-9227-A3FFCF1BC222}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8789F920-F2F0-48A2-9227-A3FFCF1BC222}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8789F920-F2F0-48A2-9227-A3FFCF1BC222}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCACE0D0-0D39-430A-B0E1-B353CCAE787E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCACE0D0-0D39-430A-B0E1-B353CCAE787E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCACE0D0-0D39-430A-B0E1-B353CCAE787E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCACE0D0-0D39-430A-B0E1-B353CCAE787E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

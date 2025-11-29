@@ -1,0 +1,112 @@
+@page "/"
+@using WuzApiClient.EventDashboard.Models
+@using WuzApiClient.EventDashboard.Components.Shared
+@implements IDisposable
+@inject IEventStreamService EventStream
+@rendermode InteractiveServer
+
+<PageTitle>WuzAPI Event Dashboard</PageTitle>
+
+<div class="dashboard">
+    <!-- Connection Status Bar -->
+    <div class="status-bar @(EventStream.IsConnected ? "connected" : "disconnected")">
+        <span class="status-indicator"></span>
+        @if (EventStream.IsConnected)
+        {
+            <span>Connected to RabbitMQ</span>
+        }
+        else
+        {
+            <span>Disconnected: @(EventStream.ConnectionError ?? "Unknown")</span>
+        }
+        <span class="event-count-pill">@totalEvents recent events</span>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="dashboard-controls">
+        <div class="category-filters">
+            @foreach (var category in Enum.GetValues<EventCategory>())
+            {
+                var isActive = activeCategories.Contains(category);
+                <button type="button"
+                        class="category-chip @(isActive ? "active" : "")"
+                        @onclick="() => ToggleCategory(category)">
+                    @category
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Event Feed -->
+    <div class="event-feed">
+        @foreach (var entry in FilteredEvents)
+        {
+            <div @key="entry.Id" class="event-card @entry.Category.ToString().ToLowerInvariant()">
+                <div class="event-header">
+                    <div class="event-header-left">
+                        <span class="event-type">@entry.EventType</span>
+                        <span class="event-category-pill @entry.Category.ToString().ToLowerInvariant()">
+                            @entry.Category
+                        </span>
+                    </div>
+                    <span class="event-time">@entry.Timestamp.ToLocalTime().ToString("HH:mm:ss.fff")</span>
+                </div>
+                <div class="event-meta">
+                    <span title="User">@entry.UserId</span>
+                    <span title="Instance">@entry.InstanceName</span>
+                    @if (!string.IsNullOrEmpty(entry.Error))
+                    {
+                        <span class="event-error">Error: @entry.Error</span>
+                    }
+                </div>
+                @if (entry.Event?.Type == "Message")
+                {
+                    <MessagePreview Event="entry.Event" />
+                }
+                <details class="event-details">
+                    <summary>Raw JSON</summary>
+                    <pre><code>@entry.RawJson</code></pre>
+                </details>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private HashSet<EventCategory> activeCategories = new(Enum.GetValues<EventCategory>());
+    private int totalEvents => EventStream.RecentEvents.Count;
+
+    protected override void OnInitialized()
+    {
+        EventStream.OnEventsChanged += HandleStateChanged;
+        EventStream.OnConnectionStateChanged += HandleStateChanged;
+    }
+
+    // CRITICAL: Marshal to Blazor circuit thread via InvokeAsync
+    private void HandleStateChanged() => InvokeAsync(StateHasChanged);
+
+    private IEnumerable<EventEntry> FilteredEvents =>
+        EventStream.RecentEvents.Where(e => activeCategories.Contains(e.Category))
+                                .Reverse();
+
+    private void ToggleCategory(EventCategory category)
+    {
+        if (!activeCategories.Add(category))
+        {
+            activeCategories.Remove(category);
+        }
+
+        // Ensure we never end up with zero active categories (optional behavior)
+        if (activeCategories.Count == 0)
+        {
+            foreach (var c in Enum.GetValues<EventCategory>())
+                activeCategories.Add(c);
+        }
+    }
+
+    public void Dispose()
+    {
+        EventStream.OnEventsChanged -= HandleStateChanged;
+        EventStream.OnConnectionStateChanged -= HandleStateChanged;
+    }
+}

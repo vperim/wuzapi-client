@@ -1,0 +1,63 @@
+# docker-compose.yml (for local development)
+x-logging: &logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+
+services:
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging: *logging
+    networks:
+      - dashboard-network
+
+  wuzapi:
+    image: asternic/wuzapi:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - wuzapi-session:/app/dbdata
+    environment:
+      WUZAPI_ADMIN_TOKEN: admin123
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    logging: *logging
+    networks:
+      - dashboard-network
+
+  event-dashboard:
+    build:
+      context: ../..
+      dockerfile: tools/WuzApiClient.EventDashboard/Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      TZ: "America/Sao_Paulo"
+      WuzEvents__ConnectionString: "amqp://guest:guest@rabbitmq:5672/"
+      WuzEvents__QueueName: "whatsapp_events"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    logging: *logging
+    networks:
+      - dashboard-network
+
+volumes:
+  wuzapi-session:
+
+networks:
+  dashboard-network:
+    driver: bridge

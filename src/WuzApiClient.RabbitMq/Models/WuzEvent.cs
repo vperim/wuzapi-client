@@ -11,8 +11,10 @@ public abstract record WuzEvent
 {
     /// <summary>
     /// Gets the event type identifier.
+    /// Note: Ignored during deserialization to avoid collision with derived class properties
+    /// that also use "type"/"Type" JSON names. Always set via converter.
     /// </summary>
-    [JsonPropertyName("type")]
+    [JsonIgnore]
     public string Type { get; init; } = string.Empty;
 
     /// <summary>

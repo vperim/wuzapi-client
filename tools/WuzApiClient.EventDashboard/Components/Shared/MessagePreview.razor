@@ -1,0 +1,31 @@
+@using WuzApiClient.EventDashboard.Helpers
+@using WuzApiClient.EventDashboard.Models
+@using WuzApiClient.RabbitMq.Models
+
+@* Displays essential message info without expanding JSON *@
+
+<div class="message-preview">
+    <div class="preview-sender @DirectionClass">
+        <span class="direction-arrow">@DirectionArrow</span>
+        <span class="sender-name">@SenderName</span>
+        <span class="sender-phone">@FormattedPhone</span>
+    </div>
+    <div class="preview-content @Preview.CssClass">
+        @Preview.Text
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public WuzEvent Event { get; set; } = default!;
+
+    private MessagePreviewResult Preview => MessageContentExtractor.CreatePreview(Event);
+
+    private (bool IsFromMe, string? PushName, string? SenderJid) SenderInfo =>
+        MessageContentExtractor.ExtractSenderInfo(Event);
+
+    private string DirectionClass => SenderInfo.IsFromMe ? "sent" : "received";
+    private string DirectionArrow => SenderInfo.IsFromMe ? "→" : "←";
+    private string SenderName => SenderInfo.PushName ?? "Unknown";
+    private string FormattedPhone => PhoneNumberFormatter.Format(SenderInfo.SenderJid);
+}
