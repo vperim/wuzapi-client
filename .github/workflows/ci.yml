@@ -1,0 +1,166 @@
+name: CI & Publish
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'          # 1.0.0
+      - '[0-9]+.[0-9]+.[0-9]+-*'        # 1.0.0-beta.1
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  NUGET_DIRECTORY: ${{ github.workspace }}/nuget
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release)
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test (Unit Tests only)
+        run: |
+          dotnet test tests/WuzApiClient.UnitTests/WuzApiClient.UnitTests.csproj \
+            --configuration Release \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
+
+          dotnet test tests/WuzApiClient.RabbitMq.UnitTests/WuzApiClient.RabbitMq.UnitTests.csproj \
+            --configuration Release \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
+
+      - name: Publish coverage summary
+        if: always()
+        run: |
+          echo "## Test Coverage" >> $GITHUB_STEP_SUMMARY
+          COVERAGE_FILE=$(find TestResults -name 'coverage.cobertura.xml' | head -n 1 || true)
+          if [ -n "$COVERAGE_FILE" ]; then
+            echo "Coverage file: $COVERAGE_FILE" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No coverage file found." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+
+  publish:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    needs: build_and_test
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+
+          # Validate semver format
+          if [[ ! "$VERSION" =~ ^[0-9]+(\.[0-9]+){2}(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "Tag '${VERSION}' is not valid semver (MAJOR.MINOR.PATCH[-prerelease][+build])." >&2
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION"
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet packages
+        run: |
+          mkdir -p ${{ env.NUGET_DIRECTORY }}
+
+          dotnet pack src/WuzApiClient/WuzApiClient.csproj \
+            --configuration Release \
+            --no-build \
+            --output ${{ env.NUGET_DIRECTORY }} \
+            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            -p:ContinuousIntegrationBuild=true
+
+          dotnet pack src/WuzApiClient.RabbitMq/WuzApiClient.RabbitMq.csproj \
+            --configuration Release \
+            --no-build \
+            --output ${{ env.NUGET_DIRECTORY }} \
+            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            -p:ContinuousIntegrationBuild=true
+
+          dotnet pack src/WuzApiClient.Results/WuzApiClient.Results.csproj \
+            --configuration Release \
+            --no-build \
+            --output ${{ env.NUGET_DIRECTORY }} \
+            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            -p:ContinuousIntegrationBuild=true
+
+      - name: List created packages
+        run: |
+          echo "Created packages:"
+          ls -lah ${{ env.NUGET_DIRECTORY }}
+
+      - name: Push to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push "${{ env.NUGET_DIRECTORY }}/*.nupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --skip-duplicate
+
+          dotnet nuget push "${{ env.NUGET_DIRECTORY }}/*.snupkg" \
+            --api-key "$NUGET_API_KEY" \
+            --source "https://api.nuget.org/v3/index.json" \
+            --skip-duplicate || true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages-${{ steps.version.outputs.VERSION }}
+          path: ${{ env.NUGET_DIRECTORY }}/*
+          retention-days: 30
