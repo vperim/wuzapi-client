@@ -206,6 +206,98 @@ var result = await client.SendImageAsync(request);
 
 ---
 
+#### SendImageFromFileAsync
+
+Sends an image message from a local file.
+
+```csharp
+Task<WuzResult<SendMessageResponse>> SendImageFromFileAsync(
+    Phone phone,
+    string filePath,
+    string? caption = null,
+    string? quotedId = null,
+    CancellationToken cancellationToken = default)
+```
+
+**Parameters:**
+- `phone` - The recipient phone number
+- `filePath` - Path to the image file
+- `caption` - Optional caption
+- `quotedId` - Optional message ID to reply to
+- `cancellationToken` - Cancellation token
+
+**Returns:** `WuzResult<SendMessageResponse>` containing send response or error
+
+**Example:**
+```csharp
+var phone = new Phone("5511999999999");
+var result = await client.SendImageFromFileAsync(
+    phone,
+    "path/to/image.jpg",
+    caption: "Check this out!");
+
+if (result.IsSuccess)
+{
+    Console.WriteLine($"Image sent: {result.Value.MessageId}");
+}
+```
+
+**Notes:**
+- MIME type is auto-detected from file extension
+- File size limited to 16 MB for images
+- Supported formats: JPG, PNG, GIF, WEBP
+
+---
+
+#### SendImageFromStreamAsync
+
+Sends an image message from a stream.
+
+```csharp
+Task<WuzResult<SendMessageResponse>> SendImageFromStreamAsync(
+    Phone phone,
+    Stream imageStream,
+    string? mimeType = null,
+    string? caption = null,
+    string? quotedId = null,
+    CancellationToken cancellationToken = default)
+```
+
+**Parameters:**
+- `phone` - The recipient phone number
+- `imageStream` - Stream containing the image data
+- `mimeType` - MIME type (e.g., "image/png"). Defaults to "image/jpeg" if null
+- `caption` - Optional caption
+- `quotedId` - Optional message ID to reply to
+- `cancellationToken` - Cancellation token
+
+**Returns:** `WuzResult<SendMessageResponse>` containing send response or error
+
+**Example:**
+```csharp
+var phone = new Phone("5511999999999");
+using var stream = File.OpenRead("image.png");
+
+var result = await client.SendImageFromStreamAsync(
+    phone,
+    stream,
+    mimeType: "image/png",
+    caption: "Here's the image!");
+
+if (result.IsSuccess)
+{
+    Console.WriteLine($"Image sent: {result.Value.MessageId}");
+}
+```
+
+**Notes:**
+- Caller is responsible for disposing the stream
+- Stream size limited to 16 MB for images
+- For seekable streams, original position is restored after reading
+- For non-seekable streams, reads from current position to EOF
+
+---
+
 #### SendDocumentAsync
 
 Sends a document.
@@ -221,6 +313,101 @@ Task<WuzResult<SendMessageResponse>> SendDocumentAsync(
 - `cancellationToken` - Cancellation token
 
 **Returns:** `WuzResult<SendMessageResponse>` containing send response or error
+
+---
+
+#### SendDocumentFromFileAsync
+
+Sends a document message from a local file.
+
+```csharp
+Task<WuzResult<SendMessageResponse>> SendDocumentFromFileAsync(
+    Phone phone,
+    string filePath,
+    string? caption = null,
+    string? quotedId = null,
+    CancellationToken cancellationToken = default)
+```
+
+**Parameters:**
+- `phone` - The recipient phone number
+- `filePath` - Path to the document file
+- `caption` - Optional caption
+- `quotedId` - Optional message ID to reply to
+- `cancellationToken` - Cancellation token
+
+**Returns:** `WuzResult<SendMessageResponse>` containing send response or error
+
+**Example:**
+```csharp
+var phone = new Phone("5511999999999");
+var result = await client.SendDocumentFromFileAsync(
+    phone,
+    "path/to/document.pdf",
+    caption: "Here's the report");
+
+if (result.IsSuccess)
+{
+    Console.WriteLine($"Document sent: {result.Value.MessageId}");
+}
+```
+
+**Notes:**
+- MIME type is auto-detected from file extension
+- File size limited to 100 MB for documents
+- Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, and more
+
+---
+
+#### SendDocumentFromStreamAsync
+
+Sends a document message from a stream.
+
+```csharp
+Task<WuzResult<SendMessageResponse>> SendDocumentFromStreamAsync(
+    Phone phone,
+    Stream documentStream,
+    string fileName,
+    string? mimeType = null,
+    string? caption = null,
+    string? quotedId = null,
+    CancellationToken cancellationToken = default)
+```
+
+**Parameters:**
+- `phone` - The recipient phone number
+- `documentStream` - Stream containing the document data
+- `fileName` - File name displayed to recipient (e.g., "report.pdf"). Used to auto-detect MIME type if not provided
+- `mimeType` - MIME type (auto-detected from fileName extension if null)
+- `caption` - Optional caption
+- `quotedId` - Optional message ID to reply to
+- `cancellationToken` - Cancellation token
+
+**Returns:** `WuzResult<SendMessageResponse>` containing send response or error
+
+**Example:**
+```csharp
+var phone = new Phone("5511999999999");
+using var stream = File.OpenRead("report.pdf");
+
+var result = await client.SendDocumentFromStreamAsync(
+    phone,
+    stream,
+    fileName: "monthly-report.pdf",
+    caption: "Monthly Report - November 2025");
+
+if (result.IsSuccess)
+{
+    Console.WriteLine($"Document sent: {result.Value.MessageId}");
+}
+```
+
+**Notes:**
+- Caller is responsible for disposing the stream
+- Stream size limited to 100 MB for documents
+- For seekable streams, original position is restored after reading
+- For non-seekable streams, reads from current position to EOF
+- The fileName parameter is required and shown to the recipient in WhatsApp
 
 ---
 
