@@ -39,10 +39,7 @@ public sealed class MessagingTests : ThrottledTestBase
         var phone = Phone.Create(TestConfiguration.TestPhoneNumber);
 
         // Act - use throttled execution
-        var result = await this.ThrottledExecuteAsync(async () =>
-        {
-            return await this.fixture.Client.SendTextMessageAsync(phone, "Integration test message");
-        });
+        var result = await this.ThrottledExecuteAsync(async () => await this.fixture.Client.SendTextMessageAsync(phone, "Integration test message"));
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -65,10 +62,7 @@ public sealed class MessagingTests : ThrottledTestBase
         };
 
         // Act - use throttled execution
-        var result = await this.ThrottledExecuteAsync(async () =>
-        {
-            return await this.fixture.Client.SendImageAsync(request);
-        });
+        var result = await this.ThrottledExecuteAsync(async () => await this.fixture.Client.SendImageAsync(request));
 
         // Assert
         result.IsSuccess.Should().BeTrue(result.IsSuccess ? string.Empty : $"Expected success but got error: {result.Error}");
@@ -104,10 +98,7 @@ public sealed class MessagingTests : ThrottledTestBase
         };
 
         // Act - use throttled execution
-        var result = await this.ThrottledExecuteAsync(async () =>
-        {
-            return await this.fixture.Client.SendDocumentAsync(request);
-        });
+        var result = await this.ThrottledExecuteAsync(async () => await this.fixture.Client.SendDocumentAsync(request));
 
         // Assert
         result.IsSuccess.Should().BeTrue(result.IsSuccess ? string.Empty : $"Expected success but got error: {result.Error}");
