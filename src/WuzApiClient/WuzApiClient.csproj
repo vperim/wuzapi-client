@@ -12,6 +12,10 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <None Remove="D:\dev\github-vperim\wuzapi-client\LICENSE" />
+	</ItemGroup>
+
     <ItemGroup>
         <InternalsVisibleTo Include="WuzApiClient.UnitTests" />
     </ItemGroup>
