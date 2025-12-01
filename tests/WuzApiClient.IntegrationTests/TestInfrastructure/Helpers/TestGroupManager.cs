@@ -10,13 +10,13 @@ namespace WuzApiClient.IntegrationTests.TestInfrastructure.Helpers;
 /// </summary>
 public sealed class TestGroupManager
 {
-    private const string TestGroupPrefix = "WuzApiClient-IntTest-";
+    private const string TestGroupPrefix = "WaClient-IntTest-";
     private static string? cachedGroupId;
     private static readonly SemaphoreSlim GroupLock = new(1, 1);
 
-    private readonly IWuzApiClient client;
+    private readonly IWaClient client;
 
-    public TestGroupManager(IWuzApiClient client)
+    public TestGroupManager(IWaClient client)
     {
         this.client = client ?? throw new ArgumentNullException(nameof(client));
     }

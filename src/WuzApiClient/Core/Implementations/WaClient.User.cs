@@ -9,7 +9,7 @@ using WuzApiClient.Results;
 namespace WuzApiClient.Core.Implementations;
 
 // User information methods
-public sealed partial class WuzApiClient
+public sealed partial class WaClient
 {
     /// <inheritdoc/>
     public async Task<WuzResult<UserInfoResponse>> GetUserInfoAsync(

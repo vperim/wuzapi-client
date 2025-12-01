@@ -21,7 +21,7 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
     /// <summary>
     /// Gets the WuzAPI client.
     /// </summary>
-    public IWuzApiClient Client { get; private set; } = null!;
+    public IWaClient Client { get; private set; } = null!;
 
     /// <summary>
     /// Gets the WuzAPI admin client.
@@ -71,7 +71,7 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
 
         this.serviceProvider = services.BuildServiceProvider();
 
-        this.Client = this.serviceProvider.GetRequiredService<IWuzApiClient>();
+        this.Client = this.serviceProvider.GetRequiredService<IWaClient>();
         this.AdminClient = this.serviceProvider.GetRequiredService<IWuzApiAdminClient>();
     }
 

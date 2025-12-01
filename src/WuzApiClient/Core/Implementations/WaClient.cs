@@ -10,7 +10,7 @@ namespace WuzApiClient.Core.Implementations;
 /// Main client implementation for WuzAPI operations.
 /// This is a partial class - method implementations are in separate files.
 /// </summary>
-public sealed partial class WuzApiClient : IWuzApiClient
+public sealed partial class WaClient : IWaClient
 {
     private const string TokenHeader = "Token";
 
@@ -18,11 +18,11 @@ public sealed partial class WuzApiClient : IWuzApiClient
     private readonly IOptions<WuzApiOptions> options;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="WuzApiClient"/> class.
+    /// Initializes a new instance of the <see cref="WaClient"/> class.
     /// </summary>
     /// <param name="httpClient">The HTTP client.</param>
     /// <param name="options">The configuration options.</param>
-    public WuzApiClient(HttpClient httpClient, IOptions<WuzApiOptions> options)
+    public WaClient(HttpClient httpClient, IOptions<WuzApiOptions> options)
     {
         this.httpClient = new WuzApiHttpClient(httpClient);
         this.options = options;

@@ -55,7 +55,7 @@ For production environments, store the token securely using [configuration provi
 
 ## Step 2: Inject and Use the Client
 
-Inject `IWuzApiClient` into your services or controllers:
+Inject `IWaClient` into your services or controllers:
 
 ```csharp
 using WuzApiClient.Core.Interfaces;
@@ -63,10 +63,10 @@ using WuzApiClient.Models.Common;
 
 public sealed class WhatsAppService
 {
-    private readonly IWuzApiClient wuzClient;
+    private readonly IWaClient wuzClient;
     private readonly ILogger<WhatsAppService> logger;
 
-    public WhatsAppService(IWuzApiClient wuzClient, ILogger<WhatsAppService> logger)
+    public WhatsAppService(IWaClient wuzClient, ILogger<WhatsAppService> logger)
     {
         this.wuzClient = wuzClient;
         this.logger = logger;

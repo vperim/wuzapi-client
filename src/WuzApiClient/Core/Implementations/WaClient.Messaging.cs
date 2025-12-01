@@ -10,7 +10,7 @@ using WuzApiClient.Utilities;
 namespace WuzApiClient.Core.Implementations;
 
 // Messaging methods - to be implemented by Batch 1 Stream B
-public sealed partial class WuzApiClient
+public sealed partial class WaClient
 {
     /// <inheritdoc/>
     public async Task<WuzResult<SendMessageResponse>> SendTextMessageAsync(

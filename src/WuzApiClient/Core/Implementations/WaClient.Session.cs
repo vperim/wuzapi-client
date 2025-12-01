@@ -7,7 +7,7 @@ using WuzApiClient.Results;
 namespace WuzApiClient.Core.Implementations;
 
 // Session management methods - to be implemented by Batch 1 Stream A
-public sealed partial class WuzApiClient
+public sealed partial class WaClient
 {
     /// <inheritdoc/>
     public async Task<WuzResult> ConnectSessionAsync(

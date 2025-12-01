@@ -399,7 +399,7 @@ Mock failure results:
 public async Task SendMessage_LogsError_WhenSendFails()
 {
     // Arrange
-    var clientMock = new Mock<IWuzApiClient>();
+    var clientMock = new Mock<IWaClient>();
     clientMock
         .Setup(x => x.SendTextMessageAsync(It.IsAny<Phone>(), It.IsAny<string>(), null, default))
         .ReturnsAsync(WuzResult<SendMessageResponse>.Failure(
@@ -442,7 +442,7 @@ public async Task SendMessage_ReturnsFailure_WhenGatewayUnreachable()
     services.AddLogging();
 
     var provider = services.BuildServiceProvider();
-    var client = provider.GetRequiredService<IWuzApiClient>();
+    var client = provider.GetRequiredService<IWaClient>();
 
     // Act
     var result = await client.SendTextMessageAsync(Phone.Parse("123"), "Hello");

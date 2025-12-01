@@ -48,11 +48,11 @@ using WuzApiClient.Models.Common;
 
 public sealed class WelcomeMessageHandler : IEventHandler<MessageEvent>
 {
-    private readonly IWuzApiClient client;
+    private readonly IWaClient client;
     private readonly ILogger<WelcomeMessageHandler> logger;
 
     public WelcomeMessageHandler(
-        IWuzApiClient client,
+        IWaClient client,
         ILogger<WelcomeMessageHandler> logger)
     {
         this.client = client;
@@ -503,7 +503,7 @@ RabbitMQ → EventConsumer
 public async Task Handler_SendsReply_OnHelloMessage()
 {
     // Arrange
-    var clientMock = new Mock<IWuzApiClient>();
+    var clientMock = new Mock<IWaClient>();
     clientMock
         .Setup(x => x.SendTextMessageAsync(
             It.IsAny<string>(),

@@ -7,7 +7,7 @@ using WuzApiClient.Results;
 namespace WuzApiClient.Core.Implementations;
 
 // Group management methods - to be implemented by Batch 2 Stream B
-public sealed partial class WuzApiClient
+public sealed partial class WaClient
 {
     /// <inheritdoc/>
     public async Task<WuzResult<GroupListResponse>> GetGroupsAsync(

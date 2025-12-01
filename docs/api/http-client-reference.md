@@ -1,8 +1,8 @@
 # HTTP Client Reference
 
-Reference for all methods available in `IWuzApiClient` and `IWuzApiAdminClient`.
+Reference for all methods available in `IWaClient` and `IWuzApiAdminClient`.
 
-## IWuzApiClient
+## IWaClient
 
 Main interface for WhatsApp operations via the asternic/wuzapi gateway.
 

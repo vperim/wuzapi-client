@@ -8,7 +8,7 @@ using WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
 namespace WuzApiClient.UnitTests.Core.Implementations;
 
 /// <summary>
-/// Unit tests for WuzApiClient session management methods.
+/// Unit tests for WaClient session management methods.
 /// </summary>
 [Trait("Category", "Unit")]
 public sealed class WuzApiClientSessionTests : WuzApiClientTestBase

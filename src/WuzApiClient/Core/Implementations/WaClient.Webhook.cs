@@ -7,7 +7,7 @@ using WuzApiClient.Results;
 namespace WuzApiClient.Core.Implementations;
 
 // Webhook and HMAC configuration methods - to be implemented by Batch 3 Stream B
-public sealed partial class WuzApiClient
+public sealed partial class WaClient
 {
     /// <inheritdoc/>
     public async Task<WuzResult> SetWebhookAsync(

@@ -23,7 +23,7 @@ WuzAPI Client abstracts these complexities, providing:
 The main client library for outbound WhatsApp operations:
 
 ```csharp
-public interface IWuzApiClient
+public interface IWaClient
 {
     Task<WuzResult<SendMessageResponse>> SendTextMessageAsync(
         Phone phone,
@@ -91,7 +91,7 @@ graph TD
     D[WhatsApp Servers]
     E[RabbitMQ<br/>Events]
 
-    A -->|IWuzApiClient<br/>IEventHandler&lt;T&gt;| B
+    A -->|IWaClient<br/>IEventHandler&lt;T&gt;| B
     B -->|HTTP REST| C
     C -->|WhatsApp Protocol| D
     E -->|AMQP| B
@@ -159,7 +159,7 @@ The codebase maintains clear separation of concerns:
 
 | Layer | Responsibility | Examples |
 |-------|----------------|----------|
-| Interfaces | Public contracts | `IWuzApiClient`, `IEventHandler<T>` |
+| Interfaces | Public contracts | `IWaClient`, `IEventHandler<T>` |
 | Configuration | DI registration and options | `ServiceCollectionExtensions`, `WuzApiOptions` |
 | Implementation | HTTP/RabbitMQ logic | `WuzApiHttpClient`, `EventConsumer` |
 | Models | Data transfer objects | Request/Response DTOs, Event types |

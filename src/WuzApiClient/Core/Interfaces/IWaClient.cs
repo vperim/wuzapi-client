@@ -19,7 +19,7 @@ namespace WuzApiClient.Core.Interfaces;
 /// <summary>
 /// Client for interacting with asternic/wuzapi WhatsApp gateway.
 /// </summary>
-public interface IWuzApiClient
+public interface IWaClient
 {
     // ==================== SESSION MANAGEMENT ====================
 

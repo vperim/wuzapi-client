@@ -39,7 +39,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var provider = services.BuildServiceProvider();
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiClient));
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
         descriptor.Should().NotBeNull();
         descriptor!.Lifetime.Should().Be(ServiceLifetime.Transient);
     }
@@ -57,7 +57,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var provider = services.BuildServiceProvider();
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiClient));
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
         descriptor.Should().NotBeNull();
     }
 
@@ -76,7 +76,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var provider = services.BuildServiceProvider();
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiClient));
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
         descriptor.Should().NotBeNull();
     }
 
@@ -217,7 +217,7 @@ public sealed class ServiceCollectionExtensionsTests
         using var provider = services.BuildServiceProvider();
 
         // Act
-        var client = provider.GetService<IWuzApiClient>();
+        var client = provider.GetService<IWaClient>();
 
         // Assert
         client.Should().NotBeNull();

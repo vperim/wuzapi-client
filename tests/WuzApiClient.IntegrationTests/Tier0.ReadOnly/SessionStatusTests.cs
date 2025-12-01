@@ -57,7 +57,7 @@ public sealed class SessionStatusTests
         services.AddWuzApiClient(invalidConfig);
 
         await using var provider = services.BuildServiceProvider();
-        var invalidClient = provider.GetRequiredService<IWuzApiClient>();
+        var invalidClient = provider.GetRequiredService<IWaClient>();
 
         // Act
         var result = await invalidClient.GetSessionStatusAsync();

@@ -3,9 +3,8 @@ using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using WuzApiClient.Core.Implementations;
 using WuzApiClient.Core.Interfaces;
-
-using WuzApiClientImpl = WuzApiClient.Core.Implementations.WuzApiClient;
 using WuzApiAdminClientImpl = WuzApiClient.Core.Implementations.WuzApiAdminClient;
 
 namespace WuzApiClient.Configuration;
@@ -15,7 +14,7 @@ namespace WuzApiClient.Configuration;
 /// </summary>
 public static class ServiceCollectionExtensions
 {
-    private const string WuzApiClientName = "WuzApiClient";
+    private const string WuzApiClientName = "WaClient";
     private const string WuzApiAdminClientName = "WuzApiAdminClient";
 
     /// <summary>
@@ -133,13 +132,13 @@ public static class ServiceCollectionExtensions
             client.Timeout = options.Timeout;
         });
 
-        services.AddTransient<IWuzApiClient>(serviceProvider =>
+        services.AddTransient<IWaClient>(serviceProvider =>
         {
             var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
             var options = serviceProvider.GetRequiredService<IOptions<WuzApiOptions>>();
             var httpClient = httpClientFactory.CreateClient(WuzApiClientName);
 
-            return new WuzApiClientImpl(httpClient, options);
+            return new WaClient(httpClient, options);
         });
 
         return services;

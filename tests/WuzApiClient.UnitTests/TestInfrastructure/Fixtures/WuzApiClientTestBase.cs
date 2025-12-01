@@ -1,12 +1,12 @@
 using Microsoft.Extensions.Options;
 using WuzApiClient.Configuration;
+using WuzApiClient.Core.Implementations;
 using WuzApiClient.UnitTests.TestInfrastructure.Mocks;
-using WuzApiClientImpl = WuzApiClient.Core.Implementations.WuzApiClient;
 
 namespace WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
 
 /// <summary>
-/// Base class for WuzApiClient unit tests providing common setup and teardown.
+/// Base class for WaClient unit tests providing common setup and teardown.
 /// </summary>
 public abstract class WuzApiClientTestBase : IAsyncLifetime
 {
@@ -23,7 +23,7 @@ public abstract class WuzApiClientTestBase : IAsyncLifetime
     /// <summary>
     /// Gets the system under test.
     /// </summary>
-    protected WuzApiClientImpl Sut { get; private set; } = null!;
+    protected WaClient Sut { get; private set; } = null!;
 
     /// <summary>
     /// Gets the options used to configure the client.
@@ -46,7 +46,7 @@ public abstract class WuzApiClientTestBase : IAsyncLifetime
             TimeoutSeconds = 30
         });
 
-        this.Sut = new WuzApiClientImpl(this.httpClient, this.Options);
+        this.Sut = new WaClient(this.httpClient, this.Options);
 
         return Task.CompletedTask;
     }

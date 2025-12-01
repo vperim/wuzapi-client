@@ -61,11 +61,11 @@ using WuzApiClient.Models.Common;
 public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
 {
     private readonly ILogger<MessageReceivedHandler> logger;
-    private readonly IWuzApiClient client;
+    private readonly IWaClient client;
 
     public MessageReceivedHandler(
         ILogger<MessageReceivedHandler> logger,
-        IWuzApiClient client)
+        IWaClient client)
     {
         this.logger = logger;
         this.client = client;
@@ -362,12 +362,12 @@ Handlers are resolved from a **scoped DI container** per message:
 public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
 {
     // All standard DI lifetimes work
-    private readonly IWuzApiClient client;              // Scoped
+    private readonly IWaClient client;              // Scoped
     private readonly ILogger<MessageReceivedHandler> logger; // Singleton
     private readonly MyDbContext dbContext;             // Scoped
 
     public MessageReceivedHandler(
-        IWuzApiClient client,
+        IWaClient client,
         ILogger<MessageReceivedHandler> logger,
         MyDbContext dbContext)
     {
@@ -398,7 +398,7 @@ public async Task HandleAsync_LogsMessage()
 {
     // Arrange
     var loggerMock = new Mock<ILogger<MessageReceivedHandler>>();
-    var clientMock = new Mock<IWuzApiClient>();
+    var clientMock = new Mock<IWaClient>();
     var handler = new MessageReceivedHandler(loggerMock.Object, clientMock.Object);
 
     var @event = new MessageEvent
