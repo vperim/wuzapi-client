@@ -27,11 +27,8 @@
     <ItemGroup>
         <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
         <PackageReference Include="System.Text.Json" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="10.0.0" />
     </ItemGroup>
 
