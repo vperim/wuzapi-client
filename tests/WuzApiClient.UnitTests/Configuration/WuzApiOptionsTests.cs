@@ -16,7 +16,6 @@ public sealed class WuzApiOptionsTests
     public void Validate_ValidConfiguration_DoesNotThrow()
     {
         this.sut.BaseUrl = "https://api.example.com/";
-        this.sut.UserToken = "valid-token";
 
         var act = () => this.sut.Validate();
 
@@ -30,22 +29,6 @@ public sealed class WuzApiOptionsTests
     public void Validate_InvalidBaseUrl_ThrowsConfigurationException(string? baseUrl, string expectedMessage)
     {
         this.sut.BaseUrl = baseUrl!;
-        this.sut.UserToken = "valid-token";
-
-        var act = () => this.sut.Validate();
-
-        act.Should().Throw<WuzApiConfigurationException>()
-            .WithMessage(expectedMessage);
-    }
-
-    [Theory]
-    [InlineData(null, "UserToken is required.")]
-    [InlineData("", "UserToken is required.")]
-    [InlineData("   ", "UserToken is required.")]
-    public void Validate_InvalidUserToken_ThrowsConfigurationException(string? userToken, string expectedMessage)
-    {
-        this.sut.BaseUrl = "https://api.example.com/";
-        this.sut.UserToken = userToken!;
 
         var act = () => this.sut.Validate();
 
@@ -57,7 +40,6 @@ public sealed class WuzApiOptionsTests
     public void Validate_InvalidBaseUrlFormat_ThrowsConfigurationException()
     {
         this.sut.BaseUrl = "not-a-valid-uri";
-        this.sut.UserToken = "valid-token";
 
         var act = () => this.sut.Validate();
 
@@ -69,7 +51,6 @@ public sealed class WuzApiOptionsTests
     public void Validate_NonHttpScheme_ThrowsConfigurationException()
     {
         this.sut.BaseUrl = "ftp://files.example.com/";
-        this.sut.UserToken = "valid-token";
 
         var act = () => this.sut.Validate();
 
@@ -84,7 +65,6 @@ public sealed class WuzApiOptionsTests
     public void Validate_NonPositiveTimeout_ThrowsConfigurationException(int timeoutSeconds)
     {
         this.sut.BaseUrl = "https://api.example.com/";
-        this.sut.UserToken = "valid-token";
         this.sut.TimeoutSeconds = timeoutSeconds;
 
         var act = () => this.sut.Validate();
@@ -113,7 +93,6 @@ public sealed class WuzApiOptionsTests
 
         options.BaseUrl.Should().Be("http://localhost:8080/");
         options.TimeoutSeconds.Should().Be(30);
-        options.UserToken.Should().BeEmpty();
     }
 
     [Fact]

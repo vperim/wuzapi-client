@@ -1,17 +1,18 @@
 # Configuration Reference
 
-Reference for configuring WuzAPI Client HTTP client and RabbitMQ event consumer.
+Reference for configuring WuzAPI Client factories and RabbitMQ event consumer.
 
-## WuzApiOptions (HTTP Client)
+## WuzApiOptions (HTTP Client Factories)
 
-Options for configuring the HTTP client via `AddWuzApiClient()`.
+Options for configuring the HTTP client factories via `AddWuzApi()`.
+
+**Note:** User tokens are not part of configuration. Tokens are passed dynamically when creating clients via `IWaClientFactory.CreateClient(userToken)` and `IWuzApiAdminClientFactory.CreateClient(adminToken)`.
 
 ### Properties
 
 | Property | Type | Required | Default | Description |
 |----------|------|----------|---------|-------------|
-| `BaseUrl` | `string` | Yes | - | Base URL of asternic/wuzapi gateway (e.g., `http://localhost:8080`) |
-| `UserToken` | `string` | Yes | - | Authentication token for gateway access |
+| `BaseUrl` | `string` | Yes | `http://localhost:8080/` | Base URL of asternic/wuzapi gateway |
 | `TimeoutSeconds` | `int` | No | `30` | HTTP request timeout in seconds |
 
 ### Basic Configuration
@@ -19,10 +20,11 @@ Options for configuring the HTTP client via `AddWuzApiClient()`.
 ```csharp
 using WuzApiClient.Configuration;
 
-builder.Services.AddWuzApiClient(options =>
+// Register factories (server settings only - tokens passed at runtime)
+builder.Services.AddWuzApi(options =>
 {
-    options.BaseUrl = "http://localhost:8080";
-    options.UserToken = "your-token-here";
+    options.BaseUrl = "http://localhost:8080/";
+    options.TimeoutSeconds = 30;
 });
 ```
 
@@ -31,38 +33,92 @@ builder.Services.AddWuzApiClient(options =>
 ```json
 {
   "WuzApi": {
-    "BaseUrl": "http://localhost:8080",
-    "UserToken": "your-token-here",
+    "BaseUrl": "http://localhost:8080/",
     "TimeoutSeconds": 45
   }
 }
 ```
 
 ```csharp
-builder.Services.AddWuzApiClient(options =>
-{
-    builder.Configuration.GetSection("WuzApi").Bind(options);
-});
+builder.Services.AddWuzApi(builder.Configuration);
+```
+
+### With HttpClient Customization
+
+Customize the underlying HttpClient with Polly resilience, logging, etc.:
+
+```csharp
+builder.Services.AddWuzApi(
+    options => { options.BaseUrl = "http://localhost:8080/"; },
+    httpClientBuilder =>
+    {
+        httpClientBuilder
+            .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _ => TimeSpan.FromMilliseconds(300)))
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5));
+    });
 ```
 
 ### Environment-Specific Configuration
 
-Use environment variables for sensitive values:
+Use environment variables for the base URL:
 
 ```bash
 # .env or system environment
-WUZAPI_BASE_URL=http://localhost:8080
-WUZAPI_USER_TOKEN=your-secure-token
+WUZAPI_BASE_URL=http://localhost:8080/
 ```
 
 ```csharp
-builder.Services.AddWuzApiClient(options =>
+builder.Services.AddWuzApi(options =>
 {
     options.BaseUrl = Environment.GetEnvironmentVariable("WUZAPI_BASE_URL")
-        ?? throw new InvalidOperationException("WUZAPI_BASE_URL not set");
-    options.UserToken = Environment.GetEnvironmentVariable("WUZAPI_USER_TOKEN")
-        ?? throw new InvalidOperationException("WUZAPI_USER_TOKEN not set");
+        ?? "http://localhost:8080/";
 });
+```
+
+### Token Management
+
+Tokens are managed by your application, not the library. Common patterns:
+
+```csharp
+// From configuration (for single-account scenarios)
+public class WhatsAppService
+{
+    private readonly IWaClientFactory clientFactory;
+    private readonly string userToken;
+
+    public WhatsAppService(IWaClientFactory clientFactory, IConfiguration config)
+    {
+        this.clientFactory = clientFactory;
+        this.userToken = config["WuzApi:UserToken"]
+            ?? throw new InvalidOperationException("Token not configured");
+    }
+
+    public async Task SendAsync(Phone phone, string message)
+    {
+        var client = this.clientFactory.CreateClient(this.userToken);
+        await client.SendTextMessageAsync(phone, message);
+    }
+}
+
+// From database/repository (for multi-account scenarios)
+public class MultiAccountWhatsAppService
+{
+    private readonly IWaClientFactory clientFactory;
+    private readonly IAccountRepository accountRepo;
+
+    public MultiAccountWhatsAppService(IWaClientFactory clientFactory, IAccountRepository accountRepo)
+    {
+        this.clientFactory = clientFactory;
+        this.accountRepo = accountRepo;
+    }
+
+    public async Task SendAsync(Guid accountId, Phone phone, string message)
+    {
+        var account = await this.accountRepo.GetAsync(accountId);
+        var client = this.clientFactory.CreateClient(account.UserToken);
+        await client.SendTextMessageAsync(phone, message);
+    }
+}
 ```
 
 
@@ -199,15 +255,17 @@ builder.Services.AddWuzEvents(options =>
 
 ### 1. Never Hardcode Secrets
 
+Store tokens securely (database, Key Vault, User Secrets) and retrieve them at runtime.
+
 ❌ **Bad:**
 ```csharp
-options.UserToken = "hardcoded-token-123"; // Never do this!
+var client = factory.CreateClient("hardcoded-token-123"); // Never do this!
 ```
 
 ✅ **Good:**
 ```csharp
-options.UserToken = builder.Configuration["WuzApi:UserToken"]
-    ?? throw new InvalidOperationException("Token not configured");
+var token = await tokenRepository.GetTokenAsync(accountId);
+var client = factory.CreateClient(token);
 ```
 
 ### 2. Use Configuration Providers
@@ -235,32 +293,18 @@ See [ASP.NET Core Configuration](https://learn.microsoft.com/en-us/aspnet/core/f
 
 ### 3. Validate Configuration
 
-Use options validation:
+`WuzApiOptions` validates configuration automatically when creating clients. Invalid configuration throws `WuzApiConfigurationException`:
+
+- `BaseUrl` must be a valid absolute URI with http/https scheme
+- `TimeoutSeconds` must be positive
+
+Custom validation can be added via options validation:
 
 ```csharp
-builder.Services.AddWuzApiClient(options =>
-{
-    builder.Configuration.GetSection("WuzApi").Bind(options);
-})
-.Validate(options =>
-{
-    return !string.IsNullOrEmpty(options.BaseUrl)
-        && !string.IsNullOrEmpty(options.UserToken);
-}, "BaseUrl and UserToken are required");
-```
-
-Or use data annotations:
-
-```csharp
-public sealed class WuzApiOptions
-{
-    [Required]
-    [Url]
-    public string BaseUrl { get; set; }
-
-    [Required]
-    public string UserToken { get; set; }
-}
+builder.Services.AddOptions<WuzApiOptions>()
+    .Bind(builder.Configuration.GetSection("WuzApi"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
 ```
 
 ### 4. Separate by Environment
@@ -411,8 +455,7 @@ See [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/h
 ```json
 {
   "WuzApi": {
-    "BaseUrl": "http://localhost:8080",
-    "UserToken": "dev-token",
+    "BaseUrl": "http://localhost:8080/",
     "TimeoutSeconds": 30
   },
   "WuzEvents": {
@@ -428,12 +471,11 @@ See [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/h
 ```json
 {
   "WuzApi": {
-    "BaseUrl": "https://wuzapi-gateway.production.internal",
-    "UserToken": null,  // From secure configuration provider
+    "BaseUrl": "https://wuzapi-gateway.production.internal/",
     "TimeoutSeconds": 60
   },
   "WuzEvents": {
-    "ConnectionString": null,  // From secure configuration provider (e.g., amqp://user:pass@rabbitmq-cluster.production.internal:5672/production)
+    "ConnectionString": null,  // From secure configuration provider
     "QueueName": "wuzapi-events",
     "ConsumerTagPrefix": "wuzapi-consumer",
     "MaxConcurrentMessages": 10,
@@ -474,9 +516,10 @@ See [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/h
 **Problem:** HTTP 401 Unauthorized from WuzAPI gateway
 
 **Solutions:**
-1. Verify `UserToken` matches gateway configuration
+1. Verify token passed to `CreateClient()` matches gateway configuration
 2. Check token is not empty or whitespace
 3. Verify gateway is running and accessible
+4. Ensure you're using the correct factory (`IWaClientFactory` for user operations, `IWuzApiAdminClientFactory` for admin operations)
 
 ## Next Steps
 

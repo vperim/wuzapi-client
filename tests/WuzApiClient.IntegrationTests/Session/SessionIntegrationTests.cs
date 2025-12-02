@@ -1,8 +1,4 @@
 using AwesomeAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using WuzApiClient.Configuration;
-using WuzApiClient.Core.Interfaces;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.Models.Requests.Session;
 using WuzApiClient.Results;
@@ -80,21 +76,8 @@ public sealed class SessionIntegrationTests
     [Trait("Category", TestCategories.Safe)]
     public async Task GetSessionStatus_InvalidToken_ReturnsUnauthorizedError()
     {
-        // Arrange
-        var invalidConfig = new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["WuzApi:BaseUrl"] = this.fixture.Configuration["WuzApi:BaseUrl"],
-                ["WuzApi:UserToken"] = "invalid-token-12345"
-            })
-            .Build();
-
-        var services = new ServiceCollection();
-        services.AddSingleton<IConfiguration>(invalidConfig);
-        services.AddWuzApiClient(invalidConfig);
-
-        await using var provider = services.BuildServiceProvider();
-        var invalidClient = provider.GetRequiredService<IWaClient>();
+        // Arrange - Create a client with invalid token using the factory
+        var invalidClient = this.fixture.ClientFactory.CreateClient("invalid-token-12345");
 
         // Act
         var result = await invalidClient.GetSessionStatusAsync();

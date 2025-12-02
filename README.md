@@ -42,28 +42,31 @@ dotnet add package WuzApiClient.RabbitMq  # For event handling
 ```csharp
 using WuzApiClient.Core.Interfaces;
 using WuzApiClient.Configuration;
+using WuzApiClient.Models.Common;
 
-// Register in DI container
-services.AddWuzApiClient(options =>
+// Register factories in DI container (server settings only)
+services.AddWuzApi(options =>
 {
-    options.BaseAddress = "http://your-wuzapi-gateway:8080";
-    options.UserToken = "your-token";
+    options.BaseUrl = "http://your-wuzapi-gateway:8080/";
 });
 
-// Use the client
-public sealed class MessageService
+// Use factories to create clients with dynamic tokens
+public sealed class WhatsAppService
 {
-    private readonly IWuzApiClient client;
+    private readonly IWaClientFactory clientFactory;
 
-    public MessageService(IWuzApiClient client)
+    public WhatsAppService(IWaClientFactory clientFactory)
     {
-        this.client = client;
+        this.clientFactory = clientFactory;
     }
 
-    public async Task SendMessageAsync()
+    public async Task SendMessageAsync(string userToken)
     {
-        var result = await this.client.SendTextMessageAsync(
-            "5511999999999@c.us",
+        // Create client with user-specific token
+        var client = this.clientFactory.CreateClient(userToken);
+
+        var result = await client.SendTextMessageAsync(
+            Phone.Create("5511999999999"),
             "Hello from WuzAPI!"
         );
 
@@ -73,7 +76,7 @@ public sealed class MessageService
         }
         else
         {
-            Console.WriteLine($"Error: {result.ErrorMessage}");
+            Console.WriteLine($"Error: {result.Error.Message}");
         }
     }
 }
@@ -83,13 +86,14 @@ See [Getting Started](docs/intro/getting-started.md) for a full guide.
 
 ## 4. Key Features
 
-- **Clean REST API Client** – Send messages, manage contacts, groups, and channels via `IWuzApiClient`
+- **Factory-First Multi-Account Design** – Create clients dynamically via `IWaClientFactory` with per-request tokens
+- **Clean REST API Client** – Send messages, manage contacts, groups, and channels via `IWaClient`
 - **Strongly-Typed Event Handling** – Process 44 WhatsApp event types with generic `IEventHandler<TEvent>`
 - **Railway-Oriented Error Handling** – Uses `WuzResult<T>` monad instead of exceptions for predictable error flows
 - **Microsoft.Extensions Integration** – Built on `Microsoft.Extensions.*` (DI, Options, HostedService, Logging)
+- **HttpClientFactory Integration** – Proper handler pooling with extensible pipeline (Polly, logging, etc.)
 - **Event Filtering Pipeline** – Filter events before processing with `IEventFilter`
 - **RabbitMQ Event Consumer** – Background service consumes WhatsApp events from message queue
-- **Health Check Integration** – Built-in health checks for RabbitMQ connectivity
 - **.NET Standard 2.0** – Broad compatibility across .NET platforms
 
 ## 5. High-Level Architecture
@@ -100,7 +104,8 @@ The library consists of two main components:
 2. **WuzApiClient.RabbitMq** – Event consumer that processes incoming WhatsApp events from a RabbitMQ queue
 
 The architecture follows clean separation of concerns:
-- **Interfaces** define public contracts (`IWuzApiClient`, `IWuzApiAdminClient`, `IEventHandler<T>`)
+- **Factory Pattern** – `IWaClientFactory` and `IWuzApiAdminClientFactory` create clients with dynamic tokens
+- **Interfaces** define public contracts (`IWaClient`, `IWuzApiAdminClient`, `IEventHandler<T>`)
 - **Implementation** handles HTTP communication and RabbitMQ consumption
 - **Result Pattern** (`WuzResult<T>`) eliminates exception-based error handling
 - **Dependency Injection** via `Microsoft.Extensions.DependencyInjection`

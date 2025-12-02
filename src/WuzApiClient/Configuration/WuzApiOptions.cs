@@ -4,7 +4,10 @@ using WuzApiClient.Exceptions;
 namespace WuzApiClient.Configuration;
 
 /// <summary>
-/// Configuration options for WuzAPI client.
+/// Configuration options for WuzAPI gateway connection.
+/// Contains server-level settings only. Authentication tokens are passed
+/// at runtime via <see cref="Core.Interfaces.IWaClientFactory"/> and
+/// <see cref="Core.Interfaces.IWuzApiAdminClientFactory"/>.
 /// </summary>
 public sealed class WuzApiOptions
 {
@@ -14,22 +17,21 @@ public sealed class WuzApiOptions
     public const string SectionName = "WuzApi";
 
     /// <summary>
-    /// Gets or sets the base URL of the WuzAPI service.
+    /// Gets or sets the base URL of the WuzAPI gateway.
     /// </summary>
     /// <example>http://localhost:8080/</example>
     public string BaseUrl { get; set; } = "http://localhost:8080/";
-
-    /// <summary>
-    /// Gets or sets the user token for authentication.
-    /// This token is sent in the "Token" header for all API requests.
-    /// </summary>
-    public string UserToken { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the request timeout in seconds.
     /// Default: 30 seconds.
     /// </summary>
     public int TimeoutSeconds { get; set; } = 30;
+
+    /// <summary>
+    /// Gets the configured timeout as a <see cref="TimeSpan"/>.
+    /// </summary>
+    public TimeSpan Timeout => TimeSpan.FromSeconds(this.TimeoutSeconds);
 
     /// <summary>
     /// Validates the configuration options.
@@ -40,11 +42,6 @@ public sealed class WuzApiOptions
         if (string.IsNullOrWhiteSpace(this.BaseUrl))
         {
             throw new WuzApiConfigurationException("BaseUrl is required.");
-        }
-
-        if (string.IsNullOrWhiteSpace(this.UserToken))
-        {
-            throw new WuzApiConfigurationException("UserToken is required.");
         }
 
         if (!Uri.TryCreate(this.BaseUrl, UriKind.Absolute, out var uri))
@@ -62,9 +59,4 @@ public sealed class WuzApiOptions
             throw new WuzApiConfigurationException("TimeoutSeconds must be a positive value.");
         }
     }
-
-    /// <summary>
-    /// Gets the configured timeout as a <see cref="TimeSpan"/>.
-    /// </summary>
-    public TimeSpan Timeout => TimeSpan.FromSeconds(this.TimeoutSeconds);
 }

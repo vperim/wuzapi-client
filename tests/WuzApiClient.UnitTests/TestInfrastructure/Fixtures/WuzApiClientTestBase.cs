@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Options;
-using WuzApiClient.Configuration;
 using WuzApiClient.Core.Implementations;
 using WuzApiClient.UnitTests.TestInfrastructure.Mocks;
 
@@ -11,7 +9,11 @@ namespace WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
 public abstract class WuzApiClientTestBase : IAsyncLifetime
 {
     private const string TestBaseUrl = "http://localhost:8080/";
-    private const string TestUserToken = "test-token";
+
+    /// <summary>
+    /// The user token used for testing.
+    /// </summary>
+    protected const string TestUserToken = "test-token";
 
     private HttpClient? httpClient;
 
@@ -25,11 +27,6 @@ public abstract class WuzApiClientTestBase : IAsyncLifetime
     /// </summary>
     protected WaClient Sut { get; private set; } = null!;
 
-    /// <summary>
-    /// Gets the options used to configure the client.
-    /// </summary>
-    protected IOptions<WuzApiOptions> Options { get; private set; } = null!;
-
     /// <inheritdoc/>
     public Task InitializeAsync()
     {
@@ -39,14 +36,7 @@ public abstract class WuzApiClientTestBase : IAsyncLifetime
             BaseAddress = new Uri(TestBaseUrl)
         };
 
-        this.Options = Microsoft.Extensions.Options.Options.Create(new WuzApiOptions
-        {
-            BaseUrl = TestBaseUrl,
-            UserToken = TestUserToken,
-            TimeoutSeconds = 30
-        });
-
-        this.Sut = new WaClient(this.httpClient, this.Options);
+        this.Sut = new WaClient(this.httpClient, TestUserToken);
 
         return Task.CompletedTask;
     }

@@ -1,8 +1,6 @@
 using System.Net;
 using System.Text.Json;
 using AwesomeAssertions;
-using Microsoft.Extensions.Options;
-using WuzApiClient.Configuration;
 using WuzApiClient.Core.Implementations;
 using WuzApiClient.Json;
 using WuzApiClient.Models.Requests.Admin;
@@ -22,7 +20,6 @@ public sealed class WuzApiAdminClientTests : IAsyncLifetime
 
     private MockHttpMessageHandler mockHandler = null!;
     private HttpClient httpClient = null!;
-    private IOptions<WuzApiAdminOptions> options = null!;
     private WuzApiAdminClient sut = null!;
 
     public Task InitializeAsync()
@@ -32,12 +29,7 @@ public sealed class WuzApiAdminClientTests : IAsyncLifetime
         {
             BaseAddress = new Uri(TestBaseUrl)
         };
-        this.options = Options.Create(new WuzApiAdminOptions
-        {
-            BaseUrl = TestBaseUrl,
-            AdminToken = TestAdminToken
-        });
-        this.sut = new WuzApiAdminClient(this.httpClient, this.options);
+        this.sut = new WuzApiAdminClient(this.httpClient, TestAdminToken);
 
         return Task.CompletedTask;
     }
@@ -47,6 +39,28 @@ public sealed class WuzApiAdminClientTests : IAsyncLifetime
         this.httpClient.Dispose();
         this.mockHandler.Dispose();
         return Task.CompletedTask;
+    }
+
+    [Fact]
+    public void Constructor_NullHttpClient_ThrowsArgumentNullException()
+    {
+        var act = () => new WuzApiAdminClient(null!, TestAdminToken);
+
+        act.Should().Throw<ArgumentNullException>()
+            .And.ParamName.Should().Be("httpClient");
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void Constructor_InvalidAdminToken_ThrowsArgumentException(string? adminToken)
+    {
+        var act = () => new WuzApiAdminClient(this.httpClient, adminToken!);
+
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("Admin token is required.*")
+            .And.ParamName.Should().Be("adminToken");
     }
 
     [Fact]

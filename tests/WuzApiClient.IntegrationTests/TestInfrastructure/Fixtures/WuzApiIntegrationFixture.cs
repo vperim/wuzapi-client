@@ -29,6 +29,16 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
     public IWuzApiAdminClient AdminClient { get; private set; } = null!;
 
     /// <summary>
+    /// Gets the client factory for creating additional clients.
+    /// </summary>
+    public IWaClientFactory ClientFactory { get; private set; } = null!;
+
+    /// <summary>
+    /// Gets the admin client factory for creating additional admin clients.
+    /// </summary>
+    public IWuzApiAdminClientFactory AdminClientFactory { get; private set; } = null!;
+
+    /// <summary>
     /// Gets the wuzapi test container.
     /// </summary>
     public WuzApiTestContainer Container => this.container ?? throw new InvalidOperationException("Container not initialized");
@@ -53,26 +63,22 @@ public sealed class WuzApiIntegrationFixture : IAsyncLifetime
 
         services.AddSingleton(this.Configuration);
 
-        // Override WuzApi configuration with container URL and token
-        services.AddWuzApiClient(options =>
+        // Register WuzApi with container URL
+        services.AddWuzApi(options =>
         {
             options.BaseUrl = this.container.BaseUrl;
-            options.UserToken = this.container.UserToken;
             options.TimeoutSeconds = this.Configuration.GetValue<int>("WuzApi:TimeoutSeconds", 60);
-        });
-
-        // Override WuzApiAdmin configuration with container URL and token
-        services.AddWuzApiAdminClient(options =>
-        {
-            options.BaseUrl = this.container.BaseUrl;
-            options.AdminToken = this.container.AdminToken;
-            options.TimeoutSeconds = this.Configuration.GetValue<int>("WuzApiAdmin:TimeoutSeconds", 60);
         });
 
         this.serviceProvider = services.BuildServiceProvider();
 
-        this.Client = this.serviceProvider.GetRequiredService<IWaClient>();
-        this.AdminClient = this.serviceProvider.GetRequiredService<IWuzApiAdminClient>();
+        // Get factories
+        this.ClientFactory = this.serviceProvider.GetRequiredService<IWaClientFactory>();
+        this.AdminClientFactory = this.serviceProvider.GetRequiredService<IWuzApiAdminClientFactory>();
+
+        // Create default clients using container tokens
+        this.Client = this.ClientFactory.CreateClient(this.container.UserToken);
+        this.AdminClient = this.AdminClientFactory.CreateClient(this.container.AdminToken);
     }
 
     /// <inheritdoc/>

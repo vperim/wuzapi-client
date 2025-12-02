@@ -14,38 +14,32 @@ public sealed class ServiceCollectionExtensionsTests
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["WuzApi:BaseUrl"] = "http://localhost:8080/",
-                ["WuzApi:UserToken"] = "test-token"
-            })
-            .Build();
-
-    private static IConfiguration CreateValidAdminConfiguration() =>
-        new ConfigurationBuilder()
-            .AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["WuzApiAdmin:BaseUrl"] = "http://localhost:8080/",
-                ["WuzApiAdmin:AdminToken"] = "admin-token"
+                ["WuzApi:TimeoutSeconds"] = "30"
             })
             .Build();
 
     [Fact]
-    public void AddWuzApiClient_WithConfiguration_RegistersClient()
+    public void AddWuzApi_WithConfiguration_RegistersFactories()
     {
         // Arrange
         var configuration = CreateValidConfiguration();
         var services = new ServiceCollection();
 
         // Act
-        services.AddWuzApiClient(configuration);
-        using var provider = services.BuildServiceProvider();
+        services.AddWuzApi(configuration);
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
-        descriptor.Should().NotBeNull();
-        descriptor!.Lifetime.Should().Be(ServiceLifetime.Transient);
+        var clientFactoryDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClientFactory));
+        clientFactoryDescriptor.Should().NotBeNull();
+        clientFactoryDescriptor!.Lifetime.Should().Be(ServiceLifetime.Singleton);
+
+        var adminFactoryDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiAdminClientFactory));
+        adminFactoryDescriptor.Should().NotBeNull();
+        adminFactoryDescriptor!.Lifetime.Should().Be(ServiceLifetime.Singleton);
     }
 
     [Fact]
-    public void AddWuzApiClient_WithConfigurationSection_RegistersClient()
+    public void AddWuzApi_WithConfigurationSection_RegistersFactories()
     {
         // Arrange
         var configuration = CreateValidConfiguration();
@@ -53,38 +47,58 @@ public sealed class ServiceCollectionExtensionsTests
         var services = new ServiceCollection();
 
         // Act
-        services.AddWuzApiClient(section);
-        using var provider = services.BuildServiceProvider();
+        services.AddWuzApi(section);
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
-        descriptor.Should().NotBeNull();
+        var clientFactoryDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClientFactory));
+        clientFactoryDescriptor.Should().NotBeNull();
     }
 
     [Fact]
-    public void AddWuzApiClient_WithAction_RegistersClient()
+    public void AddWuzApi_WithAction_RegistersFactories()
     {
         // Arrange
         var services = new ServiceCollection();
 
         // Act
-        services.AddWuzApiClient(options =>
+        services.AddWuzApi(options =>
         {
             options.BaseUrl = "http://localhost:8080/";
-            options.UserToken = "test-token";
         });
-        using var provider = services.BuildServiceProvider();
 
         // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClient));
-        descriptor.Should().NotBeNull();
+        var clientFactoryDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWaClientFactory));
+        clientFactoryDescriptor.Should().NotBeNull();
+
+        var adminFactoryDescriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiAdminClientFactory));
+        adminFactoryDescriptor.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddWuzApi_WithHttpClientBuilder_AllowsCustomization()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        var builderInvoked = false;
+
+        // Act
+        services.AddWuzApi(
+            options => { options.BaseUrl = "http://localhost:8080/"; },
+            builder =>
+            {
+                builderInvoked = true;
+                builder.SetHandlerLifetime(TimeSpan.FromMinutes(5));
+            });
+
+        // Assert
+        builderInvoked.Should().BeTrue();
     }
 
     [Theory]
     [InlineData("IConfiguration")]
     [InlineData("IConfigurationSection")]
     [InlineData("Action")]
-    public void AddWuzApiClient_NullServices_ThrowsArgumentNullException(string overload)
+    public void AddWuzApi_NullServices_ThrowsArgumentNullException(string overload)
     {
         // Arrange
         IServiceCollection services = null!;
@@ -92,9 +106,9 @@ public sealed class ServiceCollectionExtensionsTests
         // Act
         Action act = overload switch
         {
-            "IConfiguration" => () => services.AddWuzApiClient(CreateValidConfiguration()),
-            "IConfigurationSection" => () => services.AddWuzApiClient(CreateValidConfiguration().GetSection("WuzApi")),
-            "Action" => () => services.AddWuzApiClient(_ => { }),
+            "IConfiguration" => () => services.AddWuzApi(CreateValidConfiguration()),
+            "IConfigurationSection" => () => services.AddWuzApi(CreateValidConfiguration().GetSection("WuzApi")),
+            "Action" => () => services.AddWuzApi(_ => { }),
             _ => throw new InvalidOperationException()
         };
 
@@ -104,14 +118,14 @@ public sealed class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddWuzApiClient_NullConfiguration_ThrowsArgumentNullException()
+    public void AddWuzApi_NullConfiguration_ThrowsArgumentNullException()
     {
         // Arrange
         var services = new ServiceCollection();
         IConfiguration configuration = null!;
 
         // Act
-        var act = () => services.AddWuzApiClient(configuration);
+        var act = () => services.AddWuzApi(configuration);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -119,14 +133,14 @@ public sealed class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddWuzApiClient_NullConfigurationSection_ThrowsArgumentNullException()
+    public void AddWuzApi_NullConfigurationSection_ThrowsArgumentNullException()
     {
         // Arrange
         var services = new ServiceCollection();
         IConfigurationSection section = null!;
 
         // Act
-        var act = () => services.AddWuzApiClient(section);
+        var act = () => services.AddWuzApi(section);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -134,14 +148,14 @@ public sealed class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddWuzApiClient_NullAction_ThrowsArgumentNullException()
+    public void AddWuzApi_NullAction_ThrowsArgumentNullException()
     {
         // Arrange
         var services = new ServiceCollection();
         Action<WuzApiOptions> configure = null!;
 
         // Act
-        var act = () => services.AddWuzApiClient(configure);
+        var act = () => services.AddWuzApi(configure);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -149,119 +163,111 @@ public sealed class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddWuzApiAdminClient_WithConfiguration_RegistersClient()
-    {
-        // Arrange
-        var configuration = CreateValidAdminConfiguration();
-        var services = new ServiceCollection();
-
-        // Act
-        services.AddWuzApiAdminClient(configuration);
-        using var provider = services.BuildServiceProvider();
-
-        // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiAdminClient));
-        descriptor.Should().NotBeNull();
-        descriptor!.Lifetime.Should().Be(ServiceLifetime.Transient);
-    }
-
-    [Fact]
-    public void AddWuzApiAdminClient_WithAction_RegistersClient()
+    public void AddWuzApi_NullHttpClientBuilder_ThrowsArgumentNullException()
     {
         // Arrange
         var services = new ServiceCollection();
+        Action<IHttpClientBuilder> configureHttpClient = null!;
 
         // Act
-        services.AddWuzApiAdminClient(options =>
-        {
-            options.BaseUrl = "http://localhost:8080/";
-            options.AdminToken = "admin-token";
-        });
-        using var provider = services.BuildServiceProvider();
-
-        // Assert
-        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(IWuzApiAdminClient));
-        descriptor.Should().NotBeNull();
-    }
-
-    [Theory]
-    [InlineData("IConfiguration")]
-    [InlineData("IConfigurationSection")]
-    [InlineData("Action")]
-    public void AddWuzApiAdminClient_NullServices_ThrowsArgumentNullException(string overload)
-    {
-        // Arrange
-        IServiceCollection services = null!;
-
-        // Act
-        Action act = overload switch
-        {
-            "IConfiguration" => () => services.AddWuzApiAdminClient(CreateValidAdminConfiguration()),
-            "IConfigurationSection" => () => services.AddWuzApiAdminClient(CreateValidAdminConfiguration().GetSection("WuzApiAdmin")),
-            "Action" => () => services.AddWuzApiAdminClient(_ => { }),
-            _ => throw new InvalidOperationException()
-        };
+        var act = () => services.AddWuzApi(_ => { }, configureHttpClient);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
-            .And.ParamName.Should().Be("services");
+            .And.ParamName.Should().Be("configureHttpClient");
     }
 
     [Fact]
-    public void ResolveClient_ValidConfiguration_ReturnsClient()
+    public void ResolveFactory_ValidConfiguration_ReturnsFactory()
     {
         // Arrange
         var configuration = CreateValidConfiguration();
         var services = new ServiceCollection();
-        services.AddWuzApiClient(configuration);
+        services.AddWuzApi(configuration);
         using var provider = services.BuildServiceProvider();
 
         // Act
-        var client = provider.GetService<IWaClient>();
+        var factory = provider.GetService<IWaClientFactory>();
+
+        // Assert
+        factory.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void ResolveAdminFactory_ValidConfiguration_ReturnsFactory()
+    {
+        // Arrange
+        var configuration = CreateValidConfiguration();
+        var services = new ServiceCollection();
+        services.AddWuzApi(configuration);
+        using var provider = services.BuildServiceProvider();
+
+        // Act
+        var factory = provider.GetService<IWuzApiAdminClientFactory>();
+
+        // Assert
+        factory.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Factory_CreateClient_ReturnsClient()
+    {
+        // Arrange
+        var configuration = CreateValidConfiguration();
+        var services = new ServiceCollection();
+        services.AddWuzApi(configuration);
+        using var provider = services.BuildServiceProvider();
+        var factory = provider.GetRequiredService<IWaClientFactory>();
+
+        // Act
+        var client = factory.CreateClient("test-token");
 
         // Assert
         client.Should().NotBeNull();
     }
 
     [Fact]
-    public void ResolveAdminClient_ValidConfiguration_ReturnsClient()
+    public void AdminFactory_CreateClient_ReturnsClient()
     {
         // Arrange
-        var configuration = CreateValidAdminConfiguration();
+        var configuration = CreateValidConfiguration();
         var services = new ServiceCollection();
-        services.AddWuzApiAdminClient(configuration);
+        services.AddWuzApi(configuration);
         using var provider = services.BuildServiceProvider();
+        var factory = provider.GetRequiredService<IWuzApiAdminClientFactory>();
 
         // Act
-        var client = provider.GetService<IWuzApiAdminClient>();
+        var client = factory.CreateClient("admin-token");
 
         // Assert
         client.Should().NotBeNull();
     }
 
     [Fact]
-    public void AddWuzApiClient_ReturnsServiceCollection_ForChaining()
+    public void AddWuzApi_ReturnsServiceCollection_ForChaining()
     {
         // Arrange
         var services = new ServiceCollection();
 
         // Act
-        var result = services.AddWuzApiClient(CreateValidConfiguration());
+        var result = services.AddWuzApi(CreateValidConfiguration());
 
         // Assert
         result.Should().BeSameAs(services);
     }
 
     [Fact]
-    public void AddWuzApiAdminClient_ReturnsServiceCollection_ForChaining()
+    public void AddWuzApi_CalledMultipleTimes_DoesNotDuplicateRegistrations()
     {
         // Arrange
         var services = new ServiceCollection();
 
         // Act
-        var result = services.AddWuzApiAdminClient(CreateValidAdminConfiguration());
+        services.AddWuzApi(_ => { });
+        services.AddWuzApi(_ => { });
 
         // Assert
-        result.Should().BeSameAs(services);
+        var factoryCount = services.Count(d => d.ServiceType == typeof(IWaClientFactory));
+        factoryCount.Should().Be(1);
     }
 }

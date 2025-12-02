@@ -1,8 +1,4 @@
 using AwesomeAssertions;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using WuzApiClient.Configuration;
-using WuzApiClient.Core.Interfaces;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Responses.Admin;
@@ -80,24 +76,8 @@ public sealed class AdminIntegrationTests
     [Trait("Category", "LiveApi")]
     public async Task ListUsers_InvalidAdminToken_ReturnsUnauthorizedError()
     {
-        // Arrange - Create a client with invalid token
-        var configValues = new Dictionary<string, string?>
-        {
-            ["WuzApi:BaseUrl"] = this.fixture.Configuration["WuzApi:BaseUrl"],
-            ["WuzApiAdmin:BaseUrl"] = this.fixture.Configuration["WuzApiAdmin:BaseUrl"],
-            ["WuzApiAdmin:AdminToken"] = "invalid-token-12345"
-        };
-
-        var configuration = new ConfigurationBuilder()
-            .AddInMemoryCollection(configValues)
-            .Build();
-
-        var services = new ServiceCollection();
-        services.AddSingleton<IConfiguration>(configuration);
-        services.AddWuzApiAdminClient(configuration);
-
-        await using var serviceProvider = services.BuildServiceProvider();
-        var invalidAdminClient = serviceProvider.GetRequiredService<IWuzApiAdminClient>();
+        // Arrange - Create an admin client with invalid token using the factory
+        var invalidAdminClient = this.fixture.AdminClientFactory.CreateClient("invalid-token-12345");
 
         // Act
         var result = await invalidAdminClient.ListUsersAsync();

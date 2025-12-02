@@ -32,30 +32,32 @@ Or add to your `.csproj`:
 <PackageReference Include="WuzApiClient.RabbitMq" Version="1.0.0" />
 ```
 
-## Step 1: Register the HTTP Client
+## Step 1: Register the Client Factories
 
-In your application's `Program.cs` or `Startup.cs`, register the WuzAPI client:
+In your application's `Program.cs` or `Startup.cs`, register the WuzAPI client factories:
 
 ```csharp
 using WuzApiClient.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register WuzApiClient
-builder.Services.AddWuzApiClient(options =>
+// Register WuzApi factories (server settings only - tokens passed at runtime)
+builder.Services.AddWuzApi(options =>
 {
-    options.BaseUrl = "http://localhost:8080"; // Your WuzAPI gateway URL
-    options.UserToken = "your-user-token";     // Gateway authentication token
+    options.BaseUrl = "http://localhost:8080/"; // Your WuzAPI gateway URL
+    options.TimeoutSeconds = 30;                // Request timeout
 });
 
 var app = builder.Build();
 ```
 
-For production environments, store the token securely using [configuration providers](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/).
+This registers `IWaClientFactory` and `IWuzApiAdminClientFactory` for creating clients with dynamic tokens.
 
-## Step 2: Inject and Use the Client
+For production environments, store tokens securely using [configuration providers](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/).
 
-Inject `IWaClient` into your services or controllers:
+## Step 2: Inject and Use the Factory
+
+Inject `IWaClientFactory` into your services and create clients with user-specific tokens:
 
 ```csharp
 using WuzApiClient.Core.Interfaces;
@@ -63,21 +65,24 @@ using WuzApiClient.Models.Common;
 
 public sealed class WhatsAppService
 {
-    private readonly IWaClient wuzClient;
+    private readonly IWaClientFactory clientFactory;
     private readonly ILogger<WhatsAppService> logger;
 
-    public WhatsAppService(IWaClient wuzClient, ILogger<WhatsAppService> logger)
+    public WhatsAppService(IWaClientFactory clientFactory, ILogger<WhatsAppService> logger)
     {
-        this.wuzClient = wuzClient;
+        this.clientFactory = clientFactory;
         this.logger = logger;
     }
 
-    public async Task SendWelcomeMessageAsync(string phoneNumber)
+    public async Task SendWelcomeMessageAsync(string userToken, string phoneNumber)
     {
+        // Create client with user-specific token
+        var client = this.clientFactory.CreateClient(userToken);
+
         // Create Phone object from E.164 format phone number (digits only)
         var phone = Phone.Create(phoneNumber);
 
-        var result = await this.wuzClient.SendTextMessageAsync(
+        var result = await client.SendTextMessageAsync(
             phone,
             "Welcome to our service!"
         );
@@ -93,7 +98,7 @@ public sealed class WhatsAppService
         {
             this.logger.LogError(
                 "Failed to send message: {Error}",
-                result.ErrorMessage
+                result.Error.Message
             );
         }
     }
@@ -106,7 +111,7 @@ WuzAPI Client uses the Result pattern instead of exceptions. Always check `IsSuc
 
 ```csharp
 var phone = Phone.Create("5511999999999");
-var result = await wuzClient.SendTextMessageAsync(phone, "Hello, World!");
+var result = await client.SendTextMessageAsync(phone, "Hello, World!");
 
 if (result.IsSuccess)
 {
@@ -118,7 +123,7 @@ if (result.IsSuccess)
 else
 {
     // Error path
-    var errorMessage = result.ErrorMessage;
+    var error = result.Error;
     // Handle the error...
 }
 ```
@@ -137,7 +142,7 @@ using WuzApiClient.Models.Requests.Chat;
 
 ```csharp
 var phone = Phone.Create("5511999999999");
-var result = await wuzClient.SendTextMessageAsync(
+var result = await client.SendTextMessageAsync(
     phone,
     "Hello, World!"
 );
@@ -158,7 +163,7 @@ var request = new SendImageRequest
     MimeType = "image/jpeg"
 };
 
-var result = await wuzClient.SendImageAsync(request);
+var result = await client.SendImageAsync(request);
 ```
 
 ### Document Message
@@ -176,7 +181,7 @@ var request = new SendDocumentRequest
     MimeType = "application/pdf"
 };
 
-var result = await wuzClient.SendDocumentAsync(request);
+var result = await client.SendDocumentAsync(request);
 ```
 
 For complete API reference, see [HTTP Client Reference](../api/http-client-reference.md).
@@ -186,7 +191,7 @@ For complete API reference, see [HTTP Client Reference](../api/http-client-refer
 ### Get All Contacts
 
 ```csharp
-var result = await wuzClient.GetContactsAsync();
+var result = await client.GetContactsAsync();
 
 if (result.IsSuccess)
 {
@@ -200,7 +205,7 @@ if (result.IsSuccess)
 ### Get All Groups
 
 ```csharp
-var result = await wuzClient.GetGroupsAsync();
+var result = await client.GetGroupsAsync();
 
 if (result.IsSuccess)
 {

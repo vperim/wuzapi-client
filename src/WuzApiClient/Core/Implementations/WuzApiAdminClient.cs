@@ -1,8 +1,7 @@
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using WuzApiClient.Configuration;
 using WuzApiClient.Core.Interfaces;
 using WuzApiClient.Core.Internal;
 using WuzApiClient.Models.Requests.Admin;
@@ -14,25 +13,37 @@ namespace WuzApiClient.Core.Implementations;
 /// <summary>
 /// Admin client implementation for managing WuzAPI users.
 /// </summary>
+/// <remarks>
+/// Instances should be created via <see cref="IWuzApiAdminClientFactory"/> for proper
+/// HttpClient lifecycle management. Direct instantiation is supported for
+/// testing or manual DI scenarios.
+/// </remarks>
 public sealed class WuzApiAdminClient : IWuzApiAdminClient
 {
     private const string AuthHeader = "Authorization";
 
     private readonly WuzApiHttpClient httpClient;
-    private readonly IOptions<WuzApiAdminOptions> options;
+    private readonly string adminToken;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WuzApiAdminClient"/> class.
     /// </summary>
-    /// <param name="httpClient">The HTTP client.</param>
-    /// <param name="options">The configuration options.</param>
-    public WuzApiAdminClient(HttpClient httpClient, IOptions<WuzApiAdminOptions> options)
+    /// <param name="httpClient">The HTTP client configured with base URL and timeout.</param>
+    /// <param name="adminToken">The admin token for authentication.</param>
+    /// <exception cref="ArgumentNullException">Thrown when httpClient is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when adminToken is null or whitespace.</exception>
+    public WuzApiAdminClient(HttpClient httpClient, string adminToken)
     {
+        if (httpClient == null)
+            throw new ArgumentNullException(nameof(httpClient));
+        if (string.IsNullOrWhiteSpace(adminToken))
+            throw new ArgumentException("Admin token is required.", nameof(adminToken));
+
         this.httpClient = new WuzApiHttpClient(httpClient);
-        this.options = options;
+        this.adminToken = adminToken;
     }
 
-    private string AdminToken => this.options.Value.AdminToken;
+    private string AdminToken => this.adminToken;
 
     /// <inheritdoc/>
     public async Task<WuzResult<UserListResponse>> ListUsersAsync(CancellationToken cancellationToken = default)
