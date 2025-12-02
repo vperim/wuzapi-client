@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using WuzApiClient.Extensions;
 
 namespace WuzApiClient.Models.Common;
 
@@ -32,7 +33,7 @@ public readonly struct Phone : IEquatable<Phone>
     {
         phone = default;
 
-        if (string.IsNullOrWhiteSpace(value))
+        if (value.IsNullOrWhiteSpace())
             return false;
 
         // Remove common separators and formatting

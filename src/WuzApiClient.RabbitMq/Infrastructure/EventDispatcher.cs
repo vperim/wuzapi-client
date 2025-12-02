@@ -166,6 +166,7 @@ public sealed class EventDispatcher : IEventDispatcher
 
         foreach (var handler in handlers)
         {
+            if (handler is null) continue;
             try
             {
                 // Get handler options before invoking
@@ -222,7 +223,7 @@ public sealed class EventDispatcher : IEventDispatcher
     {
         var errors = new List<WuzApiError>();
         var handlerCount = 0;
-
+        
         // Resolve all non-generic handlers
         var handlers = serviceProvider.GetServices<IEventHandler>();
 

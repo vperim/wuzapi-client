@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WuzApiClient.Extensions;
 using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
 
@@ -27,7 +28,7 @@ public sealed class WuzEventJsonConverter : JsonConverter<WuzEvent>
         }
 
         var eventType = typeElement.GetString();
-        if (string.IsNullOrWhiteSpace(eventType))
+        if (eventType.IsNullOrWhiteSpace())
         {
             throw new JsonException("Event 'type' field is null or empty.");
         }

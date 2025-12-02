@@ -38,7 +38,7 @@ public sealed class GroupIntegrationTests
     public async Task GetGroupInfo_ValidGroupId_ReturnsInfo()
     {
         // Arrange - requires a real group JID
-        var groupId = TestConfiguration.TestGroupId;
+        var groupId = TestConfiguration.TestGroupId!;
 
         // Act
         var result = await this.fixture.Client.GetGroupInfoAsync(groupId);
@@ -79,7 +79,7 @@ public sealed class GroupIntegrationTests
     public async Task GetGroupInviteLink_ValidGroup_ReturnsLink()
     {
         // Arrange - requires a real group JID where the user is admin
-        var groupId = TestConfiguration.TestGroupId;
+        var groupId = TestConfiguration.TestGroupId!;
 
         // Act
         var result = await this.fixture.Client.GetGroupInviteLinkAsync(groupId);

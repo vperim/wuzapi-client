@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using WuzApiClient.Extensions;
 using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Internal;
@@ -75,7 +76,7 @@ internal static class ResponseParser
     /// <returns>The error message if found; otherwise, null.</returns>
     public static string? ExtractErrorMessage(string? rawContent)
     {
-        if (string.IsNullOrWhiteSpace(rawContent))
+        if (rawContent.IsNullOrWhiteSpace())
             return null;
 
         try

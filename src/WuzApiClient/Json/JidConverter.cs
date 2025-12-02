@@ -1,6 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WuzApiClient.Extensions;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Json;
@@ -15,7 +16,7 @@ public sealed class JidConverter : JsonConverter<Jid>
     {
         var value = reader.GetString();
 
-        if (string.IsNullOrEmpty(value))
+        if (value.IsNullOrEmpty())
             throw new JsonException("JID cannot be null or empty.");
 
         return new Jid(value);

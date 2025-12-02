@@ -1,4 +1,5 @@
 using System;
+using WuzApiClient.Extensions;
 
 namespace WuzApiClient.Models.Common;
 
@@ -94,7 +95,7 @@ public readonly struct Jid : IEquatable<Jid>
     {
         jid = default;
 
-        if (string.IsNullOrWhiteSpace(value))
+        if (value.IsNullOrWhiteSpace())
             return false;
 
         if (!value.Contains("@"))

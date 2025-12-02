@@ -16,8 +16,6 @@ namespace WuzApiClient.Core.Implementations;
 /// </remarks>
 public sealed partial class WaClient : IWaClient
 {
-    private const string TokenHeader = "Token";
-
     private readonly WuzApiHttpClient httpClient;
     private readonly string userToken;
 

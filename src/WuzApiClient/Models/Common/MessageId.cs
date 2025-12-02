@@ -1,4 +1,5 @@
 using System;
+using WuzApiClient.Extensions;
 
 namespace WuzApiClient.Models.Common;
 
@@ -31,7 +32,7 @@ public readonly struct MessageId : IEquatable<MessageId>
     {
         messageId = default;
 
-        if (string.IsNullOrWhiteSpace(value))
+        if (value.IsNullOrWhiteSpace())
             return false;
 
         messageId = new MessageId(value);

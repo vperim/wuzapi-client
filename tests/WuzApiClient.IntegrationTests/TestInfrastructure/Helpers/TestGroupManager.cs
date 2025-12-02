@@ -101,6 +101,6 @@ public sealed class TestGroupManager
                 $"Failed to create test group: {result.Error}");
         }
 
-        return result.Value!.Jid;
+        return result.Value.Jid!;
     }
 }
