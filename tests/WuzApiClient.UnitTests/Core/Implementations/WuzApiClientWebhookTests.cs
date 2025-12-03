@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Webhook;
 using WuzApiClient.Models.Responses.Webhook;
 using WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
@@ -16,7 +17,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = ["message", "status"]
+            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
         };
 
         // Act
@@ -34,7 +35,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = ["message", "status"]
+            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
         };
 
         // Act
@@ -50,8 +51,8 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         content.Should().Contain("\"url\"");
         content.Should().Contain("https://example.com/webhook");
         content.Should().Contain("\"events\"");
-        content.Should().Contain("message");
-        content.Should().Contain("status");
+        content.Should().Contain("Message");
+        content.Should().Contain("Presence");
     }
 
     [Fact]
@@ -61,7 +62,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var expectedResponse = new WebhookConfigResponse
         {
             Url = "https://example.com/webhook",
-            Events = ["message", "status"]
+            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
         };
         this.MockHandler.EnqueueSuccessResponse(expectedResponse);
 
@@ -71,7 +72,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Url.Should().Be("https://example.com/webhook");
-        result.Value.Events.Should().BeEquivalentTo(["message", "status"]);
+        result.Value.Events.Should().BeEquivalentTo([SubscribableEvent.Message, SubscribableEvent.Presence]);
     }
 
     [Fact]

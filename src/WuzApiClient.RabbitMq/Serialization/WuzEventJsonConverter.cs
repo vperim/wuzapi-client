@@ -73,6 +73,8 @@ public sealed class WuzEventJsonConverter : JsonConverter<WuzEvent>
                 => typeof(QrCodeEvent),
             _ when string.Equals(eventType, EventTypes.QrTimeout, StringComparison.OrdinalIgnoreCase)
                 => typeof(QrTimeoutEvent),
+            _ when string.Equals(eventType, EventTypes.QRScannedWithoutMultidevice, StringComparison.OrdinalIgnoreCase)
+                => typeof(QRScannedWithoutMultideviceEvent),
             _ when string.Equals(eventType, EventTypes.PairSuccess, StringComparison.OrdinalIgnoreCase)
                 => typeof(PairSuccessEvent),
             _ when string.Equals(eventType, EventTypes.PairError, StringComparison.OrdinalIgnoreCase)
@@ -143,6 +145,8 @@ public sealed class WuzEventJsonConverter : JsonConverter<WuzEvent>
                 => typeof(UserAboutEvent),
             _ when string.Equals(eventType, EventTypes.FbMessage, StringComparison.OrdinalIgnoreCase)
                 => typeof(FbMessageEvent),
+            _ when string.Equals(eventType, EventTypes.CATRefreshError, StringComparison.OrdinalIgnoreCase)
+                => typeof(CATRefreshErrorEvent),
             _ => typeof(UnknownEvent)
         };
 

@@ -14,8 +14,16 @@ public static class EventTypes
     /// <summary>Message that could not be decrypted.</summary>
     public const string UndecryptableMessage = "UndecryptableMessage";
 
-    /// <summary>Message delivery/read receipt.</summary>
-    public const string Receipt = "ReadReceipt";
+    /// <summary>
+    /// Message delivery receipt.
+    /// NOTE: Due to a wuzapi quirk, all receipt events are sent as "ReadReceipt" type.
+    /// This constant matches wuzapi/constants.go but subscribing to it has no effect.
+    /// Use ReadReceipt instead for filtering, or subscribe to All.
+    /// </summary>
+    public const string Receipt = "Receipt";
+
+    /// <summary>Message read/delivery/played receipt (actual event type sent by wuzapi).</summary>
+    public const string ReadReceipt = "ReadReceipt";
 
     /// <summary>User presence update (online/offline).</summary>
     public const string Presence = "Presence";
@@ -34,6 +42,9 @@ public static class EventTypes
 
     /// <summary>QR code expired without successful scan.</summary>
     public const string QrTimeout = "QRTimeout";
+
+    /// <summary>QR code scanned but multidevice not enabled on phone.</summary>
+    public const string QRScannedWithoutMultidevice = "QRScannedWithoutMultidevice";
 
     /// <summary>Phone pairing completed successfully.</summary>
     public const string PairSuccess = "PairSuccess";
@@ -137,6 +148,9 @@ public static class EventTypes
     /// <summary>User about (status message) updated.</summary>
     public const string UserAbout = "UserAbout";
 
+    /// <summary>CAT (Client Access Token) refresh error.</summary>
+    public const string CATRefreshError = "CATRefreshError";
+
     /// <summary>Facebook/Meta integration message.</summary>
     public const string FbMessage = "FBMessage";
 
@@ -147,12 +161,14 @@ public static class EventTypes
         Message,
         UndecryptableMessage,
         Receipt,
+        ReadReceipt,
         Presence,
         ChatPresence,
         Connected,
         Disconnected,
         Qr,
         QrTimeout,
+        QRScannedWithoutMultidevice,
         PairSuccess,
         PairError,
         LoggedOut,
@@ -187,6 +203,7 @@ public static class EventTypes
         NewsletterLiveUpdate,
         MediaRetry,
         UserAbout,
+        CATRefreshError,
         FbMessage
     ]);
 }

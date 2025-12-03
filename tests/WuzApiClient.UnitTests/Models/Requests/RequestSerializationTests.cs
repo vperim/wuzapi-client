@@ -73,13 +73,13 @@ public sealed class RequestSerializationTests
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = ["message", "status"]
+            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
         };
 
         var json = JsonSerializer.Serialize(request, this.options);
 
         json.Should().Contain("\"url\":\"https://example.com/webhook\"");
-        json.Should().Contain("\"events\":[\"message\",\"status\"]");
+        json.Should().Contain("\"events\":[\"Message\",\"Presence\"]");
     }
 
     [Fact]
@@ -106,13 +106,13 @@ public sealed class RequestSerializationTests
     {
         var request = new ConnectSessionRequest
         {
-            Subscribe = ["messages", "presence"],
+            Subscribe = [SubscribableEvent.Message, SubscribableEvent.Presence],
             Immediate = true
         };
 
         var json = JsonSerializer.Serialize(request, this.options);
 
-        json.Should().Contain("\"subscribe\":[\"messages\",\"presence\"]");
+        json.Should().Contain("\"subscribe\":[\"Message\",\"Presence\"]");
         json.Should().Contain("\"immediate\":true");
     }
 

@@ -23,7 +23,7 @@ services:
       - dashboard-network
 
   wuzapi:
-    image: asternic/wuzapi:latest
+    image: asternic/wuzapi:sha-ad80551
     ports:
       - "8080:8080"
     volumes:

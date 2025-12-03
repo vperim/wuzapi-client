@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Json;
+using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Models.Requests.Webhook;
 
@@ -17,5 +19,6 @@ public sealed class SetWebhookRequest
     /// Gets or sets the events to subscribe to.
     /// </summary>
     [JsonPropertyName("events")]
-    public string[]? Events { get; set; }
+    [JsonConverter(typeof(SubscribableEventArrayConverter))]
+    public SubscribableEvent[]? Events { get; set; }
 }
