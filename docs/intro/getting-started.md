@@ -225,13 +225,12 @@ To handle incoming WhatsApp events (messages, status updates, etc.), set up the 
 In `Program.cs`:
 
 ```csharp
-using WuzApiClient.Events.Configuration;
+using WuzApiClient.RabbitMq.Configuration;
 
-builder.Services.AddWuzEvents(options =>
-{
-    options.ConnectionString = "amqp://guest:guest@localhost:5672/";
-    options.QueueName = "wuzapi-events";
-});
+// Register event consumer with fluent builder
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 ```
 
 For RabbitMQ configuration details, see the [RabbitMQ .NET Client Guide](https://www.rabbitmq.com/client-libraries/dotnet-api-guide).
@@ -241,8 +240,8 @@ For RabbitMQ configuration details, see the [RabbitMQ .NET Client Guide](https:/
 Implement `IEventHandler<TEvent>` for the events you want to process:
 
 ```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models.Events;
+using WuzApiClient.RabbitMq.Core.Interfaces;
+using WuzApiClient.RabbitMq.Models.Events;
 
 public sealed class MessageHandler : IEventHandler<MessageEvent>
 {
@@ -253,8 +252,10 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
         this.logger = logger;
     }
 
-    public Task HandleAsync(MessageEvent @event, CancellationToken cancellationToken)
+    public Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken cancellationToken)
     {
+        var @event = envelope.Event;
+
         // Get sender information
         var sender = @event.Info?.Sender ?? "Unknown";
 
@@ -277,8 +278,18 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
 
 ### Register the Handler
 
+Handlers are automatically registered when using `AddHandlersFromAssembly()`:
+
 ```csharp
-builder.Services.AddScoped<IEventHandler<MessageEvent>, MessageHandler>();
+// Assembly scanning (recommended) - automatically discovers MessageHandler
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
+
+// Or register explicitly
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
+);
 ```
 
 For event handling documentation, see [Event Handling Guide](../usage/event-handling.md).

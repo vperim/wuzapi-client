@@ -1,6 +1,4 @@
 using System;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -10,8 +8,6 @@ using RabbitMQ.Client.Events;
 using WuzApiClient.RabbitMq.Configuration;
 using WuzApiClient.RabbitMq.Core;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
-using WuzApiClient.RabbitMq.Serialization;
 
 namespace WuzApiClient.RabbitMq.Infrastructure;
 
@@ -212,35 +208,15 @@ public sealed class EventConsumer : IEventConsumer
     /// <returns>A task representing the async operation.</returns>
     private async Task ProcessMessageAsync(BasicDeliverEventArgs eventArgs, CancellationToken ct)
     {
-        WuzEvent? evt = null;
-
         try
         {
-            // Deserialize message body - RabbitMQ messages are already in the correct format
-            var messageBody = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-
             this.logger.LogDebug(
-                "Received message with delivery tag {DeliveryTag}",
-                eventArgs.DeliveryTag);
+                "Received message with delivery tag {DeliveryTag} ({ByteCount} bytes)",
+                eventArgs.DeliveryTag,
+                eventArgs.Body.Length);
 
-            // Deserialize directly to WuzEvent using our custom converter
-            evt = JsonSerializer.Deserialize<WuzEvent>(
-                messageBody,
-                WuzEventJsonSerializerOptions.Default);
-
-            if (evt == null)
-            {
-                this.logger.LogWarning(
-                    "Failed to deserialize message with delivery tag {DeliveryTag}. Raw message (truncated): {RawMessage}",
-                    eventArgs.DeliveryTag,
-                    TruncateForLogging(messageBody, 500));
-
-                await this.NackMessageAsync(eventArgs.DeliveryTag, requeue: false, ct).ConfigureAwait(false);
-                return;
-            }
-
-            // Call dispatcher.DispatchAsync()
-            var result = await this.dispatcher.DispatchAsync(evt, ct).ConfigureAwait(false);
+            // Pass raw bytes directly to dispatcher (no deserialization here)
+            var result = await this.dispatcher.DispatchAsync(eventArgs.Body, ct).ConfigureAwait(false);
 
             // Handle ack/nack based on dispatch result and AutoAck setting
             if (!this.options.AutoAck)
@@ -252,27 +228,13 @@ public sealed class EventConsumer : IEventConsumer
                 else
                 {
                     this.logger.LogError(
-                        "Failed to dispatch event of type '{EventType}': {Error}",
-                        evt.Type,
+                        "Failed to dispatch event: {Error}",
                         result.Error);
 
                     // Nack message on failure (requeue based on ErrorBehavior - for now default to requeue=false)
                     await this.NackMessageAsync(eventArgs.DeliveryTag, requeue: false, ct).ConfigureAwait(false);
                 }
             }
-        }
-        catch (JsonException ex)
-        {
-            // Log with raw message for debugging schema mismatches
-            var rawMessage = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
-            this.logger.LogError(
-                ex,
-                "JSON deserialization error for message with delivery tag {DeliveryTag}. Raw message (truncated): {RawMessage}",
-                eventArgs.DeliveryTag,
-                TruncateForLogging(rawMessage, 500));
-
-            // Don't requeue messages that can't be deserialized
-            await this.NackMessageAsync(eventArgs.DeliveryTag, requeue: false, ct).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -287,9 +249,8 @@ public sealed class EventConsumer : IEventConsumer
         {
             this.logger.LogError(
                 ex,
-                "Unexpected error processing message with delivery tag {DeliveryTag} (EventType: {EventType})",
-                eventArgs.DeliveryTag,
-                evt?.Type ?? "unknown");
+                "Unexpected error processing message with delivery tag {DeliveryTag}",
+                eventArgs.DeliveryTag);
 
             // Nack message on failure (requeue based on ErrorBehavior - for now default to requeue=false)
             await this.NackMessageAsync(eventArgs.DeliveryTag, requeue: false, ct).ConfigureAwait(false);

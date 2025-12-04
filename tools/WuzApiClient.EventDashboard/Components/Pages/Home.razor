@@ -1,5 +1,4 @@
 @page "/"
-@using WuzApiClient.EventDashboard.Models
 @using WuzApiClient.EventDashboard.Components.Shared
 @implements IDisposable
 @inject IEventStreamService EventStream
@@ -19,7 +18,7 @@
         {
             <span>Disconnected: @(EventStream.ConnectionError ?? "Unknown")</span>
         }
-        <span class="event-count-pill">@totalEvents recent events</span>
+        <span class="event-count-pill">@TotalEvents recent events</span>
     </div>
 
     <!-- Category Filters -->
@@ -59,7 +58,7 @@
                         <span class="event-error">Error: @entry.Error</span>
                     }
                 </div>
-                @if (entry.Event?.Type == "Message")
+                @if (entry.Event?.EventType == "Message")
                 {
                     <MessagePreview Event="entry.Event" />
                 }
@@ -73,8 +72,8 @@
 </div>
 
 @code {
-    private HashSet<EventCategory> activeCategories = new(Enum.GetValues<EventCategory>());
-    private int totalEvents => EventStream.RecentEvents.Count;
+    private HashSet<EventCategory> activeCategories = [..Enum.GetValues<EventCategory>()];
+    private int TotalEvents => EventStream.RecentEvents.Count;
 
     protected override void OnInitialized()
     {

@@ -6,7 +6,7 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for chat typing and recording indicators.
 /// Maps to whatsmeow events.ChatPresence.
 /// </summary>
-public sealed record ChatPresenceEvent : WuzEvent
+public sealed record ChatPresenceEvent
 {
     // === MessageSource fields (embedded in Go) ===
 

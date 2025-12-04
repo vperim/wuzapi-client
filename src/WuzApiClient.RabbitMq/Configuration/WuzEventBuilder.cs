@@ -1,143 +1,83 @@
 using System;
+using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models.Events;
 
 namespace WuzApiClient.RabbitMq.Configuration;
 
 /// <summary>
-/// Fluent builder for configuring WuzEvents services.
+/// Fluent builder for configuring WuzApiClient.RabbitMq event handlers.
 /// </summary>
 public sealed class WuzEventBuilder
 {
     private readonly IServiceCollection services;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="WuzEventBuilder"/> class.
-    /// </summary>
-    /// <param name="services">The service collection.</param>
     internal WuzEventBuilder(IServiceCollection services)
     {
         this.services = services ?? throw new ArgumentNullException(nameof(services));
     }
 
     /// <summary>
-    /// Adds a handler for message events.
+    /// Registers a typed event handler for a specific event type.
     /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
+    /// <typeparam name="TEvent">The event type to handle.</typeparam>
+    /// <typeparam name="THandler">The handler implementation.</typeparam>
+    /// <param name="lifetime">Service lifetime (default: Scoped).</param>
     /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnMessage<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<MessageEvent>
+    public WuzEventBuilder AddHandler<TEvent, THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where TEvent : class
+        where THandler : class, IEventHandler<TEvent>
     {
-        this.services.AddEventHandler<MessageEvent, THandler>(lifetime);
+        this.services.Add(new ServiceDescriptor(
+            typeof(IEventHandler<TEvent>),
+            typeof(THandler),
+            lifetime));
+
         return this;
     }
 
     /// <summary>
-    /// Adds a handler for presence events.
+    /// Scans assemblies and registers all types implementing IEventHandler&lt;T&gt;.
     /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
+    /// <param name="assemblies">Assemblies to scan for handlers.</param>
     /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnPresence<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<PresenceEvent>
+    public WuzEventBuilder AddHandlersFromAssembly(params Assembly[] assemblies)
     {
-        this.services.AddEventHandler<PresenceEvent, THandler>(lifetime);
-        return this;
+        return this.AddHandlersFromAssembly(ServiceLifetime.Scoped, assemblies);
     }
 
     /// <summary>
-    /// Adds a handler for receipt events.
+    /// Scans assemblies and registers all types implementing IEventHandler&lt;T&gt;.
     /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
+    /// <param name="lifetime">Default service lifetime for discovered handlers.</param>
+    /// <param name="assemblies">Assemblies to scan for handlers.</param>
     /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnReceipt<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<ReceiptEvent>
+    public WuzEventBuilder AddHandlersFromAssembly(ServiceLifetime lifetime, params Assembly[] assemblies)
     {
-        this.services.AddEventHandler<ReceiptEvent, THandler>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a handler for connected events.
-    /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnConnected<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<ConnectedEvent>
-    {
-        this.services.AddEventHandler<ConnectedEvent, THandler>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a handler for disconnected events.
-    /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnDisconnected<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<DisconnectedEvent>
-    {
-        this.services.AddEventHandler<DisconnectedEvent, THandler>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a handler for call offer events.
-    /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnCallOffer<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler<CallOfferEvent>
-    {
-        this.services.AddEventHandler<CallOfferEvent, THandler>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a non-generic handler for any event type.
-    /// </summary>
-    /// <typeparam name="THandler">The handler type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder OnAny<THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler
-    {
-        this.services.AddEventHandler<THandler>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Adds a custom event filter.
-    /// </summary>
-    /// <typeparam name="TFilter">The filter type.</typeparam>
-    /// <param name="lifetime">The service lifetime.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder WithFilter<TFilter>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TFilter : class, IEventFilter
-    {
-        this.services.AddEventFilter<TFilter>(lifetime);
-        return this;
-    }
-
-    /// <summary>
-    /// Configures the event consumer options.
-    /// </summary>
-    /// <param name="configure">Configuration action.</param>
-    /// <returns>The builder for chaining.</returns>
-    public WuzEventBuilder Configure(Action<WuzEventOptions> configure)
-    {
-        if (configure == null)
+        if (assemblies == null || assemblies.Length == 0)
         {
-            throw new ArgumentNullException(nameof(configure));
+            throw new ArgumentException("At least one assembly must be provided", nameof(assemblies));
         }
 
-        this.services.Configure(configure);
+        foreach (var assembly in assemblies)
+        {
+            var handlerTypes = assembly.GetTypes()
+                .Where(t => t.IsClass && !t.IsAbstract);
+
+            foreach (var handlerType in handlerTypes)
+            {
+                var interfaces = handlerType.GetInterfaces()
+                    .Where(i => i.IsGenericType &&
+                               i.GetGenericTypeDefinition() == typeof(IEventHandler<>));
+
+                foreach (var iface in interfaces)
+                {
+                    this.services.Add(new ServiceDescriptor(iface, handlerType, lifetime));
+                }
+            }
+        }
+
         return this;
     }
 }

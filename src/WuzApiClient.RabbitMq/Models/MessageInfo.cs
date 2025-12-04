@@ -78,7 +78,7 @@ public sealed record MessageInfo
     /// Gets the server-assigned message ID.
     /// </summary>
     [JsonPropertyName("ServerID")]
-    public int ServerID { get; init; }
+    public int ServerId { get; init; }
 
     /// <summary>
     /// Gets the message type (e.g., "text", "image").
@@ -174,7 +174,7 @@ public sealed record MsgBotInfo
     /// Gets the edit target ID.
     /// </summary>
     [JsonPropertyName("EditTargetID")]
-    public string? EditTargetID { get; init; }
+    public string? EditTargetId { get; init; }
 
     /// <summary>
     /// Gets the edit type.
@@ -186,7 +186,7 @@ public sealed record MsgBotInfo
     /// Gets the edit sender timestamp.
     /// </summary>
     [JsonPropertyName("EditSenderTimestampMS")]
-    public DateTimeOffset? EditSenderTimestampMS { get; init; }
+    public DateTimeOffset? EditSenderTimestampMs { get; init; }
 }
 
 /// <summary>
@@ -204,7 +204,7 @@ public sealed record MsgMetaInfo
     /// Gets the target ID.
     /// </summary>
     [JsonPropertyName("TargetID")]
-    public string? TargetID { get; init; }
+    public string? TargetId { get; init; }
 
     /// <summary>
     /// Gets the target sender.
@@ -216,19 +216,19 @@ public sealed record MsgMetaInfo
     /// Gets the thread message ID.
     /// </summary>
     [JsonPropertyName("ThreadMessageID")]
-    public string? ThreadMessageID { get; init; }
+    public string? ThreadMessageId { get; init; }
 
     /// <summary>
     /// Gets the thread message sender JID.
     /// </summary>
     [JsonPropertyName("ThreadMessageSenderJID")]
-    public string? ThreadMessageSenderJID { get; init; }
+    public string? ThreadMessageSenderJid { get; init; }
 
     /// <summary>
     /// Gets the deprecated LID session.
     /// </summary>
     [JsonPropertyName("DeprecatedLIDSession")]
-    public object? DeprecatedLIDSession { get; init; }
+    public object? DeprecatedLidSession { get; init; }
 }
 
 /// <summary>
@@ -252,7 +252,7 @@ public sealed record DeviceSentMeta
     /// Gets the destination JID.
     /// </summary>
     [JsonPropertyName("DestinationJID")]
-    public string? DestinationJID { get; init; }
+    public string? DestinationJid { get; init; }
 
     /// <summary>
     /// Gets the phash.

@@ -44,7 +44,7 @@ public static class EventTypes
     public const string QrTimeout = "QRTimeout";
 
     /// <summary>QR code scanned but multidevice not enabled on phone.</summary>
-    public const string QRScannedWithoutMultidevice = "QRScannedWithoutMultidevice";
+    public const string QrScannedWithoutMultidevice = "QRScannedWithoutMultidevice";
 
     /// <summary>Phone pairing completed successfully.</summary>
     public const string PairSuccess = "PairSuccess";
@@ -149,7 +149,7 @@ public static class EventTypes
     public const string UserAbout = "UserAbout";
 
     /// <summary>CAT (Client Access Token) refresh error.</summary>
-    public const string CATRefreshError = "CATRefreshError";
+    public const string CatRefreshError = "CATRefreshError";
 
     /// <summary>Facebook/Meta integration message.</summary>
     public const string FbMessage = "FBMessage";
@@ -168,7 +168,7 @@ public static class EventTypes
         Disconnected,
         Qr,
         QrTimeout,
-        QRScannedWithoutMultidevice,
+        QrScannedWithoutMultidevice,
         PairSuccess,
         PairError,
         LoggedOut,
@@ -203,7 +203,7 @@ public static class EventTypes
         NewsletterLiveUpdate,
         MediaRetry,
         UserAbout,
-        CATRefreshError,
+        CatRefreshError,
         FbMessage
     ]);
 }

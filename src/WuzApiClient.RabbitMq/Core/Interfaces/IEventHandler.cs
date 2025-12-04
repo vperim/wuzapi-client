@@ -9,16 +9,16 @@ namespace WuzApiClient.RabbitMq.Core.Interfaces;
 /// Handles a specific type of WhatsApp event.
 /// </summary>
 /// <typeparam name="TEvent">The event type to handle.</typeparam>
-public interface IEventHandler<in TEvent>
-    where TEvent : WuzEvent
+public interface IEventHandler<TEvent>
+    where TEvent : class
 {
     /// <summary>
     /// Handles the event asynchronously.
     /// </summary>
-    /// <param name="evt">The event to handle.</param>
+    /// <param name="envelope">The event envelope containing the typed event data.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task representing the async operation.</returns>
-    Task HandleAsync(TEvent evt, CancellationToken cancellationToken = default);
+    Task HandleAsync(WuzEventEnvelope<TEvent> envelope, CancellationToken cancellationToken = default);
 }
 
 /// <summary>
@@ -34,8 +34,8 @@ public interface IEventHandler
     /// <summary>
     /// Handles the event asynchronously.
     /// </summary>
-    /// <param name="evt">The event to handle.</param>
+    /// <param name="envelope">The event envelope containing event data.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>A task representing the async operation.</returns>
-    Task HandleAsync(WuzEvent evt, CancellationToken cancellationToken = default);
+    Task HandleAsync(WuzEventEnvelope envelope, CancellationToken cancellationToken = default);
 }

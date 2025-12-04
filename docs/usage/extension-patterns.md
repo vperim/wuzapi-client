@@ -9,8 +9,7 @@ WuzAPI Client provides clear extension points for customization:
 | Extension Point | Purpose | Priority |
 |----------------|---------|----------|
 | `IEventHandler<TEvent>` | Handle WhatsApp events | High |
-| `IEventFilter` | Filter events before processing | High |
-| `IEventErrorHandler` | Customize error handling | Medium |
+| `WuzEventBuilder` | Fluent API for handler registration | High |
 | `WuzApiOptions` | Configure HTTP client | High |
 | `WuzEventOptions` | Configure RabbitMQ consumer | High |
 | Custom JSON Converters | Add serialization for custom types | Low |
@@ -97,12 +96,17 @@ public sealed class WelcomeMessageHandler : IEventHandler<MessageEvent>
 ### Registration
 
 ```csharp
-// Register as scoped (new instance per message)
-builder.Services.AddScoped<IEventHandler<MessageEvent>, WelcomeMessageHandler>();
+// Using assembly scanning (recommended - automatically discovers all handlers)
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 
-// Multiple handlers for same event type are supported
-builder.Services.AddScoped<IEventHandler<MessageEvent>, LoggingHandler>();
-builder.Services.AddScoped<IEventHandler<MessageEvent>, AnalyticsHandler>();
+// Or register individual handlers explicitly
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandler<MessageEvent, WelcomeMessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEvent, LoggingHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEvent, AnalyticsHandler>(ServiceLifetime.Scoped)
+);
 ```
 
 ### Constraints
@@ -130,180 +134,73 @@ public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
 }
 ```
 
-## Extension Point 2: IEventFilter
+## Extension Point 2: WuzEventBuilder
 
-**Location:** `WuzApiClient.RabbitMq/Core/Interfaces/IEventFilter.cs`
+**Location:** `WuzApiClient.RabbitMq/Configuration/WuzEventBuilder.cs`
 
-**Purpose:** Filter events before they reach handlers
+**Purpose:** Fluent API for registering event handlers
 
 **When to Use:**
-- Ignore messages from specific senders
-- Skip events during maintenance windows
-- Filter by event properties
-- Implement rate limiting per sender
+- Registering multiple event handlers
+- Using assembly scanning to auto-discover handlers
+- Controlling handler service lifetimes
 
 ### Interface Definition
 
 ```csharp
-namespace WuzApiClient.Events.Core.Interfaces;
+namespace WuzApiClient.RabbitMq.Configuration;
 
-public interface IEventFilter
+public sealed class WuzEventBuilder
 {
-    bool ShouldProcess(WuzEvent @event);
-    int Order { get; }
+    public WuzEventBuilder AddHandler<TEvent, THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where TEvent : class
+        where THandler : class, IEventHandler<TEvent>;
+
+    public WuzEventBuilder AddHandlersFromAssembly(params Assembly[] assemblies);
+
+    public WuzEventBuilder AddHandlersFromAssembly(ServiceLifetime lifetime, params Assembly[] assemblies);
 }
 ```
 
-**Return Value:**
-- `true` – Process the event (dispatch to handlers)
-- `false` – Skip the event (acknowledge without processing)
+### Usage Examples
 
-### Implementation Example
+**Assembly Scanning (Recommended):**
 
 ```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models.Events;
-
-public sealed class BusinessHoursFilter : IEventFilter
-{
-    private readonly ILogger<BusinessHoursFilter> logger;
-    private readonly TimeProvider timeProvider;
-
-    public BusinessHoursFilter(ILogger<BusinessHoursFilter> logger, TimeProvider timeProvider)
-    {
-        this.logger = logger;
-        this.timeProvider = timeProvider;
-    }
-
-    public int Order => 0; // Execute first
-
-    public bool ShouldProcess(WuzEvent @event)
-    {
-        var now = this.timeProvider.GetLocalNow();
-        var isBusinessHours = now.Hour >= 9 && now.Hour < 18
-            && now.DayOfWeek != DayOfWeek.Saturday
-            && now.DayOfWeek != DayOfWeek.Sunday;
-
-        if (!isBusinessHours)
-        {
-            this.logger.LogInformation(
-                "Skipping event {EventType} outside business hours",
-                @event.GetType().Name
-            );
-        }
-
-        return isBusinessHours;
-    }
-}
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 ```
 
-### Registration
+**Individual Handler Registration:**
 
 ```csharp
-// Filters typically registered as scoped (default)
-builder.Services.AddScoped<IEventFilter, BusinessHoursFilter>();
-
-// All registered filters must return true for event to process
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEvent, ReceiptHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEvent, GroupHandler>(ServiceLifetime.Singleton)
+);
 ```
 
-### Constraints
-
-- Filters run **sequentially** ordered by `Order` property (lower = earlier execution)
-- **All filters** must return `true` for event to be processed
-- Filters should be **fast** (synchronous, no async I/O)
-- Filters are resolved from **scoped** DI container (per-message)
-
-## Extension Point 3: IEventErrorHandler
-
-**Location:** `WuzApiClient.RabbitMq/Core/Interfaces/IEventErrorHandler.cs`
-
-**Purpose:** Customize error handling when handlers fail
-
-**When to Use:**
-- Implement retry logic for transient errors
-- Route different errors to different behaviors
-- Send alerts on specific error types
-- Log errors with custom context
-
-### Interface Definition
+**Mixed Approach:**
 
 ```csharp
-namespace WuzApiClient.Events.Core.Interfaces;
-
-public interface IEventErrorHandler
-{
-    Task HandleErrorAsync(
-        WuzEvent @event,
-        Exception exception,
-        CancellationToken cancellationToken);
-}
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    // Scan for most handlers
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+    // Override lifetime for specific handler
+    .AddHandler<CriticalMessageEvent, CriticalHandler>(ServiceLifetime.Singleton)
+);
 ```
 
-### Implementation Example
+### Benefits
 
-```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models.Events;
+- **Less boilerplate** - No need to register each handler individually
+- **Compile-time safety** - Handlers must implement `IEventHandler<T>`
+- **Lifetime control** - Specify lifetime per handler or for entire assembly
+- **Discoverable** - Assembly scanning finds all handlers automatically
 
-public sealed class SmartErrorHandler : IEventErrorHandler
-{
-    private readonly ILogger<SmartErrorHandler> logger;
-    private readonly INotificationService notifications;
-
-    public SmartErrorHandler(
-        ILogger<SmartErrorHandler> logger,
-        INotificationService notifications)
-    {
-        this.logger = logger;
-        this.notifications = notifications;
-    }
-
-    public async Task HandleErrorAsync(
-        WuzEvent @event,
-        Exception exception,
-        CancellationToken cancellationToken)
-    {
-        this.logger.LogError(
-            exception,
-            "Error processing {EventType} event",
-            @event.GetType().Name
-        );
-
-        // Critical errors - send alert
-        if (exception is InvalidOperationException)
-        {
-            this.logger.LogCritical("Critical error detected");
-            await this.notifications.SendAlertAsync(
-                $"Critical error processing WhatsApp event: {exception.Message}",
-                cancellationToken
-            );
-        }
-        else if (exception is TimeoutException or HttpRequestException)
-        {
-            this.logger.LogWarning("Transient error detected");
-        }
-        else if (exception is JsonException or ArgumentException)
-        {
-            this.logger.LogWarning("Data error detected");
-        }
-    }
-}
-```
-
-### Registration
-
-```csharp
-builder.Services.AddSingleton<IEventErrorHandler, SmartErrorHandler>();
-```
-
-### Constraints
-
-- Only **one** error handler can be registered
-- Error handler is resolved from **singleton** DI container
-- Should be **fast** (avoid long-running operations)
-- Error handler is for logging/alerting only - it does not control message acknowledgment behavior
-
-## Extension Point 4: WuzApiOptions
+## Extension Point 3: WuzApiOptions
 
 **Location:** `WuzApiClient/Configuration/WuzApiOptions.cs`
 
@@ -336,7 +233,7 @@ builder.Services.AddWuzApiClient(options =>
 });
 ```
 
-## Extension Point 5: WuzEventOptions
+## Extension Point 4: WuzEventOptions
 
 **Location:** `WuzApiClient.RabbitMq/Configuration/WuzEventOptions.cs`
 
@@ -350,10 +247,12 @@ builder.Services.AddWuzApiClient(options =>
 ### Properties
 
 ```csharp
-namespace WuzApiClient.Events.Configuration;
+namespace WuzApiClient.RabbitMq.Configuration;
 
 public class WuzEventOptions
 {
+    public const string SectionName = "WuzEvents";
+
     public string ConnectionString { get; set; } = string.Empty;
     public string QueueName { get; set; } = "whatsapp_events";
     public string ConsumerTagPrefix { get; set; } = "wuzapi-consumer";
@@ -362,28 +261,27 @@ public class WuzEventOptions
     public int MaxReconnectAttempts { get; set; } = 10;
     public TimeSpan ReconnectDelay { get; set; } = TimeSpan.FromSeconds(3);
     public int MaxConcurrentMessages { get; set; } = Environment.ProcessorCount;
-    public HashSet<string> SubscribedEventTypes { get; set; } = [];
-    public HashSet<string> FilterUserIds { get; set; } = [];
-    public HashSet<string> FilterInstanceNames { get; set; } = [];
 }
 ```
 
 ### Configuration Example
 
 ```csharp
-builder.Services.AddWuzEvents(options =>
+// Configuration is loaded from appsettings.json "WuzEvents" section
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
+
+// Advanced: Override specific options
+builder.Services.Configure<WuzEventOptions>(options =>
 {
-    options.ConnectionString = "amqp://user:pass@rabbitmq.internal:5672/vhost";
-    options.QueueName = "wuzapi-events";
     options.MaxConcurrentMessages = 10;
     options.PrefetchCount = 20;
     options.MaxReconnectAttempts = 5;
-    options.SubscribedEventTypes = ["message", "message.ack"];
-    options.FilterUserIds = ["user1", "user2"];
 });
 ```
 
-## Extension Point 6: Custom JSON Converters
+## Extension Point 5: Custom JSON Converters
 
 **Location:** `WuzApiClient/Json/Converters/`
 
@@ -451,29 +349,17 @@ See [System.Text.Json Custom Converters](https://learn.microsoft.com/en-us/dotne
 Example: Complete event processing pipeline
 
 ```csharp
-// 1. Register HTTP client
-builder.Services.AddWuzApiClient(options =>
+// 1. Register HTTP client factories
+builder.Services.AddWuzApi(options =>
 {
     options.BaseUrl = configuration["WuzApi:BaseUrl"];
-    options.UserToken = configuration["WuzApi:UserToken"];
+    options.TimeoutSeconds = 30;
 });
 
-// 2. Register event consumer
-builder.Services.AddWuzEvents(options =>
-{
-    configuration.GetSection("RabbitMq").Bind(options);
-});
-
-// 3. Register filters
-builder.Services.AddSingleton<IEventFilter, BusinessHoursFilter>();
-
-// 4. Register error handler
-builder.Services.AddSingleton<IEventErrorHandler, SmartErrorHandler>();
-
-// 5. Register event handlers
-builder.Services.AddScoped<IEventHandler<MessageEvent>, CommandHandler>();
-builder.Services.AddScoped<IEventHandler<MessageStatusEvent>, StatusTracker>();
-builder.Services.AddScoped<IEventHandler<GroupUpdateEvent>, GroupMonitor>();
+// 2. Register event consumer with handlers
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 ```
 
 Processing flow:
@@ -481,17 +367,13 @@ Processing flow:
 ```
 RabbitMQ → EventConsumer
               ↓
-         Deserialize to WuzEvent
-              ↓
-         BusinessHoursFilter (pass)
+         Deserialize to WuzEventEnvelope<T>
               ↓
          EventDispatcher
               ↓
-         CommandHandler.HandleAsync() [throws exception]
+         IEventHandler<T>.HandleAsync()
               ↓
-         SmartErrorHandler.HandleErrorAsync()
-              ↓
-         EventConsumer nacks message
+         EventConsumer acknowledges message
 ```
 
 ## Testing Extensions
@@ -530,23 +412,6 @@ public async Task Handler_SendsReply_OnHelloMessage()
 }
 ```
 
-### Unit Test Filter
-
-```csharp
-[Fact]
-public void Filter_ReturnsTrue_DuringBusinessHours()
-{
-    // Arrange
-    var filter = new BusinessHoursFilter(Mock.Of<ILogger<BusinessHoursFilter>>(), TimeProvider.System);
-    var @event = new MessageEvent();
-
-    // Act (assuming test runs during business hours)
-    var result = filter.ShouldProcess(@event);
-
-    // Assert
-    Assert.True(result);
-}
-```
 
 ## Best Practices
 

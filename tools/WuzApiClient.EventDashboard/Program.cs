@@ -16,11 +16,10 @@ builder.Services.Configure<DashboardOptions>(
 // Add event stream service (singleton to preserve state across circuits)
 builder.Services.AddSingleton<IEventStreamService, EventStreamService>();
 
-// Add WuzApiClient.RabbitMq event consumer
-builder.Services.AddWuzEvents(builder.Configuration, "WuzEvents");
-
-// Register dashboard event handler (non-generic, handles all events)
-builder.Services.AddEventHandler<DashboardEventHandler>(ServiceLifetime.Singleton);
+// Add WuzApiClient.RabbitMq event consumer with automatic handler registration
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Singleton, typeof(Program).Assembly)
+);
 
 var app = builder.Build();
 

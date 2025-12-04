@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Filters;
 using WuzApiClient.RabbitMq.Infrastructure;
-using WuzApiClient.RabbitMq.Models;
 
 namespace WuzApiClient.RabbitMq.Configuration;
 
@@ -47,12 +45,10 @@ public static class WuzEventServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The service collection.</param>
     /// <param name="configuration">The configuration instance.</param>
-    /// <param name="sectionName">The configuration section name. Default: "WuzEvents".</param>
     /// <returns>The service collection for chaining.</returns>
     public static IServiceCollection AddWuzEvents(
         this IServiceCollection services,
-        IConfiguration configuration,
-        string sectionName = "WuzEvents")
+        IConfiguration configuration)
     {
         if (services == null)
         {
@@ -66,10 +62,51 @@ public static class WuzEventServiceCollectionExtensions
 
         services
             .AddOptions<WuzEventOptions>()
-            .Bind(configuration.GetSection(sectionName))
+            .Bind(configuration.GetSection(WuzEventOptions.SectionName))
             .PostConfigure(options => options.Validate());
 
         return services.AddWuzEventsCore();
+    }
+
+    /// <summary>
+    /// Adds WuzApi event consumer services with configuration section binding and handler registration via fluent builder.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="configuration">The configuration instance.</param>
+    /// <param name="configureHandlers">Optional builder configuration action for registering event handlers.</param>
+    /// <returns>The service collection for chaining.</returns>
+    public static IServiceCollection AddWuzEvents(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        Action<WuzEventBuilder>? configureHandlers)
+    {
+        if (services == null)
+        {
+            throw new ArgumentNullException(nameof(services));
+        }
+
+        if (configuration == null)
+        {
+            throw new ArgumentNullException(nameof(configuration));
+        }
+
+        // Bind configuration
+        services
+            .AddOptions<WuzEventOptions>()
+            .Bind(configuration.GetSection(WuzEventOptions.SectionName))
+            .PostConfigure(options => options.Validate());
+
+        // Add core services
+        services.AddWuzEventsCore();
+
+        // Register handlers via builder if provided
+        if (configureHandlers != null)
+        {
+            var builder = new WuzEventBuilder(services);
+            configureHandlers(builder);
+        }
+
+        return services;
     }
 
     /// <summary>
@@ -106,83 +143,6 @@ public static class WuzEventServiceCollectionExtensions
     }
 
     /// <summary>
-    /// Registers a typed event handler with the specified service lifetime.
-    /// </summary>
-    /// <typeparam name="TEvent">The event type to handle.</typeparam>
-    /// <typeparam name="THandler">The handler implementation type.</typeparam>
-    /// <param name="services">The service collection.</param>
-    /// <param name="lifetime">The service lifetime. Default: Scoped.</param>
-    /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddEventHandler<TEvent, THandler>(
-        this IServiceCollection services,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TEvent : WuzEvent
-        where THandler : class, IEventHandler<TEvent>
-    {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        services.Add(new ServiceDescriptor(
-            typeof(IEventHandler<TEvent>),
-            typeof(THandler),
-            lifetime));
-
-        return services;
-    }
-
-    /// <summary>
-    /// Registers a non-generic event handler with the specified service lifetime.
-    /// </summary>
-    /// <typeparam name="THandler">The handler implementation type.</typeparam>
-    /// <param name="services">The service collection.</param>
-    /// <param name="lifetime">The service lifetime. Default: Scoped.</param>
-    /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddEventHandler<THandler>(
-        this IServiceCollection services,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where THandler : class, IEventHandler
-    {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        services.Add(new ServiceDescriptor(
-            typeof(IEventHandler),
-            typeof(THandler),
-            lifetime));
-
-        return services;
-    }
-
-    /// <summary>
-    /// Registers an event filter with the specified service lifetime.
-    /// </summary>
-    /// <typeparam name="TFilter">The filter implementation type.</typeparam>
-    /// <param name="services">The service collection.</param>
-    /// <param name="lifetime">The service lifetime. Default: Scoped (per-message).</param>
-    /// <returns>The service collection for chaining.</returns>
-    public static IServiceCollection AddEventFilter<TFilter>(
-        this IServiceCollection services,
-        ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TFilter : class, IEventFilter
-    {
-        if (services == null)
-        {
-            throw new ArgumentNullException(nameof(services));
-        }
-
-        services.Add(new ServiceDescriptor(
-            typeof(IEventFilter),
-            typeof(TFilter),
-            lifetime));
-
-        return services;
-    }
-
-    /// <summary>
     /// Registers core WuzEvents infrastructure services.
     /// </summary>
     /// <param name="services">The service collection.</param>
@@ -191,8 +151,8 @@ public static class WuzEventServiceCollectionExtensions
     {
         // Core infrastructure services - singletons
         services.TryAddSingleton<IRabbitMqConnection, RabbitMqConnection>();
+        services.TryAddSingleton<ITypedEventDispatcherRegistry, TypedEventDispatcherRegistry>();
         services.TryAddSingleton<IEventDispatcher, EventDispatcher>();
-        services.TryAddSingleton<IEventErrorHandler, LoggingEventErrorHandler>();
 
         // Register EventConsumer as IEventConsumer singleton
         services.TryAddSingleton<IEventConsumer, EventConsumer>();
@@ -201,11 +161,6 @@ public static class WuzEventServiceCollectionExtensions
         // This ensures IEventConsumer can be injected elsewhere (e.g., to observe ConnectionStateChanged)
         services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService>(
             sp => (EventConsumer)sp.GetRequiredService<IEventConsumer>());
-
-        // Default filters - scoped to support per-message resolution with scoped dependencies
-        services.TryAddEnumerable(ServiceDescriptor.Scoped<IEventFilter, EventTypeFilter>());
-        services.TryAddEnumerable(ServiceDescriptor.Scoped<IEventFilter, UserIdFilter>());
-        services.TryAddEnumerable(ServiceDescriptor.Scoped<IEventFilter, InstanceNameFilter>());
 
         return services;
     }

@@ -44,7 +44,7 @@ public sealed class InfrastructureTests : EventsTestBase
 
         // Assert
         evt.Should().NotBeNull();
-        evt.Type.Should().Be("TestEvent");
+        evt.EventType.Should().Be("TestEvent");
         evt.UserId.Should().Be("test-user");
         evt.InstanceName.Should().Be("test-instance");
     }
@@ -60,7 +60,7 @@ public sealed class InfrastructureTests : EventsTestBase
             .Build();
 
         // Assert
-        evt.Type.Should().Be("CustomType");
+        evt.EventType.Should().Be("CustomType");
         evt.UserId.Should().Be("custom-user");
         evt.InstanceName.Should().Be("custom-instance");
     }

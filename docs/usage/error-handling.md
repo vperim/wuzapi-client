@@ -204,57 +204,6 @@ public async Task<ActionResult> SendMessage(SendMessageRequest request)
 
 > **Important:** WuzAPI Client does NOT include built-in retry logic. Consumers should implement their own retry and resilience patterns using libraries like [Polly](https://www.pollydocs.org/).
 
-## Event Handler Error Handling
-
-Event handlers can log and handle errors via `IEventErrorHandler`:
-
-```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models;
-
-public sealed class CustomEventErrorHandler : IEventErrorHandler
-{
-    private readonly ILogger<CustomEventErrorHandler> logger;
-
-    public CustomEventErrorHandler(ILogger<CustomEventErrorHandler> logger)
-    {
-        this.logger = logger;
-    }
-
-    public Task HandleErrorAsync(
-        WuzEvent evt,
-        Exception exception,
-        CancellationToken cancellationToken)
-    {
-        this.logger.LogError(
-            exception,
-            "Error processing {EventType} event",
-            evt.GetType().Name
-        );
-
-        // Perform any custom error handling logic
-        // (e.g., send alerts, record metrics, etc.)
-
-        return Task.CompletedTask;
-    }
-}
-```
-
-Register the error handler:
-
-```csharp
-builder.Services.AddSingleton<IEventErrorHandler, CustomEventErrorHandler>();
-```
-
-### ErrorBehavior Configuration
-
-Error behavior is configured at the subscription level, not per-error. Configure it in your event subscription options:
-
-| Behavior | Description | Use Case |
-|----------|-------------|----------|
-| `AcknowledgeOnError` | Remove message from queue even on error | Fire-and-forget, skip failed messages |
-| `RequeueOnError` | Return to queue for retry on error | Transient errors, automatic retry |
-| `DeadLetterOnError` | Send to dead-letter queue on error | Unrecoverable errors, manual review needed |
 
 ## Common Error Scenarios
 

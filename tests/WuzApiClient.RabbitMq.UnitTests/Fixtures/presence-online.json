@@ -1,0 +1,11 @@
+{
+  "type": "Presence",
+  "userID": "user-004",
+  "instanceName": "instance-prod-4",
+  "event": {
+    "From": "5511999999999@s.whatsapp.net",
+    "Unavailable": false,
+    "LastSeen": "2024-01-15T13:20:30Z"
+  },
+  "state": "online"
+}

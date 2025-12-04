@@ -6,25 +6,49 @@ namespace WuzApiClient.EventDashboard.Helpers;
 
 public static class MessageContentExtractor
 {
-    public static MessagePreviewResult CreatePreview(WuzEvent evt)
+    public static MessagePreviewResult CreatePreview(WuzEventEnvelope envelope)
     {
-        // WuzEvent has: Type, UserId, InstanceName, RawEvent (JsonElement?)
+        // WuzEventEnvelope has: EventType, UserId, InstanceName, RawEvent (JsonElement?)
         // All message details must be extracted from RawEvent
-        return evt.Type switch
+        return envelope.EventType switch
         {
-            "Message" => ExtractMessage(evt),
-            _ => new MessagePreviewResult($"[{evt.Type}]", "unknown-message")
+            "Message" => ExtractMessage(envelope),
+            _ => new MessagePreviewResult($"[{envelope.EventType}]", "unknown-message")
         };
     }
 
-    private static MessagePreviewResult ExtractMessage(WuzEvent evt)
+    private static MessagePreviewResult ExtractMessage(WuzEventEnvelope envelope)
     {
-        // Handle nullable RawEvent
-        if (evt.RawEvent is not JsonElement raw)
+        // Parse RawJson string to JsonElement
+        if (string.IsNullOrWhiteSpace(envelope.RawJson))
             return new MessagePreviewResult("[No content]", "unknown-message");
 
+        JsonDocument? document = null;
+        try
+        {
+            document = JsonDocument.Parse(envelope.RawJson);
+            var raw = document.RootElement;
+
+            return ExtractMessageFromElement(raw);
+        }
+        catch
+        {
+            return new MessagePreviewResult("[Invalid JSON]", "unknown-message");
+        }
+        finally
+        {
+            document?.Dispose();
+        }
+    }
+
+    private static MessagePreviewResult ExtractMessageFromElement(JsonElement raw)
+    {
+        // Navigate into the "event" property first
+        if (!raw.TryGetProperty("event", out var eventElement))
+            return new MessagePreviewResult("[No event data]", "unknown-message");
+
         // WuzAPI uses PascalCase: "Message" not "message"
-        if (!raw.TryGetProperty("Message", out var message))
+        if (!eventElement.TryGetProperty("Message", out var message))
             return new MessagePreviewResult("[Message]", "unknown-message");
 
         // Text: conversation field
@@ -90,31 +114,50 @@ public static class MessageContentExtractor
     /// Extracts sender info from RawEvent for direction/sender display.
     /// WuzAPI structure: Info.IsFromMe, Info.PushName, Info.Sender
     /// </summary>
-    public static (bool IsFromMe, string? PushName, string? SenderJid) ExtractSenderInfo(WuzEvent evt)
+    public static (bool IsFromMe, string? PushName, string? SenderJid) ExtractSenderInfo(WuzEventEnvelope envelope)
     {
-        if (evt.RawEvent is not JsonElement raw)
+        if (string.IsNullOrWhiteSpace(envelope.RawJson))
             return (false, null, null);
 
-        bool isFromMe = false;
-        string? pushName = null;
-        string? senderJid = null;
-
-        // WuzAPI uses PascalCase "Info" with PascalCase properties
-        if (raw.TryGetProperty("Info", out var info))
+        JsonDocument? document = null;
+        try
         {
-            if (info.TryGetProperty("IsFromMe", out var fromMe) &&
-                fromMe.ValueKind == JsonValueKind.True)
-                isFromMe = true;
+            document = JsonDocument.Parse(envelope.RawJson);
+            var raw = document.RootElement;
 
-            if (info.TryGetProperty("Sender", out var sender) &&
-                sender.ValueKind == JsonValueKind.String)
-                senderJid = sender.GetString();
+            bool isFromMe = false;
+            string? pushName = null;
+            string? senderJid = null;
 
-            if (info.TryGetProperty("PushName", out var pn) &&
-                pn.ValueKind == JsonValueKind.String)
-                pushName = pn.GetString();
+            // Navigate into the "event" property first
+            if (!raw.TryGetProperty("event", out var eventElement))
+                return (false, null, null);
+
+            // WuzAPI uses PascalCase "Info" with PascalCase properties
+            if (eventElement.TryGetProperty("Info", out var info))
+            {
+                if (info.TryGetProperty("IsFromMe", out var fromMe) &&
+                    fromMe.ValueKind == JsonValueKind.True)
+                    isFromMe = true;
+
+                if (info.TryGetProperty("Sender", out var sender) &&
+                    sender.ValueKind == JsonValueKind.String)
+                    senderJid = sender.GetString();
+
+                if (info.TryGetProperty("PushName", out var pn) &&
+                    pn.ValueKind == JsonValueKind.String)
+                    pushName = pn.GetString();
+            }
+
+            return (isFromMe, pushName, senderJid);
         }
-
-        return (isFromMe, pushName, senderJid);
+        catch
+        {
+            return (false, null, null);
+        }
+        finally
+        {
+            document?.Dispose();
+        }
     }
 }

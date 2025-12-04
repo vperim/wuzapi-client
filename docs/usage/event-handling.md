@@ -7,15 +7,13 @@ This guide explains how to process incoming WhatsApp events using WuzAPI Client'
 WhatsApp events (incoming messages, status updates, group changes, etc.) flow through this pipeline:
 
 ```
-WhatsApp → asternic/wuzapi → RabbitMQ → EventConsumer → EventFilter → EventDispatcher → IEventHandler<T>
+WhatsApp → asternic/wuzapi → RabbitMQ → EventConsumer → EventDispatcher → IEventHandler<T>
 ```
 
 The library provides:
 - **EventConsumer** – Background service consuming from RabbitMQ
 - **EventDispatcher** – Routes events to registered handlers
 - **IEventHandler\<TEvent>** – Interface for implementing event handlers
-- **IEventFilter** – Interface for filtering events before processing
-- **IEventErrorHandler** – Interface for customizing error handling
 
 ## Prerequisites
 
@@ -34,13 +32,10 @@ using WuzApiClient.Events.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register event consumer
-builder.Services.AddWuzEvents(options =>
-{
-    options.ConnectionString = "amqp://guest:guest@localhost:5672/";
-    options.QueueName = "wuzapi-events";
-    options.MaxConcurrentMessages = 1; // See concurrency warning below
-});
+// Register event consumer with fluent builder
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 
 var app = builder.Build();
 app.Run();
@@ -108,18 +103,23 @@ public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
 
 ## Step 3: Register Event Handlers
 
-Register your handlers in DI:
+Register your handlers using the fluent builder API:
 
 ```csharp
-// Register as scoped (new instance per message)
-builder.Services.AddScoped<IEventHandler<MessageEvent>, MessageReceivedHandler>();
+// Using assembly scanning (recommended - automatically discovers all handlers)
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 
-// You can register multiple handlers for different events
-builder.Services.AddScoped<IEventHandler<ReceiptEvent>, MessageStatusHandler>();
-builder.Services.AddScoped<IEventHandler<GroupInfoEvent>, GroupUpdateHandler>();
+// Or register individual handlers explicitly
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandler<MessageEvent, MessageReceivedHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEvent, MessageStatusHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEvent, GroupUpdateHandler>(ServiceLifetime.Scoped)
+);
 ```
 
-**Service Lifetime:** Handlers are resolved from a **scoped DI container** created per message. This ensures proper lifetime management for scoped dependencies.
+**Service Lifetime:** Handlers are resolved from a **scoped DI container** created per message. This ensures proper lifetime management for scoped dependencies. The default lifetime is `Scoped` but can be overridden per handler or for all handlers in an assembly.
 
 ## Event Types
 
@@ -229,105 +229,48 @@ public sealed class GroupUpdateHandler : IEventHandler<GroupInfoEvent>
 }
 ```
 
-## Event Filtering
-
-Filter events before they reach handlers using `IEventFilter`:
-
-```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models.Events;
-
-public sealed class IgnoreOwnMessagesFilter : IEventFilter
-{
-    private readonly string myPhoneNumber;
-
-    public IgnoreOwnMessagesFilter(IConfiguration configuration)
-    {
-        this.myPhoneNumber = configuration["MyPhoneNumber"];
-    }
-
-    public int Order => 0;
-
-    public bool ShouldProcess(WuzEvent @event)
-    {
-        // Filter out messages from our own number
-        if (@event is MessageEvent message)
-        {
-            return message.Info?.Sender != $"{this.myPhoneNumber}@c.us";
-        }
-
-        // Process all other events
-        return true;
-    }
-}
-```
-
-Register the filter:
-
-```csharp
-builder.Services.AddSingleton<IEventFilter, IgnoreOwnMessagesFilter>();
-```
-
-**Multiple Filters:** All registered filters must return `true` for an event to be processed. Filters run sequentially in registration order.
 
 ## Error Handling
 
 ### Default Behavior
 
 By default, if a handler throws an exception:
-1. Exception is logged
+1. Exception is logged to the configured logger
 2. Message is **acknowledged** (removed from queue)
 3. Processing continues with next message
 
-### Custom Error Handling
-
-Implement `IEventErrorHandler` to customize error behavior:
+**Custom Error Logic:** Implement error handling within your event handlers using try-catch blocks:
 
 ```csharp
-using WuzApiClient.Events.Core.Interfaces;
-using WuzApiClient.Events.Models.Events;
-
-public sealed class CustomErrorHandler : IEventErrorHandler
+public sealed class ResilientMessageHandler : IEventHandler<MessageEvent>
 {
-    private readonly ILogger<CustomErrorHandler> logger;
+    private readonly ILogger<ResilientMessageHandler> logger;
 
-    public CustomErrorHandler(ILogger<CustomErrorHandler> logger)
+    public ResilientMessageHandler(ILogger<ResilientMessageHandler> logger)
     {
         this.logger = logger;
     }
 
-    public Task HandleErrorAsync(
-        WuzEvent @event,
-        Exception exception,
-        CancellationToken cancellationToken)
+    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
     {
-        this.logger.LogError(exception, "Error processing event {EventType}", @event.GetType().Name);
+        try
+        {
+            // Process message...
+            await ProcessMessageAsync(@event, ct);
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Failed to process message from {Sender}", @event.Info?.Sender);
 
-        // Custom error handling logic
-        // Note: Error acknowledgment behavior is controlled by WuzEventOptions.ErrorBehavior
-        // This handler is for logging, alerting, or other side effects
-
-        return Task.CompletedTask;
+            // Custom error handling:
+            // - Send alert
+            // - Store in error queue
+            // - Retry with backoff
+            // etc.
+        }
     }
 }
 ```
-
-Register the error handler:
-
-```csharp
-builder.Services.AddSingleton<IEventErrorHandler, CustomErrorHandler>();
-```
-
-**ErrorBehavior Options (configured in WuzEventOptions):**
-- `AcknowledgeOnError` – Acknowledge message even if handler fails (default)
-- `RequeueOnError` – Reject and requeue message on handler failure
-- `DeadLetterOnError` – Reject without requeue (dead-letter if configured)
-
-### Dead Letter Queue
-
-For failed messages, configure dead-letter exchange at the RabbitMQ queue level (not in WuzEventOptions). When using `DeadLetterOnError`, messages will be rejected and routed to the dead-letter exchange if one is configured for your queue.
-
-See [RabbitMQ Dead Letter Exchanges](https://www.rabbitmq.com/docs/dlx) for details on queue-level configuration.
 
 ## Concurrency Configuration
 
@@ -559,14 +502,12 @@ public sealed class ConversationHandler : IEventHandler<MessageEvent>
 **Symptoms:** Events arrive in RabbitMQ but handler doesn't execute
 
 **Solutions:**
-1. Verify handler is registered: `services.AddScoped<IEventHandler<TEvent>, THandler>()`
+1. Verify handler is registered via fluent builder or is discovered by assembly scanning
 2. Check event type matches: `IEventHandler<MessageEvent>` only handles that event type
-3. Verify event filters aren't blocking: Check `IEventFilter.ShouldProcess` returns true
-4. Check logs for exceptions during handler resolution
+3. Check logs for exceptions during handler resolution or execution
 
 ## Next Steps
 
-- **Filter Events** → [Filtering Guide](filtering.md)
 - **Configure Options** → [Configuration Reference](configuration.md)
 - **Handle Errors** → [Error Handling Guide](error-handling.md)
 - **Event Types** → [Event Types Reference](../api/event-types-reference.md)

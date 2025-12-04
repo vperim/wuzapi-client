@@ -1,0 +1,7 @@
+{
+  "type": "QR",
+  "userID": "user-005",
+  "instanceName": "instance-pairing-1",
+  "event": "code",
+  "qrCodeBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+}

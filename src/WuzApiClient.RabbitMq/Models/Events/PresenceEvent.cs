@@ -7,7 +7,7 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for user presence (online/offline) updates.
 /// Maps to whatsmeow events.Presence with wuzapi additions.
 /// </summary>
-public sealed record PresenceEvent : WuzEvent
+public sealed record PresenceEvent
 {
     // === whatsmeow Presence fields ===
 
@@ -33,6 +33,7 @@ public sealed record PresenceEvent : WuzEvent
 
     /// <summary>
     /// Gets the presence state (added by wuzapi: "online" or "offline").
+    /// This field is at the root level in wuzapi JSON.
     /// </summary>
     [JsonPropertyName("state")]
     public string? State { get; init; }

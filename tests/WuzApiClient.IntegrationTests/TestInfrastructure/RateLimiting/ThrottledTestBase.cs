@@ -18,7 +18,7 @@ public abstract class ThrottledTestBase
     /// <summary>
     /// Tracks the last execution time for enforcing minimum delays.
     /// </summary>
-    private static DateTime LastExecutionTime = DateTime.MinValue;
+    private static DateTime lastExecutionTime = DateTime.MinValue;
 
     /// <summary>
     /// Lock object for thread-safe access to LastExecutionTime.
@@ -81,7 +81,7 @@ public abstract class ThrottledTestBase
             // Update last execution time
             lock (TimeLock)
             {
-                LastExecutionTime = DateTime.UtcNow;
+                lastExecutionTime = DateTime.UtcNow;
             }
         }
         finally
@@ -122,7 +122,7 @@ public abstract class ThrottledTestBase
             // Update last execution time
             lock (TimeLock)
             {
-                LastExecutionTime = DateTime.UtcNow;
+                lastExecutionTime = DateTime.UtcNow;
             }
 
             return result;
@@ -144,7 +144,7 @@ public abstract class ThrottledTestBase
         DateTime lastExecution;
         lock (TimeLock)
         {
-            lastExecution = LastExecutionTime;
+            lastExecution = lastExecutionTime;
         }
 
         // Calculate time since last execution

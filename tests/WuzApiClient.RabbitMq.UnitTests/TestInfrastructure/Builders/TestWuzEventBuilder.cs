@@ -1,17 +1,15 @@
-using System.Text.Json;
 using WuzApiClient.RabbitMq.Models;
 
 namespace WuzApiClient.RabbitMq.UnitTests.TestInfrastructure.Builders;
 
 /// <summary>
-/// Fluent builder for creating test WuzEvent instances.
+/// Fluent builder for creating test WuzEventEnvelope instances.
 /// </summary>
 public sealed class TestWuzEventBuilder
 {
-    private string type = "TestEvent";
+    private string eventType = "TestEvent";
     private string userId = "test-user";
     private string instanceName = "test-instance";
-    private JsonElement? rawEvent = null;
     private DateTimeOffset receivedAt = DateTimeOffset.UtcNow;
 
     /// <summary>
@@ -21,7 +19,7 @@ public sealed class TestWuzEventBuilder
     /// <returns>The builder for chaining.</returns>
     public TestWuzEventBuilder WithType(string type)
     {
-        this.type = type;
+        this.eventType = type;
         return this;
     }
 
@@ -48,29 +46,6 @@ public sealed class TestWuzEventBuilder
     }
 
     /// <summary>
-    /// Sets the raw event payload.
-    /// </summary>
-    /// <param name="rawEvent">The raw event data.</param>
-    /// <returns>The builder for chaining.</returns>
-    public TestWuzEventBuilder WithRawEvent(JsonElement? rawEvent)
-    {
-        this.rawEvent = rawEvent;
-        return this;
-    }
-
-    /// <summary>
-    /// Sets the raw event payload from a JSON string.
-    /// </summary>
-    /// <param name="json">The JSON string.</param>
-    /// <returns>The builder for chaining.</returns>
-    public TestWuzEventBuilder WithRawEventJson(string json)
-    {
-        using var doc = JsonDocument.Parse(json);
-        this.rawEvent = doc.RootElement.Clone();
-        return this;
-    }
-
-    /// <summary>
     /// Sets the received timestamp.
     /// </summary>
     /// <param name="receivedAt">The received timestamp.</param>
@@ -82,26 +57,26 @@ public sealed class TestWuzEventBuilder
     }
 
     /// <summary>
-    /// Builds the test event.
+    /// Builds the test event envelope.
     /// </summary>
-    /// <returns>A testable WuzEvent instance.</returns>
-    public WuzEvent Build()
+    /// <returns>A testable WuzEventEnvelope instance.</returns>
+    public WuzEventEnvelope Build()
     {
-        return new TestableWuzEvent
+        return new WuzEventEnvelope<TestEventData>
         {
-            Type = this.type,
+            EventType = this.eventType,
             UserId = this.userId,
             InstanceName = this.instanceName,
-            RawEvent = this.rawEvent,
             ReceivedAt = this.receivedAt,
+            Event = new TestEventData(),
         };
     }
 }
 
 /// <summary>
-/// Concrete implementation of WuzEvent for testing purposes.
+/// Simple test event data for testing purposes.
 /// </summary>
-internal sealed record TestableWuzEvent : WuzEvent
+internal sealed record TestEventData
 {
-    // Inherits all properties from WuzEvent base record
+    // Empty record - used only for testing infrastructure
 }

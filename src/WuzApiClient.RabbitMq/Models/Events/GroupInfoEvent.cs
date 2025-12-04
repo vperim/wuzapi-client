@@ -1,27 +1,65 @@
+using System;
 using System.Text.Json.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
 /// Event for group information updates.
+/// Maps to whatsmeow events.GroupInfo.
 /// </summary>
-public sealed record GroupInfoEvent : WuzEvent
+public sealed record GroupInfoEvent
 {
     /// <summary>
     /// Gets the group JID.
     /// </summary>
-    [JsonPropertyName("groupJid")]
-    public string? GroupJid { get; init; }
+    [JsonPropertyName("JID")]
+    public string? Jid { get; init; }
 
     /// <summary>
     /// Gets the group name.
     /// </summary>
-    [JsonPropertyName("name")]
+    [JsonPropertyName("Name")]
     public string? Name { get; init; }
 
     /// <summary>
-    /// Gets the group topic.
+    /// Gets the group topic/description.
     /// </summary>
-    [JsonPropertyName("topic")]
+    [JsonPropertyName("Topic")]
     public string? Topic { get; init; }
+
+    /// <summary>
+    /// Gets whether the group is locked (only admins can send messages).
+    /// </summary>
+    [JsonPropertyName("Locked")]
+    public bool? Locked { get; init; }
+
+    /// <summary>
+    /// Gets whether the group is announced (only admins can send messages).
+    /// </summary>
+    [JsonPropertyName("Announce")]
+    public bool? Announce { get; init; }
+
+    /// <summary>
+    /// Gets whether the group is ephemeral.
+    /// </summary>
+    [JsonPropertyName("Ephemeral")]
+    public bool? Ephemeral { get; init; }
+
+    /// <summary>
+    /// Gets when the group was created.
+    /// </summary>
+    [JsonPropertyName("GroupCreated")]
+    public DateTimeOffset? GroupCreated { get; init; }
+
+    /// <summary>
+    /// Gets the participant version ID.
+    /// </summary>
+    [JsonPropertyName("ParticipantVersionID")]
+    public string? ParticipantVersionId { get; init; }
+
+    /// <summary>
+    /// Gets the join method (invite link, etc.).
+    /// </summary>
+    [JsonPropertyName("JoinMethod")]
+    public string? JoinMethod { get; init; }
 }

@@ -26,9 +26,6 @@ public sealed class WuzEventOptionsTests
         options.MaxReconnectAttempts.Should().Be(10);
         options.ReconnectDelay.Should().Be(TimeSpan.FromSeconds(3));
         options.MaxConcurrentMessages.Should().Be(Environment.ProcessorCount);
-        options.SubscribedEventTypes.Should().BeEmpty();
-        options.FilterUserIds.Should().BeEmpty();
-        options.FilterInstanceNames.Should().BeEmpty();
     }
 
     [Fact]

@@ -1,8 +1,23 @@
+using System;
+using System.Text.Json.Serialization;
+
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event for keep-alive timeout.
+/// Event emitted when the keepalive ping request to WhatsApp web servers times out.
+/// Corresponds to whatsmeow events.KeepAliveTimeout.
 /// </summary>
-public sealed record KeepAliveTimeoutEvent : WuzEvent
+public sealed record KeepAliveTimeoutEvent
 {
+    /// <summary>
+    /// Gets the number of consecutive errors.
+    /// </summary>
+    [JsonPropertyName("ErrorCount")]
+    public int ErrorCount { get; init; }
+
+    /// <summary>
+    /// Gets the timestamp of the last successful keepalive.
+    /// </summary>
+    [JsonPropertyName("LastSuccess")]
+    public DateTimeOffset LastSuccess { get; init; }
 }

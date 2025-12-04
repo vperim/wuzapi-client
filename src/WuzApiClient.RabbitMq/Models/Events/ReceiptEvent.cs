@@ -8,7 +8,7 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for message delivery and read receipts.
 /// Maps to whatsmeow events.Receipt with wuzapi additions.
 /// </summary>
-public sealed record ReceiptEvent : WuzEvent
+public sealed record ReceiptEvent
 {
     // === MessageSource fields (embedded in Go) ===
 
@@ -66,9 +66,8 @@ public sealed record ReceiptEvent : WuzEvent
 
     /// <summary>
     /// Gets the receipt state (added by wuzapi: "Read", "ReadSelf", "Delivered").
-    /// Note: This field is at the root level in wuzapi JSON, not inside the event object.
-    /// It's set by the WuzEventJsonConverter.
+    /// This field is at the root level in wuzapi JSON.
     /// </summary>
-    [JsonIgnore]
+    [JsonPropertyName("state")]
     public string? State { get; init; }
 }

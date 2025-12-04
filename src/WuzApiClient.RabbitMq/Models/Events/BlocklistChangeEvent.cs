@@ -1,6 +1,22 @@
+using System.Text.Json.Serialization;
+
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event when blocklist is modified.
+/// Event when a contact is blocked or unblocked.
+/// Maps to whatsmeow events.BlocklistChange.
 /// </summary>
-public sealed record BlocklistChangeEvent : WuzEvent;
+public sealed record BlocklistChangeEvent
+{
+    /// <summary>
+    /// Gets the JID of the contact whose block status changed.
+    /// </summary>
+    [JsonPropertyName("JID")]
+    public string? Jid { get; init; }
+
+    /// <summary>
+    /// Gets the action performed ("block" or "unblock").
+    /// </summary>
+    [JsonPropertyName("Action")]
+    public string? Action { get; init; }
+}

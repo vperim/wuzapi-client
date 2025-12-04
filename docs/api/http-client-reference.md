@@ -26,12 +26,24 @@ Task<WuzResult> ConnectSessionAsync(
 
 **Example:**
 ```csharp
+using WuzApiClient.Models.Common;
+using WuzApiClient.Models.Requests.Session;
+
+// Default: subscribes to all events automatically
 var connectRequest = new ConnectSessionRequest();
 var result = await client.ConnectSessionAsync(connectRequest);
 if (result.IsSuccess)
 {
     Console.WriteLine("Session connected successfully");
 }
+
+// Or subscribe to specific events only
+var selectiveRequest = new ConnectSessionRequest
+{
+    Subscribe = [SubscribableEvent.Message, SubscribableEvent.Receipt],
+    Immediate = true
+};
+var selectiveResult = await client.ConnectSessionAsync(selectiveRequest);
 ```
 
 ---

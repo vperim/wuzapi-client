@@ -69,7 +69,7 @@ public enum SubscribableEvent
     KeepAliveTimeout,
 
     /// <summary>QR code expired without successful scan.</summary>
-    QRTimeout,
+    QrTimeout,
 
     /// <summary>User was logged out.</summary>
     LoggedOut,
@@ -93,10 +93,10 @@ public enum SubscribableEvent
     PairError,
 
     /// <summary>QR code generated for pairing.</summary>
-    QR,
+    Qr,
 
     /// <summary>QR code scanned but multidevice not enabled on phone.</summary>
-    QRScannedWithoutMultidevice,
+    QrScannedWithoutMultidevice,
 
     // ==================== Privacy and Settings ====================
 
@@ -159,7 +159,7 @@ public enum SubscribableEvent
     // ==================== Errors ====================
 
     /// <summary>CAT (Client Access Token) refresh error.</summary>
-    CATRefreshError,
+    CatRefreshError,
 
     // ==================== Newsletter (WhatsApp Channels) ====================
 
@@ -178,5 +178,5 @@ public enum SubscribableEvent
     // ==================== Facebook/Meta Bridge ====================
 
     /// <summary>Facebook/Meta integration message.</summary>
-    FBMessage
+    FbMessage
 }

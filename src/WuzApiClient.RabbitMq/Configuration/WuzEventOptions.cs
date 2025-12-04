@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace WuzApiClient.RabbitMq.Configuration;
 
@@ -8,6 +7,8 @@ namespace WuzApiClient.RabbitMq.Configuration;
 /// </summary>
 public sealed class WuzEventOptions
 {
+    public const string SectionName = "WuzEvents";
+
     /// <summary>
     /// Gets or sets the RabbitMQ connection string (amqp://user:pass@host:port/vhost).
     /// </summary>
@@ -49,24 +50,6 @@ public sealed class WuzEventOptions
     /// NOTE: Message ordering is NOT guaranteed when concurrency &gt; 1.
     /// </summary>
     public int MaxConcurrentMessages { get; set; } = Environment.ProcessorCount;
-
-    /// <summary>
-    /// Gets or sets the event types to subscribe to. Empty = all events.
-    /// NOTE: Uses HashSet for configuration binding compatibility.
-    /// </summary>
-    public HashSet<string> SubscribedEventTypes { get; set; } = [];
-
-    /// <summary>
-    /// Gets or sets the user IDs to filter events for. Empty = all users.
-    /// NOTE: Uses HashSet for configuration binding compatibility.
-    /// </summary>
-    public HashSet<string> FilterUserIds { get; set; } = [];
-
-    /// <summary>
-    /// Gets or sets the instance names to filter events for. Empty = all instances.
-    /// NOTE: Uses HashSet for configuration binding compatibility.
-    /// </summary>
-    public HashSet<string> FilterInstanceNames { get; set; } = [];
 
     /// <summary>
     /// Validates the configuration options.

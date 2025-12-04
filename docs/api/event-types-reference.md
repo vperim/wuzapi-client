@@ -1,23 +1,31 @@
 # Event Types Reference
 
-Reference for all 44 WhatsApp event types available in `WuzApiClient.RabbitMq`.
+Reference for all 46 WhatsApp event types available in `WuzApiClient.RabbitMq`.
 
 > **Note:** The most commonly used event types (`MessageEvent`, `ReceiptEvent`, `PresenceEvent`, `GroupInfoEvent`) include detailed code examples below. For all other event types, see the [Complete Event Type Catalog](#complete-event-type-catalog).
 
-## Base Event Type
+## Event Envelope Structure
 
-All events inherit from `WuzEvent`:
+All events are wrapped in `WuzEventEnvelope<TEvent>`:
 
 ```csharp
-public abstract record WuzEvent
+public sealed record WuzEventEnvelope<TEvent> : WuzEventEnvelope
+    where TEvent : class
 {
-    public string Type { get; init; }               // Event type identifier
+    public string EventType { get; init; }          // Event type identifier (e.g., "Message", "Receipt")
     public string UserId { get; init; }             // User ID that generated this event
     public string InstanceName { get; init; }       // Instance name
-    public JsonElement? RawEvent { get; init; }     // Raw event payload for dynamic access
-    public DateTimeOffset ReceivedAt { get; init; } // Timestamp when event was received
+    public DateTimeOffset ReceivedAt { get; init; } // Timestamp when event was received by client
+    public required TEvent Event { get; init; }     // Typed event data (non-nullable)
+    public string RawJson { get; init; }            // Raw JSON string of entire event envelope
 }
 ```
+
+**Key Points:**
+- Event handlers receive `WuzEventEnvelope<TEvent>`, not raw event objects
+- Access the typed event data via the `Event` property
+- `RawJson` contains the complete JSON for debugging/logging purposes
+- Event classes (like `MessageEvent`, `ReceiptEvent`) are POCOs that don't inherit from a base class
 
 > **JSON Property Naming:** Event properties use camelCase in JSON serialization but PascalCase in C# code. For example, the `GroupJid` property in C# corresponds to `"groupJid"` in JSON. When examining raw JSON payloads, expect camelCase property names. The library handles this conversion automatically during deserialization.
 
@@ -25,9 +33,9 @@ public abstract record WuzEvent
 
 > **Note:** All examples require the following namespace imports:
 > ```csharp
-> using WuzApiClient.Events.Models;
-> using WuzApiClient.Events.Models.Events;
-> using WuzApiClient.Events.Core.Interfaces;
+> using WuzApiClient.RabbitMq.Models;
+> using WuzApiClient.RabbitMq.Models.Events;
+> using WuzApiClient.RabbitMq.Core.Interfaces;
 > ```
 
 ### MessageEvent
@@ -35,7 +43,7 @@ public abstract record WuzEvent
 Triggered when a message is received (text, image, document, audio, video, etc.).
 
 ```csharp
-public sealed record MessageEvent : WuzEvent
+public sealed record MessageEvent
 {
     public MessageInfo? Info { get; init; }          // Message metadata (ID, timestamp, sender, chat)
     public MessageContent? Message { get; init; }    // Message content (text, media, etc.)
@@ -53,21 +61,23 @@ public sealed record MessageEvent : WuzEvent
 **Example Handler:**
 
 ```csharp
-public class MessageHandler : IEventHandler<MessageEvent>
+public sealed class MessageHandler : IEventHandler<MessageEvent>
 {
-    private readonly ILogger<MessageHandler> _logger;
+    private readonly ILogger<MessageHandler> logger;
 
     public MessageHandler(ILogger<MessageHandler> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
     {
+        var @event = envelope.Event; // Extract typed event data
+
         if (@event.Info == null || @event.Message == null)
             return;
 
-        _logger.LogInformation(
+        this.logger.LogInformation(
             "Received message from {From} in chat {Chat}: ID={MessageId}",
             @event.Info.Sender,
             @event.Info.Chat,
@@ -85,7 +95,7 @@ public class MessageHandler : IEventHandler<MessageEvent>
 Triggered when message delivery or read receipts are received.
 
 ```csharp
-public sealed record ReceiptEvent : WuzEvent
+public sealed record ReceiptEvent
 {
     public string? Chat { get; init; }                      // Chat JID
     public string? Sender { get; init; }                    // Sender JID
@@ -102,30 +112,32 @@ public sealed record ReceiptEvent : WuzEvent
 **Example Handler:**
 
 ```csharp
-public class ReceiptHandler : IEventHandler<ReceiptEvent>
+public sealed class ReceiptHandler : IEventHandler<ReceiptEvent>
 {
-    private readonly ILogger<ReceiptHandler> _logger;
+    private readonly ILogger<ReceiptHandler> logger;
 
     public ReceiptHandler(ILogger<ReceiptHandler> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
-    public async Task HandleAsync(ReceiptEvent @event, CancellationToken ct)
+    public async Task HandleAsync(WuzEventEnvelope<ReceiptEvent> envelope, CancellationToken ct)
     {
+        var @event = envelope.Event; // Extract typed event data
+
         if (@event.MessageIDs == null || @event.MessageIDs.Count == 0)
             return;
 
         switch (@event.State)
         {
             case "Delivered":
-                _logger.LogInformation(
+                this.logger.LogInformation(
                     "Messages delivered: {MessageIds}",
                     string.Join(", ", @event.MessageIDs)
                 );
                 break;
             case "Read":
-                _logger.LogInformation(
+                this.logger.LogInformation(
                     "Messages read by {Sender}: {MessageIds}",
                     @event.Sender,
                     string.Join(", ", @event.MessageIDs)
@@ -141,7 +153,7 @@ public class ReceiptHandler : IEventHandler<ReceiptEvent>
 Triggered when contact's online/offline status changes.
 
 ```csharp
-public sealed record PresenceEvent : WuzEvent
+public sealed record PresenceEvent
 {
     public string? From { get; init; }           // JID of user whose presence changed
     public bool Unavailable { get; init; }       // True if user is offline
@@ -153,24 +165,26 @@ public sealed record PresenceEvent : WuzEvent
 **Example Handler:**
 
 ```csharp
-public class PresenceHandler : IEventHandler<PresenceEvent>
+public sealed class PresenceHandler : IEventHandler<PresenceEvent>
 {
-    private readonly ILogger<PresenceHandler> _logger;
+    private readonly ILogger<PresenceHandler> logger;
 
     public PresenceHandler(ILogger<PresenceHandler> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
-    public async Task HandleAsync(PresenceEvent @event, CancellationToken ct)
+    public async Task HandleAsync(WuzEventEnvelope<PresenceEvent> envelope, CancellationToken ct)
     {
+        var @event = envelope.Event; // Extract typed event data
+
         if (@event.State == "online" || !@event.Unavailable)
         {
-            _logger.LogInformation("{User} is online", @event.From);
+            this.logger.LogInformation("{User} is online", @event.From);
         }
         else if (@event.LastSeen.HasValue)
         {
-            _logger.LogInformation(
+            this.logger.LogInformation(
                 "{User} was last seen at {Time}",
                 @event.From,
                 @event.LastSeen.Value
@@ -185,7 +199,7 @@ public class PresenceHandler : IEventHandler<PresenceEvent>
 Triggered when group information (name, topic) is updated.
 
 ```csharp
-public sealed record GroupInfoEvent : WuzEvent
+public sealed record GroupInfoEvent
 {
     public string? GroupJid { get; init; }  // Group JID
     public string? Name { get; init; }      // Group name
@@ -196,18 +210,20 @@ public sealed record GroupInfoEvent : WuzEvent
 **Example Handler:**
 
 ```csharp
-public class GroupInfoHandler : IEventHandler<GroupInfoEvent>
+public sealed class GroupInfoHandler : IEventHandler<GroupInfoEvent>
 {
-    private readonly ILogger<GroupInfoHandler> _logger;
+    private readonly ILogger<GroupInfoHandler> logger;
 
     public GroupInfoHandler(ILogger<GroupInfoHandler> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
-    public async Task HandleAsync(GroupInfoEvent @event, CancellationToken ct)
+    public async Task HandleAsync(WuzEventEnvelope<GroupInfoEvent> envelope, CancellationToken ct)
     {
-        _logger.LogInformation(
+        var @event = envelope.Event; // Extract typed event data
+
+        this.logger.LogInformation(
             "Group {GroupJid} updated: Name='{Name}', Topic='{Topic}'",
             @event.GroupJid,
             @event.Name,
@@ -219,7 +235,7 @@ public class GroupInfoHandler : IEventHandler<GroupInfoEvent>
 
 ## Complete Event Type Catalog
 
-The library includes 44 event types total. Below is the complete list organized by category.
+The library includes 46 event types total. Below is the complete list organized by category.
 
 ### Connection Events
 
@@ -231,6 +247,7 @@ The library includes 44 event types total. Below is the complete list organized 
 | `LoggedOutEvent` | User is logged out from WhatsApp |
 | `QrCodeEvent` | QR code is generated for pairing (contains `QrCodeBase64` property with base64-encoded QR code image) |
 | `QrTimeoutEvent` | QR code expires without being scanned |
+| `QRScannedWithoutMultideviceEvent` | QR code is scanned but multidevice is not enabled on the phone |
 | `PairSuccessEvent` | Device pairing succeeds |
 | `PairErrorEvent` | Device pairing fails |
 | `StreamErrorEvent` | WebSocket stream error occurs |
@@ -239,6 +256,7 @@ The library includes 44 event types total. Below is the complete list organized 
 | `KeepAliveRestoredEvent` | Keep-alive connection restored |
 | `ClientOutdatedEvent` | Client version is outdated |
 | `TemporaryBanEvent` | Account is temporarily banned |
+| `CATRefreshErrorEvent` | Client Access Token (CAT) refresh operation fails |
 
 ### Message Events
 
@@ -309,13 +327,21 @@ The library includes 44 event types total. Below is the complete list organized 
 
 ### Separate Handlers
 
-Register individual handlers for each event type:
+Register individual handlers for each event type using the fluent builder:
 
 ```csharp
-builder.Services.AddScoped<IEventHandler<MessageEvent>, MessageHandler>();
-builder.Services.AddScoped<IEventHandler<ReceiptEvent>, ReceiptHandler>();
-builder.Services.AddScoped<IEventHandler<GroupInfoEvent>, GroupInfoHandler>();
-builder.Services.AddScoped<IEventHandler<PresenceEvent>, PresenceHandler>();
+// Using assembly scanning (recommended)
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
+
+// Or register explicitly
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEvent, ReceiptHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEvent, GroupInfoHandler>(ServiceLifetime.Scoped)
+    .AddHandler<PresenceEvent, PresenceHandler>(ServiceLifetime.Scoped)
+);
 ```
 
 ### Shared Handler
@@ -323,66 +349,81 @@ builder.Services.AddScoped<IEventHandler<PresenceEvent>, PresenceHandler>();
 A single class can handle multiple event types:
 
 ```csharp
-public class MultiEventHandler :
+public sealed class MultiEventHandler :
     IEventHandler<MessageEvent>,
     IEventHandler<ReceiptEvent>,
     IEventHandler<GroupInfoEvent>
 {
-    private readonly ILogger<MultiEventHandler> _logger;
+    private readonly ILogger<MultiEventHandler> logger;
 
     public MultiEventHandler(ILogger<MultiEventHandler> logger)
     {
-        _logger = logger;
+        this.logger = logger;
     }
 
-    public Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
     {
-        _logger.LogInformation("Message received from {Sender}", @event.Info?.Sender);
+        var @event = envelope.Event;
+        this.logger.LogInformation("Message received from {Sender}", @event.Info?.Sender);
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(ReceiptEvent @event, CancellationToken ct)
+    public Task HandleAsync(WuzEventEnvelope<ReceiptEvent> envelope, CancellationToken ct)
     {
-        _logger.LogInformation("Receipt: {State}", @event.State);
+        var @event = envelope.Event;
+        this.logger.LogInformation("Receipt: {State}", @event.State);
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(GroupInfoEvent @event, CancellationToken ct)
+    public Task HandleAsync(WuzEventEnvelope<GroupInfoEvent> envelope, CancellationToken ct)
     {
-        _logger.LogInformation("Group {Name} updated", @event.Name);
+        var @event = envelope.Event;
+        this.logger.LogInformation("Group {Name} updated", @event.Name);
         return Task.CompletedTask;
     }
 }
 
-// Register once for all three event types
-builder.Services.AddScoped<IEventHandler<MessageEvent>, MultiEventHandler>();
-builder.Services.AddScoped<IEventHandler<ReceiptEvent>, MultiEventHandler>();
-builder.Services.AddScoped<IEventHandler<GroupInfoEvent>, MultiEventHandler>();
+// Register using fluent builder (assembly scanning will discover all interfaces)
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
 ```
 
-## Event Filtering
+## Filtering Events in Handlers
 
-Filter specific event types using `IEventFilter`:
+You can implement filtering logic directly in your handlers:
 
 ```csharp
-public class MessageOnlyFilter : IEventFilter
+public sealed class MessageHandler : IEventHandler<MessageEvent>
 {
-    public bool ShouldProcess(WuzEvent evt)
+    private readonly ILogger<MessageHandler> logger;
+
+    public MessageHandler(ILogger<MessageHandler> logger)
     {
-        // Only process MessageEvent and ReceiptEvent, ignore everything else
-        return evt is MessageEvent or ReceiptEvent;
+        this.logger = logger;
     }
 
-    public int Order => 0; // Filter priority (lower = earlier execution)
-}
+    public async Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
+    {
+        var @event = envelope.Event;
 
-// Register the filter
-builder.Services.AddSingleton<IEventFilter, MessageOnlyFilter>();
+        // Filter: Only process messages from specific user
+        if (envelope.UserId != "expected-user-id")
+            return;
+
+        // Filter: Ignore messages from ourselves
+        if (@event.Info?.IsFromMe == true)
+            return;
+
+        // Process the message...
+        this.logger.LogInformation("Processing message from {Sender}", @event.Info?.Sender);
+    }
+}
 ```
 
 ## Next Steps
 
 - **Implement Handlers** → [Event Handling Guide](../usage/event-handling.md)
 - **HTTP Client Methods** → [HTTP Client Reference](http-client-reference.md)
-- **Filter Events** → [Extension Patterns](../usage/extension-patterns.md)
+- **Extension Patterns** → [Extension Patterns Guide](../usage/extension-patterns.md)
 

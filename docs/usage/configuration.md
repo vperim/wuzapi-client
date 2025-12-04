@@ -175,24 +175,6 @@ Options for configuring the RabbitMQ event consumer via `AddWuzEvents()`.
 - **Default:** `Environment.ProcessorCount`
 - **Description:** Number of messages to process concurrently (1 = sequential)
 
-#### SubscribedEventTypes
-- **Type:** `HashSet<string>`
-- **Required:** No
-- **Default:** `[]` (all)
-- **Description:** Event types to subscribe to (empty = all events)
-
-#### FilterUserIds
-- **Type:** `HashSet<string>`
-- **Required:** No
-- **Default:** `[]` (all)
-- **Description:** User IDs to filter events for (empty = all users)
-
-#### FilterInstanceNames
-- **Type:** `HashSet<string>`
-- **Required:** No
-- **Default:** `[]` (all)
-- **Description:** Instance names to filter events for (empty = all instances)
-
 ### Basic Configuration
 
 ```csharp
@@ -217,19 +199,19 @@ builder.Services.AddWuzEvents(options =>
     "PrefetchCount": 10,
     "AutoAck": false,
     "MaxReconnectAttempts": 10,
-    "ReconnectDelay": "00:00:03",
-    "SubscribedEventTypes": [],
-    "FilterUserIds": [],
-    "FilterInstanceNames": []
+    "ReconnectDelay": "00:00:03"
   }
 }
 ```
 
 ```csharp
-builder.Services.AddWuzEvents(options =>
-{
-    builder.Configuration.GetSection("WuzEvents").Bind(options);
-});
+// Using fluent builder with assembly scanning (recommended)
+builder.Services.AddWuzEvents(builder.Configuration, b => b
+    .AddHandlersFromAssembly(ServiceLifetime.Scoped, typeof(Program).Assembly)
+);
+
+// Or bind configuration manually
+builder.Services.AddWuzEvents(builder.Configuration);
 ```
 
 ### Environment-Specific Configuration
@@ -385,42 +367,6 @@ builder.Services.AddWuzEvents(options =>
 });
 ```
 
-### Custom Error Handling
-
-Implement `IEventErrorHandler` for custom error handling logic:
-
-```csharp
-public sealed class CustomErrorHandler : IEventErrorHandler
-{
-    private readonly ILogger<CustomErrorHandler> logger;
-
-    public CustomErrorHandler(ILogger<CustomErrorHandler> logger)
-    {
-        this.logger = logger;
-    }
-
-    public async Task HandleErrorAsync(
-        WuzEvent evt,
-        Exception exception,
-        CancellationToken cancellationToken)
-    {
-        if (exception is BrokerUnreachableException)
-        {
-            this.logger.LogWarning("RabbitMQ unreachable, connection will retry automatically");
-            await Task.Delay(TimeSpan.FromSeconds(10), cancellationToken);
-        }
-        else
-        {
-            this.logger.LogError(
-                exception,
-                "Error processing event {EventType} for {UserId}/{InstanceName}",
-                evt.Type,
-                evt.UserId,
-                evt.InstanceName);
-        }
-    }
-}
-```
 
 ## Health Checks
 
@@ -482,10 +428,7 @@ See [ASP.NET Core Health Checks](https://learn.microsoft.com/en-us/aspnet/core/h
     "PrefetchCount": 20,
     "AutoAck": false,
     "MaxReconnectAttempts": 10,
-    "ReconnectDelay": "00:00:03",
-    "SubscribedEventTypes": [],
-    "FilterUserIds": [],
-    "FilterInstanceNames": []
+    "ReconnectDelay": "00:00:03"
   }
 }
 ```

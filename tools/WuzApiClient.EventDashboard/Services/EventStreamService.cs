@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WuzApiClient.EventDashboard.Models;
+using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.RabbitMq.Core;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using System.Text.Json;
@@ -11,7 +11,7 @@ namespace WuzApiClient.EventDashboard.Services;
 public sealed class EventStreamService : IEventStreamService, IDisposable
 {
     private readonly object gate = new();
-    private readonly List<EventEntry> events = new();
+    private readonly List<EventEntry> events = [];
     private readonly int maxSize;
     private readonly IEventConsumer consumer;
     private readonly ILogger<EventStreamService> logger;
@@ -62,9 +62,9 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
     public event Action? OnEventsChanged;
     public event Action? OnConnectionStateChanged;
 
-    public void AddEvent(WuzEvent evt, string rawJson)
+    public void AddEvent(WuzEventEnvelope envelope, EventMetadata metadata)
     {
-        var entry = CreateEntry(evt, rawJson);
+        var entry = CreateEntry(envelope, metadata);
 
         lock (gate)
         {
@@ -90,6 +90,13 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
             Category = EventCategory.System,
             UserId = string.Empty,
             InstanceName = string.Empty,
+            Metadata = new SystemMetadata
+            {
+                Category = EventCategory.System,
+                SystemEvent = "Error",
+                Details = exception != null ? $"{error}: {exception.Message}" : error,
+                IsSyncComplete = false
+            },
             Event = null!,
             RawJson = "{}",
             Error = exception != null ? $"{error}: {exception.Message}" : error
@@ -134,18 +141,19 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
         WriteIndented = true
     };
 
-    private EventEntry CreateEntry(WuzEvent evt, string rawJson)
+    private EventEntry CreateEntry(WuzEventEnvelope envelope, EventMetadata metadata)
     {
         return new EventEntry
         {
             Id = Guid.NewGuid().ToString(),
-            Timestamp = DateTimeOffset.UtcNow,
-            EventType = evt.Type,
-            Category = EventCategoryMapper.MapToCategory(evt.Type),
-            UserId = evt.UserId,
-            InstanceName = evt.InstanceName,
-            Event = evt,
-            RawJson = FormatJson(rawJson)
+            Timestamp = envelope.ReceivedAt,
+            EventType = envelope.EventType,
+            Category = metadata.Category,
+            UserId = envelope.UserId,
+            InstanceName = envelope.InstanceName,
+            Metadata = metadata,
+            Event = envelope,
+            RawJson = FormatJson(envelope.RawJson)
         };
     }
 
@@ -153,12 +161,13 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
     {
         try
         {
-            using var doc = JsonDocument.Parse(json);
-            return JsonSerializer.Serialize(doc.RootElement, PrettyPrintOptions);
+            // Parse and re-serialize with indentation for display
+            using var document = JsonDocument.Parse(json);
+            return JsonSerializer.Serialize(document.RootElement, PrettyPrintOptions);
         }
         catch
         {
-            return json;
+            return json; // Return original if parsing fails
         }
     }
 }
