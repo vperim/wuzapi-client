@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event when a contact is blocked or unblocked.
 /// Maps to whatsmeow events.BlocklistChange.
 /// </summary>
-public sealed record BlocklistChangeEvent
+public sealed record BlocklistChangeEventEnvelope : WhatsAppEventEnvelope<BlocklistChangeEventData>
+{
+    [JsonPropertyName("event")]
+    public override required BlocklistChangeEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event when a contact is blocked or unblocked.
+/// Maps to whatsmeow events.BlocklistChange.
+/// </summary>
+public sealed record BlocklistChangeEventData
 {
     /// <summary>
     /// Gets the JID of the contact whose block status changed.

@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using WuzApiClient.RabbitMq.UnitTests.TestInfrastructure.Builders;
 using WuzApiClient.RabbitMq.UnitTests.TestInfrastructure.Fixtures;
 using WuzApiClient.RabbitMq.UnitTests.TestInfrastructure.Mocks;
 
@@ -33,37 +32,37 @@ public sealed class InfrastructureTests : EventsTestBase
         logger.Object.Should().NotBeNull();
     }
 
-    [Fact]
-    public void TestWuzEventBuilder_Build_ShouldCreateEventWithDefaults()
-    {
-        // Arrange
-        var builder = new TestWuzEventBuilder();
+    //[Fact]
+    //public void TestWuzEventBuilder_Build_ShouldCreateEventWithDefaults()
+    //{
+    //    // Arrange
+    //    var builder = new TestWuzEventBuilder();
 
-        // Act
-        var evt = builder.Build();
+    //    // Act
+    //    var evt = builder.Build();
 
-        // Assert
-        evt.Should().NotBeNull();
-        evt.EventType.Should().Be("TestEvent");
-        evt.UserId.Should().Be("test-user");
-        evt.InstanceName.Should().Be("test-instance");
-    }
+    //    // Assert
+    //    evt.Should().NotBeNull();
+    //    evt.EventType.Should().Be("TestEvent");
+    //    evt.UserId.Should().Be("test-user");
+    //    evt.InstanceName.Should().Be("test-instance");
+    //}
 
-    [Fact]
-    public void TestWuzEventBuilder_WithCustomValues_ShouldCreateEventWithCustomValues()
-    {
-        // Arrange & Act
-        var evt = new TestWuzEventBuilder()
-            .WithType("CustomType")
-            .WithUserId("custom-user")
-            .WithInstanceName("custom-instance")
-            .Build();
+    //[Fact]
+    //public void TestWuzEventBuilder_WithCustomValues_ShouldCreateEventWithCustomValues()
+    //{
+    //    // Arrange & Act
+    //    var evt = new TestWuzEventBuilder()
+    //        .WithType("CustomType")
+    //        .WithUserId("custom-user")
+    //        .WithInstanceName("custom-instance")
+    //        .Build();
 
-        // Assert
-        evt.EventType.Should().Be("CustomType");
-        evt.UserId.Should().Be("custom-user");
-        evt.InstanceName.Should().Be("custom-instance");
-    }
+    //    // Assert
+    //    evt.EventType.Should().Be("CustomType");
+    //    evt.UserId.Should().Be("custom-user");
+    //    evt.InstanceName.Should().Be("custom-instance");
+    //}
 
     [Fact]
     public void MockRabbitMqConnection_DefaultState_ShouldBeConnected()

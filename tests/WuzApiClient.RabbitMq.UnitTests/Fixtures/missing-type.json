@@ -1,8 +1,0 @@
-{
-  "userID": "user-008",
-  "instanceName": "instance-no-type",
-  "event": {
-    "someData": "present",
-    "butNoType": true
-  }
-}

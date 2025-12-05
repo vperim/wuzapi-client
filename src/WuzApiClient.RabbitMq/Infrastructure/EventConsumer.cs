@@ -216,24 +216,12 @@ public sealed class EventConsumer : IEventConsumer
                 eventArgs.Body.Length);
 
             // Pass raw bytes directly to dispatcher (no deserialization here)
-            var result = await this.dispatcher.DispatchAsync(eventArgs.Body, ct).ConfigureAwait(false);
+            await this.dispatcher.DispatchAsync(eventArgs.Body, ct).ConfigureAwait(false);
 
             // Handle ack/nack based on dispatch result and AutoAck setting
             if (!this.options.AutoAck)
             {
-                if (result.IsSuccess)
-                {
-                    await this.AckMessageAsync(eventArgs.DeliveryTag, ct).ConfigureAwait(false);
-                }
-                else
-                {
-                    this.logger.LogError(
-                        "Failed to dispatch event: {Error}",
-                        result.Error);
-
-                    // Nack message on failure (requeue based on ErrorBehavior - for now default to requeue=false)
-                    await this.NackMessageAsync(eventArgs.DeliveryTag, requeue: false, ct).ConfigureAwait(false);
-                }
+                await this.AckMessageAsync(eventArgs.DeliveryTag, ct).ConfigureAwait(false);
             }
         }
         catch (OperationCanceledException)

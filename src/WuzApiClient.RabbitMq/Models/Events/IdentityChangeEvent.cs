@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Identity change event from whatsmeow events.IdentityChange.
 /// Emitted when another user changes their primary device.
 /// </summary>
-public sealed record IdentityChangeEvent
+public sealed record IdentityChangeEventEnvelope : WhatsAppEventEnvelope<IdentityChangeEventData>
+{
+    [JsonPropertyName("event")]
+    public override required IdentityChangeEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for an identity change event from whatsmeow events.IdentityChange.
+/// Emitted when another user changes their primary device.
+/// </summary>
+public sealed record IdentityChangeEventData
 {
     /// <summary>
     /// Gets the JID of the user whose identity changed.

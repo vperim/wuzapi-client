@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,9 +11,9 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles group events (GroupInfo, JoinedGroup, Picture).
 /// </summary>
 public sealed class GroupCategoryHandler :
-    IEventHandler<GroupInfoEvent>,
-    IEventHandler<JoinedGroupEvent>,
-    IEventHandler<PictureEvent>
+    IEventHandler<GroupInfoEventEnvelope>,
+    IEventHandler<JoinedGroupEventEnvelope>,
+    IEventHandler<PictureEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -22,9 +22,9 @@ public sealed class GroupCategoryHandler :
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<GroupInfoEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<GroupInfoEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new GroupMetadata
         {
             Category = EventCategory.Group,
@@ -40,9 +40,9 @@ public sealed class GroupCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<JoinedGroupEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<JoinedGroupEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new GroupMetadata
         {
             Category = EventCategory.Group,
@@ -56,9 +56,9 @@ public sealed class GroupCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<PictureEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PictureEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new GroupMetadata
         {
             Category = EventCategory.Group,

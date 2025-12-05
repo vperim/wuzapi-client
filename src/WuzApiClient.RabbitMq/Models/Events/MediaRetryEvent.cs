@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for media retry requests.
 /// Maps to whatsmeow events.MediaRetry.
 /// </summary>
-public sealed record MediaRetryEvent
+public sealed record MediaRetryEventEnvelope : WhatsAppEventEnvelope<MediaRetryEventData>
+{
+    [JsonPropertyName("event")]
+    public override required MediaRetryEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event for media retry requests.
+/// Maps to whatsmeow events.MediaRetry.
+/// </summary>
+public sealed record MediaRetryEventData
 {
     /// <summary>
     /// Gets the chat JID where the media was sent.

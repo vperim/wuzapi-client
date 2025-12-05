@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event when newsletter mute status is changed.
 /// Maps to whatsmeow events.NewsletterMuteChange.
 /// </summary>
-public sealed record NewsletterMuteChangeEvent
+public sealed record NewsletterMuteChangeEventEnvelope : WhatsAppEventEnvelope<NewsletterMuteChangeEventData>
+{
+    [JsonPropertyName("event")]
+    public override required NewsletterMuteChangeEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event when newsletter mute status is changed.
+/// Maps to whatsmeow events.NewsletterMuteChange.
+/// </summary>
+public sealed record NewsletterMuteChangeEventData
 {
     /// <summary>
     /// Gets the newsletter JID.

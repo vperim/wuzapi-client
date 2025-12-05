@@ -58,7 +58,7 @@
                         <span class="event-error">Error: @entry.Error</span>
                     }
                 </div>
-                @if (entry.Event?.EventType == "Message")
+                @if (entry.Event.Metadata.WaEventMetadata.Type == "Message")
                 {
                     <MessagePreview Event="entry.Event" />
                 }

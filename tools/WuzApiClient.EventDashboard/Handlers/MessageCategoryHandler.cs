@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,9 +11,9 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles message-related events: Message, UndecryptableMessage, FbMessage.
 /// </summary>
 public sealed class MessageCategoryHandler :
-    IEventHandler<MessageEvent>,
-    IEventHandler<UndecryptableMessageEvent>,
-    IEventHandler<FbMessageEvent>
+    IEventHandler<MessageEventEnvelope>,
+    IEventHandler<UndecryptableMessageEventEnvelope>,
+    IEventHandler<FbMessageEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -22,9 +22,9 @@ public sealed class MessageCategoryHandler :
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new MessageMetadata
         {
             Category = EventCategory.Message,
@@ -36,7 +36,7 @@ public sealed class MessageCategoryHandler :
             IsGroup = evt.Info?.IsGroup ?? false,
             MessageTimestamp = evt.Info?.Timestamp,
             MessageType = evt.Info?.Type ?? "unknown",
-            MediaType = evt.MimeType,
+            MediaType = envelope.Payload.MimeType,
             ContentPreview = ExtractContentPreview(evt),
             IsViewOnce = evt.IsViewOnce,
             IsEphemeral = evt.IsEphemeral
@@ -46,9 +46,9 @@ public sealed class MessageCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<UndecryptableMessageEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<UndecryptableMessageEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new MessageMetadata
         {
             Category = EventCategory.Message,
@@ -70,9 +70,9 @@ public sealed class MessageCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<FbMessageEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<FbMessageEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new MessageMetadata
         {
             Category = EventCategory.Message,
@@ -94,7 +94,7 @@ public sealed class MessageCategoryHandler :
         return Task.CompletedTask;
     }
 
-    private static string ExtractContentPreview(MessageEvent evt)
+    private static string ExtractContentPreview(MessageEventData evt)
     {
         // Text message - conversation field
         if (evt.Message?.Conversation != null && !string.IsNullOrWhiteSpace(evt.Message.Conversation))
@@ -126,7 +126,7 @@ public sealed class MessageCategoryHandler :
         return "[Message]";
     }
 
-    private static string ExtractFbContentPreview(FbMessageEvent evt)
+    private static string ExtractFbContentPreview(FbMessageEventData evt)
     {
         // Text message - conversation field
         if (evt.Message?.Conversation != null && !string.IsNullOrWhiteSpace(evt.Message.Conversation))

@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,25 +11,25 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles system events (Sync, Newsletter, Privacy, Blocklist, Keep-alive, etc.).
 /// </summary>
 public sealed class SystemCategoryHandler :
-    IEventHandler<HistorySyncEvent>,
-    IEventHandler<AppStateEvent>,
-    IEventHandler<AppStateSyncCompleteEvent>,
-    IEventHandler<OfflineSyncCompletedEvent>,
-    IEventHandler<OfflineSyncPreviewEvent>,
-    IEventHandler<NewsletterJoinEvent>,
-    IEventHandler<NewsletterLeaveEvent>,
-    IEventHandler<NewsletterMuteChangeEvent>,
-    IEventHandler<NewsletterLiveUpdateEvent>,
-    IEventHandler<PrivacySettingsEvent>,
-    IEventHandler<PushNameSettingEvent>,
-    IEventHandler<UserAboutEvent>,
-    IEventHandler<BlocklistChangeEvent>,
-    IEventHandler<BlocklistEvent>,
-    IEventHandler<IdentityChangeEvent>,
-    IEventHandler<MediaRetryEvent>,
-    IEventHandler<CatRefreshErrorEvent>,
-    IEventHandler<KeepAliveTimeoutEvent>,
-    IEventHandler<KeepAliveRestoredEvent>
+    IEventHandler<HistorySyncEventEnvelope>,
+    IEventHandler<AppStateEventEnvelope>,
+    IEventHandler<AppStateSyncCompleteEventEnvelope>,
+    IEventHandler<OfflineSyncCompletedEventEnvelope>,
+    IEventHandler<OfflineSyncPreviewEventEnvelope>,
+    IEventHandler<NewsletterJoinEventEnvelope>,
+    IEventHandler<NewsletterLeaveEventEnvelope>,
+    IEventHandler<NewsletterMuteChangeEventEnvelope>,
+    IEventHandler<NewsletterLiveUpdateEventEnvelope>,
+    IEventHandler<PrivacySettingsEventEnvelope>,
+    IEventHandler<PushNameSettingEventEnvelope>,
+    IEventHandler<UserAboutEventEnvelope>,
+    IEventHandler<BlocklistChangeEventEnvelope>,
+    IEventHandler<BlocklistEventEnvelope>,
+    IEventHandler<IdentityChangeEventEnvelope>,
+    IEventHandler<MediaRetryEventEnvelope>,
+    IEventHandler<CatRefreshErrorEventEnvelope>,
+    IEventHandler<KeepAliveTimeoutEventEnvelope>,
+    IEventHandler<KeepAliveRestoredEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -39,7 +39,7 @@ public sealed class SystemCategoryHandler :
     }
 
     // Sync Events
-    public Task HandleAsync(WuzEventEnvelope<HistorySyncEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<HistorySyncEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new SystemMetadata
         {
@@ -52,7 +52,7 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<AppStateEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<AppStateEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new SystemMetadata
         {
@@ -65,9 +65,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<AppStateSyncCompleteEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<AppStateSyncCompleteEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -80,9 +80,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<OfflineSyncCompletedEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<OfflineSyncCompletedEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -95,9 +95,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<OfflineSyncPreviewEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<OfflineSyncPreviewEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -111,9 +111,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Newsletter Events
-    public Task HandleAsync(WuzEventEnvelope<NewsletterJoinEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<NewsletterJoinEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -127,9 +127,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<NewsletterLeaveEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<NewsletterLeaveEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -143,9 +143,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<NewsletterMuteChangeEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<NewsletterMuteChangeEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -159,9 +159,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<NewsletterLiveUpdateEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<NewsletterLiveUpdateEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -176,9 +176,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Privacy/Settings Events
-    public Task HandleAsync(WuzEventEnvelope<PrivacySettingsEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PrivacySettingsEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var changedSettings = new List<string>();
         if (evt.GroupAddChanged) changedSettings.Add("GroupAdd");
         if (evt.LastSeenChanged) changedSettings.Add("LastSeen");
@@ -201,7 +201,7 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<PushNameSettingEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PushNameSettingEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new SystemMetadata
         {
@@ -215,9 +215,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<UserAboutEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<UserAboutEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -231,9 +231,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Blocklist Events
-    public Task HandleAsync(WuzEventEnvelope<BlocklistChangeEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<BlocklistChangeEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -246,9 +246,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<BlocklistEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<BlocklistEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -262,9 +262,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Keep-Alive Events
-    public Task HandleAsync(WuzEventEnvelope<KeepAliveTimeoutEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<KeepAliveTimeoutEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -277,7 +277,7 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<KeepAliveRestoredEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<KeepAliveRestoredEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new SystemMetadata
         {
@@ -291,9 +291,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Contact Events
-    public Task HandleAsync(WuzEventEnvelope<IdentityChangeEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<IdentityChangeEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -306,9 +306,9 @@ public sealed class SystemCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<MediaRetryEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<MediaRetryEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,
@@ -322,9 +322,9 @@ public sealed class SystemCategoryHandler :
     }
 
     // Error Events
-    public Task HandleAsync(WuzEventEnvelope<CatRefreshErrorEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CatRefreshErrorEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new SystemMetadata
         {
             Category = EventCategory.System,

@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event when connection to WhatsApp fails.
+/// Data for the event when connection to WhatsApp fails.
 /// Corresponds to whatsmeow events.ConnectFailure with wuzapi enhancements.
 /// </summary>
-public sealed record ConnectFailureEvent
+public sealed record ConnectFailureEventData
 {
     /// <summary>
     /// Gets the error message describing the connection failure.
@@ -28,4 +28,14 @@ public sealed record ConnectFailureEvent
     /// </summary>
     [JsonPropertyName("reason")]
     public string? Reason { get; init; }
+}
+
+/// <summary>
+/// Envelope for the event when connection to WhatsApp fails.
+/// Corresponds to whatsmeow events.ConnectFailure with wuzapi enhancements.
+/// </summary>
+public sealed record ConnectFailureEventEnvelope : WhatsAppEventEnvelope<ConnectFailureEventData>
+{
+    [JsonPropertyName("event")]
+    public override required ConnectFailureEventData Event { get; init; }
 }

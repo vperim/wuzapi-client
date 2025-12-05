@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for group information updates.
 /// Maps to whatsmeow events.GroupInfo.
 /// </summary>
-public sealed record GroupInfoEvent
+public sealed record GroupInfoEventEnvelope : WhatsAppEventEnvelope<GroupInfoEventData>
+{
+    [JsonPropertyName("event")]
+    public override required GroupInfoEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a group information event.
+/// </summary>
+public sealed record GroupInfoEventData
 {
     /// <summary>
     /// Gets the group JID.

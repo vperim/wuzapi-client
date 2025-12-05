@@ -31,9 +31,10 @@ WuzAPI Client provides clear extension points for customization:
 ```csharp
 namespace WuzApiClient.Events.Core.Interfaces;
 
-public interface IEventHandler<TEvent> where TEvent : WuzEvent
+public interface IEventHandler<in TEvent>
+    where TEvent : class, IWhatsAppEnvelope
 {
-    Task HandleAsync(TEvent @event, CancellationToken cancellationToken);
+    Task HandleAsync(IWuzEventEnvelope<TEvent> envelope, CancellationToken cancellationToken = default);
 }
 ```
 
@@ -45,7 +46,7 @@ using WuzApiClient.Events.Core.Interfaces;
 using WuzApiClient.Events.Models.Events;
 using WuzApiClient.Models.Common;
 
-public sealed class WelcomeMessageHandler : IEventHandler<MessageEvent>
+public sealed class WelcomeMessageHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly IWaClient client;
     private readonly ILogger<WelcomeMessageHandler> logger;
@@ -59,9 +60,11 @@ public sealed class WelcomeMessageHandler : IEventHandler<MessageEvent>
     }
 
     public async Task HandleAsync(
-        MessageEvent @event,
+        IWuzEventEnvelope<MessageEventEnvelope> envelope,
         CancellationToken cancellationToken)
     {
+        var @event = envelope.Payload.Event;
+
         // Extract text from message (could be in Conversation or ExtendedTextMessage)
         var text = @event.Message?.Conversation
             ?? @event.Message?.ExtendedTextMessage?.Text;
@@ -103,9 +106,9 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 // Or register individual handlers explicitly
 builder.Services.AddWuzEvents(builder.Configuration, b => b
-    .AddHandler<MessageEvent, WelcomeMessageHandler>(ServiceLifetime.Scoped)
-    .AddHandler<MessageEvent, LoggingHandler>(ServiceLifetime.Scoped)
-    .AddHandler<MessageEvent, AnalyticsHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, WelcomeMessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, LoggingHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, AnalyticsHandler>(ServiceLifetime.Scoped)
 );
 ```
 
@@ -120,7 +123,7 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 ❌ **DO NOT block thread:**
 ```csharp
-public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
 {
     Thread.Sleep(10000); // Blocks thread pool
 }
@@ -128,7 +131,7 @@ public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
 
 ✅ **DO use async properly:**
 ```csharp
-public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
 {
     await Task.Delay(10000, ct); // Properly async
 }
@@ -176,9 +179,9 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 ```csharp
 builder.Services.AddWuzEvents(builder.Configuration, b => b
-    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
-    .AddHandler<ReceiptEvent, ReceiptHandler>(ServiceLifetime.Scoped)
-    .AddHandler<GroupInfoEvent, GroupHandler>(ServiceLifetime.Singleton)
+    .AddHandler<MessageEventEnvelope, MessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEventEnvelope, ReceiptHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEventEnvelope, GroupHandler>(ServiceLifetime.Singleton)
 );
 ```
 
@@ -375,53 +378,6 @@ RabbitMQ → EventConsumer
               ↓
          EventConsumer acknowledges message
 ```
-
-## Testing Extensions
-
-### Unit Test Event Handler
-
-```csharp
-[Fact]
-public async Task Handler_SendsReply_OnHelloMessage()
-{
-    // Arrange
-    var clientMock = new Mock<IWaClient>();
-    clientMock
-        .Setup(x => x.SendTextMessageAsync(
-            It.IsAny<string>(),
-            "Welcome! How can I help you today?",
-            default))
-        .ReturnsAsync(WuzResult<SendMessageResponse>.Success(new()));
-
-    var handler = new WelcomeMessageHandler(clientMock.Object, Mock.Of<ILogger<WelcomeMessageHandler>>());
-
-    var @event = new MessageEvent
-    {
-        Type = "text",
-        Body = "Hello",
-        From = "123@c.us"
-    };
-
-    // Act
-    await handler.HandleAsync(@event, CancellationToken.None);
-
-    // Assert
-    clientMock.Verify(
-        x => x.SendTextMessageAsync("123@c.us", It.IsAny<string>(), default),
-        Times.Once);
-}
-```
-
-
-## Best Practices
-
-1. **Keep handlers focused** – One responsibility per handler
-2. **Use DI liberally** – Inject dependencies, don't create them
-3. **Make filters fast** – Avoid async I/O
-4. **Test extension code** – Unit test handlers and filters
-5. **Log important events** – Aid debugging in production
-6. **Handle cancellation** – Respect CancellationToken
-7. **Use scoped services** – Handlers get scoped container
 
 ## Next Steps
 

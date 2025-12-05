@@ -1,9 +1,0 @@
-{
-  "type": "Message",
-  "userID": "user-007",
-  "instanceName": "instance-broken",
-  "event": {
-    "Info": "this-should-be-an-object-not-a-string",
-    "Message": [1, 2, 3, "invalid-message-structure"]
-  }
-}

@@ -3,10 +3,10 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event for Facebook/Meta messages.
+/// Event data for Facebook/Meta messages.
 /// Maps to whatsmeow events.FBMessage.
 /// </summary>
-public sealed record FbMessageEvent
+public sealed record FbMessageEventData
 {
     /// <summary>
     /// Gets the message information (metadata).
@@ -31,4 +31,14 @@ public sealed record FbMessageEvent
     /// </summary>
     [JsonPropertyName("IsEphemeral")]
     public bool IsEphemeral { get; init; }
+}
+
+/// <summary>
+/// Event envelope for Facebook/Meta messages.
+/// Maps to whatsmeow events.FBMessage.
+/// </summary>
+public sealed record FbMessageEventEnvelope : WhatsAppEventEnvelope<FbMessageEventData>
+{
+    [JsonPropertyName("event")]
+    public override required FbMessageEventData Event { get; init; }
 }

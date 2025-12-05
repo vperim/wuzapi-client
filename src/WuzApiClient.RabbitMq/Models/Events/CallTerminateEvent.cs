@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event emitted when a call is terminated on WhatsApp.
 /// Corresponds to whatsmeow events.CallTerminate.
 /// </summary>
-public sealed record CallTerminateEvent
+public sealed record CallTerminateEventEnvelope : WhatsAppEventEnvelope<CallTerminateEventData>
+{
+    [JsonPropertyName("event")]
+    public override required CallTerminateEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a call terminate event on WhatsApp.
+/// </summary>
+public sealed record CallTerminateEventData
 {
     // BasicCallMeta fields
     /// <summary>

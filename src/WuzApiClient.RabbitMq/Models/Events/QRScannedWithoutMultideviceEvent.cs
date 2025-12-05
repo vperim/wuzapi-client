@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
@@ -5,4 +7,13 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// User must enable multidevice in WhatsApp settings.
 /// Corresponds to whatsmeow events.QRScannedWithoutMultidevice.
 /// </summary>
-public sealed record QrScannedWithoutMultideviceEvent;
+public sealed record QrScannedWithoutMultideviceEventData;
+
+/// <summary>
+/// Envelope for QR scanned without multidevice event.
+/// </summary>
+public sealed record QrScannedWithoutMultideviceEventEnvelope : WhatsAppEventEnvelope<QrScannedWithoutMultideviceEventData>
+{
+    [JsonPropertyName("event")]
+    public override required QrScannedWithoutMultideviceEventData Event { get; init; }
+}

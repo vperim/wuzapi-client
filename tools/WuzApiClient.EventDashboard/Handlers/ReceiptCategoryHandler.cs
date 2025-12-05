@@ -2,15 +2,15 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
 /// <summary>
 /// Handles receipt events (read, delivery, played receipts).
 /// </summary>
-public sealed class ReceiptCategoryHandler : IEventHandler<ReceiptEvent>
+public sealed class ReceiptCategoryHandler : IEventHandler<ReceiptEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -19,9 +19,9 @@ public sealed class ReceiptCategoryHandler : IEventHandler<ReceiptEvent>
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ReceiptEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<ReceiptEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new ReceiptMetadata
         {
             Category = EventCategory.Receipt,
@@ -30,7 +30,7 @@ public sealed class ReceiptCategoryHandler : IEventHandler<ReceiptEvent>
             MessageIds = evt.MessageIDs ?? [],
             ReceiptTimestamp = evt.Timestamp,
             ReceiptType = evt.ReceiptType ?? "unknown",
-            State = evt.State ?? "unknown",
+            State = envelope.Payload.State ?? "unknown",
             IsGroup = evt.IsGroup
         };
 

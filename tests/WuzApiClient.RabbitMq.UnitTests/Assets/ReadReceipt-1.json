@@ -1,0 +1,5 @@
+{
+  "instanceName": "DashboardUser",
+  "jsonData": "{\"event\":{\"Chat\":\"5511991367947@s.whatsapp.net\",\"Sender\":\"5511991367947@s.whatsapp.net\",\"IsFromMe\":true,\"IsGroup\":false,\"AddressingMode\":\"\",\"SenderAlt\":\"\",\"RecipientAlt\":\"\",\"BroadcastListOwner\":\"\",\"BroadcastRecipients\":null,\"MessageIDs\":[\"3EB0131D16474B5A7E3C3B\"],\"Timestamp\":\"2025-12-03T19:23:26-03:00\",\"Type\":\"\",\"MessageSender\":\"\"},\"state\":\"Delivered\",\"type\":\"ReadReceipt\"}",
+  "userID": "eeb9c96d4ac15602fda4db3b759d12c0"
+}

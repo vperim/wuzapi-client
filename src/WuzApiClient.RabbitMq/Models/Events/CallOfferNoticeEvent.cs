@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event emitted for call offer notice on WhatsApp.
 /// Corresponds to whatsmeow events.CallOfferNotice.
 /// </summary>
-public sealed record CallOfferNoticeEvent
+public sealed record CallOfferNoticeEventEnvelope : WhatsAppEventEnvelope<CallOfferNoticeEventData>
+{
+    [JsonPropertyName("event")]
+    public override required CallOfferNoticeEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a call offer notice event on WhatsApp.
+/// </summary>
+public sealed record CallOfferNoticeEventData
 {
     // BasicCallMeta fields
     /// <summary>

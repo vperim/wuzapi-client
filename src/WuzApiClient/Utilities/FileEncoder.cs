@@ -182,7 +182,7 @@ internal static class FileEncoder
     }
 
     /// <summary>
-    /// Core chunked base64 encoder that never loads the full stream into memory.
+    /// Core chunked base64 encoder.
     /// Reads from current stream position to EOF.
     /// </summary>
     private static async Task<string> EncodeStreamInternalAsync(
@@ -200,7 +200,7 @@ internal static class FileEncoder
         if (knownLength is <= int.MaxValue)
         {
             var len = knownLength.Value;
-            estimatedBase64Len = (int)(((len + 2L) / 3L) * 4L);
+            estimatedBase64Len = (int)((len + 2L) / 3L * 4L);
         }
 
         var sb = estimatedBase64Len > 0
@@ -211,7 +211,7 @@ internal static class FileEncoder
 
         var buffer = ArrayPool<byte>.Shared.Rent(StreamBufferSize);
         // Max chars needed for any N bytes is ((N + 2) / 3) * 4
-        var charBuffer = ArrayPool<char>.Shared.Rent(((StreamBufferSize + 2) / 3) * 4);
+        var charBuffer = ArrayPool<char>.Shared.Rent((StreamBufferSize + 2) / 3 * 4);
 
         var leftoverCount = 0;
         var totalBytesRead = 0L;
@@ -237,14 +237,14 @@ internal static class FileEncoder
                 totalBytesRead += bytesRead;
 
                 // Running size check (for non-seekable streams especially)
-                if (maxAllowedSize.HasValue && totalBytesRead > maxAllowedSize.Value)
+                if (totalBytesRead > maxAllowedSize)
                 {
                     throw new InvalidOperationException(
                         $"Stream size exceeds maximum allowed size for {mimeType} ({maxAllowedSize.Value} bytes).");
                 }
 
                 var totalInBuffer = leftoverCount + bytesRead;
-                var bytesToEncode = (totalInBuffer / 3) * 3; // multiple of 3
+                var bytesToEncode = totalInBuffer / 3 * 3; // multiple of 3
 
                 if (bytesToEncode > 0)
                 {

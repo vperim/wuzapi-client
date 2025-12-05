@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event emitted when a call is accepted on WhatsApp.
 /// Corresponds to whatsmeow events.CallAccept.
 /// </summary>
-public sealed record CallAcceptEvent
+public sealed record CallAcceptEventEnvelope : WhatsAppEventEnvelope<CallAcceptEventData>
+{
+    [JsonPropertyName("event")]
+    public override required CallAcceptEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a call accept event on WhatsApp.
+/// </summary>
+public sealed record CallAcceptEventData
 {
     // BasicCallMeta fields
     /// <summary>

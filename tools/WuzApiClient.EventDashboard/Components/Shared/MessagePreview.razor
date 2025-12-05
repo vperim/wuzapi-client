@@ -1,4 +1,5 @@
 @using WuzApiClient.EventDashboard.Helpers
+@using WuzApiClient.RabbitMq.Models.Wuz
 
 @* Displays essential message info without expanding JSON *@
 
@@ -15,7 +16,7 @@
 
 @code {
     [Parameter, EditorRequired]
-    public WuzEventEnvelope Event { get; set; } = default!;
+    public IWuzEventEnvelope Event { get; set; } = default!;
 
     private MessagePreviewResult Preview => MessageContentExtractor.CreatePreview(Event);
 

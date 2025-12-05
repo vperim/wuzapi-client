@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event emitted when the keepalive ping request to WhatsApp web servers times out.
 /// Corresponds to whatsmeow events.KeepAliveTimeout.
 /// </summary>
-public sealed record KeepAliveTimeoutEvent
+public sealed record KeepAliveTimeoutEventEnvelope : WhatsAppEventEnvelope<KeepAliveTimeoutEventData>
+{
+    [JsonPropertyName("event")]
+    public override required KeepAliveTimeoutEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event data emitted when the keepalive ping request to WhatsApp web servers times out.
+/// Corresponds to whatsmeow events.KeepAliveTimeout.
+/// </summary>
+public sealed record KeepAliveTimeoutEventData
 {
     /// <summary>
     /// Gets the number of consecutive errors.

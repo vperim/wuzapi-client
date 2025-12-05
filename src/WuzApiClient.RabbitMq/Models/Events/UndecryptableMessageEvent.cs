@@ -4,10 +4,19 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event for messages that could not be decrypted.
+/// Envelope for undecryptable message events.
+/// </summary>
+public sealed record UndecryptableMessageEventEnvelope : WhatsAppEventEnvelope<UndecryptableMessageEventData>
+{
+    [JsonPropertyName("event")]
+    public override required UndecryptableMessageEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event data for messages that could not be decrypted.
 /// Maps to whatsmeow events.UndecryptableMessage.
 /// </summary>
-public sealed record UndecryptableMessageEvent
+public sealed record UndecryptableMessageEventData
 {
     /// <summary>
     /// Gets the message information (metadata).

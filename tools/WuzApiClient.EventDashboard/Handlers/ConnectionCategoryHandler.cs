@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,19 +11,19 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles connection lifecycle events (Connected, Disconnected, QR codes, pairing, etc.).
 /// </summary>
 public sealed class ConnectionCategoryHandler :
-    IEventHandler<ConnectedEvent>,
-    IEventHandler<DisconnectedEvent>,
-    IEventHandler<LoggedOutEvent>,
-    IEventHandler<ConnectFailureEvent>,
-    IEventHandler<QrCodeEvent>,
-    IEventHandler<QrTimeoutEvent>,
-    IEventHandler<QrScannedWithoutMultideviceEvent>,
-    IEventHandler<PairSuccessEvent>,
-    IEventHandler<PairErrorEvent>,
-    IEventHandler<ClientOutdatedEvent>,
-    IEventHandler<TemporaryBanEvent>,
-    IEventHandler<StreamErrorEvent>,
-    IEventHandler<StreamReplacedEvent>
+    IEventHandler<ConnectedEventEnvelope>,
+    IEventHandler<DisconnectedEventEnvelope>,
+    IEventHandler<LoggedOutEventEnvelope>,
+    IEventHandler<ConnectFailureEventEnvelope>,
+    IEventHandler<QrCodeEventEnvelope>,
+    IEventHandler<QrTimeoutEventEnvelope>,
+    IEventHandler<QrScannedWithoutMultideviceEventEnvelope>,
+    IEventHandler<PairSuccessEventEnvelope>,
+    IEventHandler<PairErrorEventEnvelope>,
+    IEventHandler<ClientOutdatedEventEnvelope>,
+    IEventHandler<TemporaryBanEventEnvelope>,
+    IEventHandler<StreamErrorEventEnvelope>,
+    IEventHandler<StreamReplacedEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -32,7 +32,7 @@ public sealed class ConnectionCategoryHandler :
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ConnectedEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<ConnectedEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -44,7 +44,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<DisconnectedEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<DisconnectedEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -56,9 +56,9 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<LoggedOutEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<LoggedOutEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new ConnectionMetadata
         {
             Category = EventCategory.Connection,
@@ -70,9 +70,9 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ConnectFailureEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<ConnectFailureEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new ConnectionMetadata
         {
             Category = EventCategory.Connection,
@@ -86,21 +86,21 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<QrCodeEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<QrCodeEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload;
         var metadata = new ConnectionMetadata
         {
             Category = EventCategory.Connection,
             ConnectionEvent = "QR",
-            QrCodeBase64 = evt.QrCodeBase64
+            QrCodeBase64 = evt.QrCode?.ToString()
         };
 
         eventStream.AddEvent(envelope, metadata);
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<QrTimeoutEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<QrTimeoutEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -112,7 +112,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<QrScannedWithoutMultideviceEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<QrScannedWithoutMultideviceEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -124,7 +124,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<PairSuccessEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PairSuccessEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -136,7 +136,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<PairErrorEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PairErrorEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -148,7 +148,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ClientOutdatedEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<ClientOutdatedEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {
@@ -160,9 +160,9 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<TemporaryBanEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<TemporaryBanEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new ConnectionMetadata
         {
             Category = EventCategory.Connection,
@@ -174,9 +174,9 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<StreamErrorEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<StreamErrorEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new ConnectionMetadata
         {
             Category = EventCategory.Connection,
@@ -188,7 +188,7 @@ public sealed class ConnectionCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<StreamReplacedEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<StreamReplacedEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
         var metadata = new ConnectionMetadata
         {

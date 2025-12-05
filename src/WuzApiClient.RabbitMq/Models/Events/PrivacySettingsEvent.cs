@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Privacy settings change event from whatsmeow events.PrivacySettings.
 /// Emitted when the user changes their privacy settings.
 /// </summary>
-public sealed record PrivacySettingsEvent
+public sealed record PrivacySettingsEventEnvelope : WhatsAppEventEnvelope<PrivacySettingsEventData>
+{
+    [JsonPropertyName("event")]
+    public override required PrivacySettingsEventData Event { get; init; }
+}
+
+/// <summary>
+/// Privacy settings change event data from whatsmeow events.PrivacySettings.
+/// Emitted when the user changes their privacy settings.
+/// </summary>
+public sealed record PrivacySettingsEventData
 {
     /// <summary>
     /// Gets the new privacy settings.

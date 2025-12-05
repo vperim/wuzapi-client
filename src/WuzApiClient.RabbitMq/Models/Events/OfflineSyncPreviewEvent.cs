@@ -3,10 +3,20 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Offline sync preview event from whatsmeow events.OfflineSyncPreview.
+/// Offline sync preview event envelope from whatsmeow events.OfflineSyncPreview.
 /// Emitted right after connecting if the server is going to send events that the client missed during downtime.
 /// </summary>
-public sealed record OfflineSyncPreviewEvent
+public sealed record OfflineSyncPreviewEventEnvelope : WhatsAppEventEnvelope<OfflineSyncPreviewEventData>
+{
+    [JsonPropertyName("event")]
+    public override required OfflineSyncPreviewEventData Event { get; init; }
+}
+
+/// <summary>
+/// Offline sync preview event data from whatsmeow events.OfflineSyncPreview.
+/// Contains the offline sync preview information.
+/// </summary>
+public sealed record OfflineSyncPreviewEventData
 {
     /// <summary>
     /// Gets the total number of events to be synced.

@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event emitted for call relay latency updates on WhatsApp.
 /// Corresponds to whatsmeow events.CallRelayLatency.
 /// </summary>
-public sealed record CallRelayLatencyEvent
+public sealed record CallRelayLatencyEventEnvelope : WhatsAppEventEnvelope<CallRelayLatencyEventData>
+{
+    [JsonPropertyName("event")]
+    public override required CallRelayLatencyEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a call relay latency event on WhatsApp.
+/// </summary>
+public sealed record CallRelayLatencyEventData
 {
     // BasicCallMeta fields
     /// <summary>

@@ -4,6 +4,16 @@ using System.Text.Json.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
+
+public sealed record ReceiptEventEnvelope : WhatsAppEventEnvelope<ReceiptEvent>
+{
+    [JsonPropertyName("state")]
+    public required string State { get; init; }
+
+    [JsonPropertyName("event")]
+    public override required ReceiptEvent Event { get; init; }
+}
+
 /// <summary>
 /// Event for message delivery and read receipts.
 /// Maps to whatsmeow events.Receipt with wuzapi additions.
@@ -61,13 +71,4 @@ public sealed record ReceiptEvent
     /// </summary>
     [JsonPropertyName("MessageSender")]
     public string? MessageSender { get; init; }
-
-    // === wuzapi-added fields ===
-
-    /// <summary>
-    /// Gets the receipt state (added by wuzapi: "Read", "ReadSelf", "Delivered").
-    /// This field is at the root level in wuzapi JSON.
-    /// </summary>
-    [JsonPropertyName("state")]
-    public string? State { get; init; }
 }

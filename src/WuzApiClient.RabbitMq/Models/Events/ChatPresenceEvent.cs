@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for chat typing and recording indicators.
 /// Maps to whatsmeow events.ChatPresence.
 /// </summary>
-public sealed record ChatPresenceEvent
+public sealed record ChatPresenceEventEnvelope : WhatsAppEventEnvelope<ChatPresenceEventData>
+{
+    [JsonPropertyName("event")]
+    public override required ChatPresenceEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event data for chat typing and recording indicators.
+/// Maps to whatsmeow events.ChatPresence.
+/// </summary>
+public sealed record ChatPresenceEventData
 {
     // === MessageSource fields (embedded in Go) ===
 

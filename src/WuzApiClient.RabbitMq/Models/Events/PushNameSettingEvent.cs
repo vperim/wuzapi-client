@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Push name setting change event from whatsmeow events.PushNameSetting.
 /// Emitted when the user's push name is changed from another device.
 /// </summary>
-public sealed record PushNameSettingEvent
+public sealed record PushNameSettingEventEnvelope : WhatsAppEventEnvelope<PushNameSettingEventData>
+{
+    [JsonPropertyName("event")]
+    public override required PushNameSettingEventData Event { get; init; }
+}
+
+/// <summary>
+/// Push name setting change event data from whatsmeow events.PushNameSetting.
+/// Emitted when the user's push name is changed from another device.
+/// </summary>
+public sealed record PushNameSettingEventData
 {
     /// <summary>
     /// Gets the timestamp of the push name change.

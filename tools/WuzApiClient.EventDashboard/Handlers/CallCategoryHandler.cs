@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,11 +11,11 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles call events (CallOffer, CallAccept, CallTerminate, etc.).
 /// </summary>
 public sealed class CallCategoryHandler :
-    IEventHandler<CallOfferEvent>,
-    IEventHandler<CallAcceptEvent>,
-    IEventHandler<CallTerminateEvent>,
-    IEventHandler<CallOfferNoticeEvent>,
-    IEventHandler<CallRelayLatencyEvent>
+    IEventHandler<CallOfferEventEnvelope>,
+    IEventHandler<CallAcceptEventEnvelope>,
+    IEventHandler<CallTerminateEventEnvelope>,
+    IEventHandler<CallOfferNoticeEventEnvelope>,
+    IEventHandler<CallRelayLatencyEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -24,9 +24,9 @@ public sealed class CallCategoryHandler :
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<CallOfferEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CallOfferEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new CallMetadata
         {
             Category = EventCategory.Call,
@@ -41,9 +41,9 @@ public sealed class CallCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<CallAcceptEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CallAcceptEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new CallMetadata
         {
             Category = EventCategory.Call,
@@ -58,9 +58,9 @@ public sealed class CallCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<CallTerminateEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CallTerminateEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new CallMetadata
         {
             Category = EventCategory.Call,
@@ -74,9 +74,9 @@ public sealed class CallCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<CallOfferNoticeEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CallOfferNoticeEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new CallMetadata
         {
             Category = EventCategory.Call,
@@ -91,9 +91,9 @@ public sealed class CallCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<CallRelayLatencyEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<CallRelayLatencyEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new CallMetadata
         {
             Category = EventCategory.Call,

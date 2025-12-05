@@ -1,32 +1,32 @@
 using System.Text.Json;
 using WuzApiClient.EventDashboard.Models;
-using WuzApiClient.RabbitMq.Models;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Helpers;
 
 public static class MessageContentExtractor
 {
-    public static MessagePreviewResult CreatePreview(WuzEventEnvelope envelope)
+    public static MessagePreviewResult CreatePreview(IWuzEventEnvelope envelope)
     {
-        // WuzEventEnvelope has: EventType, UserId, InstanceName, RawEvent (JsonElement?)
+        // IWuzEventEnvelope has: EventType, UserId, InstanceName, RawEvent (JsonElement?)
         // All message details must be extracted from RawEvent
-        return envelope.EventType switch
+        return envelope.Metadata.WaEventMetadata.Type switch
         {
             "Message" => ExtractMessage(envelope),
-            _ => new MessagePreviewResult($"[{envelope.EventType}]", "unknown-message")
+            _ => new MessagePreviewResult($"[{envelope.Metadata.WaEventMetadata.Type}]", "unknown-message")
         };
     }
 
-    private static MessagePreviewResult ExtractMessage(WuzEventEnvelope envelope)
+    private static MessagePreviewResult ExtractMessage(IWuzEventEnvelope envelope)
     {
         // Parse RawJson string to JsonElement
-        if (string.IsNullOrWhiteSpace(envelope.RawJson))
+        if (string.IsNullOrWhiteSpace(envelope.Metadata.WuzEnvelope.JsonData))
             return new MessagePreviewResult("[No content]", "unknown-message");
 
         JsonDocument? document = null;
         try
         {
-            document = JsonDocument.Parse(envelope.RawJson);
+            document = JsonDocument.Parse(envelope.Metadata.WuzEnvelope.JsonData);
             var raw = document.RootElement;
 
             return ExtractMessageFromElement(raw);
@@ -114,15 +114,15 @@ public static class MessageContentExtractor
     /// Extracts sender info from RawEvent for direction/sender display.
     /// WuzAPI structure: Info.IsFromMe, Info.PushName, Info.Sender
     /// </summary>
-    public static (bool IsFromMe, string? PushName, string? SenderJid) ExtractSenderInfo(WuzEventEnvelope envelope)
+    public static (bool IsFromMe, string? PushName, string? SenderJid) ExtractSenderInfo(IWuzEventEnvelope envelope)
     {
-        if (string.IsNullOrWhiteSpace(envelope.RawJson))
+        if (string.IsNullOrWhiteSpace(envelope.Metadata.WuzEnvelope.JsonData))
             return (false, null, null);
 
         JsonDocument? document = null;
         try
         {
-            document = JsonDocument.Parse(envelope.RawJson);
+            document = JsonDocument.Parse(envelope.Metadata.WuzEnvelope.JsonData);
             var raw = document.RootElement;
 
             bool isFromMe = false;

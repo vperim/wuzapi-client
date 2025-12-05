@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event when a newsletter receives a live update.
 /// Maps to whatsmeow events.NewsletterLiveUpdate.
 /// </summary>
-public sealed record NewsletterLiveUpdateEvent
+public sealed record NewsletterLiveUpdateEventEnvelope : WhatsAppEventEnvelope<NewsletterLiveUpdateEventData>
+{
+    [JsonPropertyName("event")]
+    public override required NewsletterLiveUpdateEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event when a newsletter receives a live update.
+/// Maps to whatsmeow events.NewsletterLiveUpdate.
+/// </summary>
+public sealed record NewsletterLiveUpdateEventData
 {
     /// <summary>
     /// Gets the newsletter JID.

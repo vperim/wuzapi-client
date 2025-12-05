@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event related to blocklist operations.
 /// Maps to whatsmeow events.Blocklist.
 /// </summary>
-public sealed record BlocklistEvent
+public sealed record BlocklistEventEnvelope : WhatsAppEventEnvelope<BlocklistEventData>
+{
+    [JsonPropertyName("event")]
+    public override required BlocklistEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event related to blocklist operations.
+/// Maps to whatsmeow events.Blocklist.
+/// </summary>
+public sealed record BlocklistEventData
 {
     /// <summary>
     /// Gets the action performed on the blocklist ("" for default, "modify" for modifications).

@@ -63,22 +63,6 @@ public interface IEventHandler<in TEvent>
 - Configurable concurrency with `MaxConcurrentMessages`
 - Scoped DI per message for proper service lifetime management
 
-### 3. WuzApiClient.Results (Result Pattern)
-
-Monad-based error handling library eliminating exceptions:
-
-```csharp
-public readonly struct WuzResult<T>
-{
-    public bool IsSuccess { get; }
-    public bool IsFailure { get; }
-    public T Value { get; }
-    public WuzApiError Error { get; }
-}
-```
-
-This follows railway-oriented programming principles, making error handling explicit and composable.
-
 ## System Context
 
 WuzAPI Client sits between .NET applications and the asternic/wuzapi gateway:
@@ -147,7 +131,7 @@ This makes error handling explicit, predictable, and composable. See [Error Hand
 
 The library uses standard `Microsoft.Extensions.*` patterns:
 
-- **Dependency Injection** – Register with `AddWuzApiClient()` (3 overloads: IConfiguration, IConfigurationSection, or Action<WuzApiOptions>) and `AddWuzEvents()` (3 overloads: Action<WuzEventOptions>, IConfiguration + sectionName, or Action<WuzEventBuilder>)
+- **Dependency Injection** – Register with `AddWuzApiClient()` (3 overloads: IConfiguration, IConfigurationSection, or Action\<WuzApiOptions>) and `AddWuzEvents()` (3 overloads: Action\<WuzEventOptions>, IConfiguration + sectionName, or Action\<WuzEventBuilder>)
 - **Options Pattern** – Configure via `IOptions<WuzApiOptions>` and `IOptions<WuzEventOptions>`
 - **Hosted Services** – RabbitMQ consumer runs as `IHostedService`
 - **Logging** – Integrated with `ILogger<T>` throughout

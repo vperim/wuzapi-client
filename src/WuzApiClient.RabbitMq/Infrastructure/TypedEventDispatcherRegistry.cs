@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
@@ -15,60 +16,73 @@ public sealed class TypedEventDispatcherRegistry : ITypedEventDispatcherRegistry
     private readonly Dictionary<string, ITypedEventDispatcher> dispatchers;
     private readonly ITypedEventDispatcher unknownDispatcher;
 
-    public TypedEventDispatcherRegistry()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TypedEventDispatcherRegistry"/> class.
+    /// </summary>
+    /// <param name="loggerFactory">The logger factory for creating typed loggers.</param>
+    public TypedEventDispatcherRegistry(ILoggerFactory loggerFactory)
     {
-        this.unknownDispatcher = new TypedEventDispatcher<UnknownEventData>();
+        if (loggerFactory == null)
+            throw new ArgumentNullException(nameof(loggerFactory));
+
+        this.unknownDispatcher = CreateDispatcher<UnknownEventEnvelope>(loggerFactory);
 
         this.dispatchers = new Dictionary<string, ITypedEventDispatcher>(StringComparer.Ordinal)
         {
-            [EventTypes.Message] = new TypedEventDispatcher<MessageEvent>(),
-            [EventTypes.UndecryptableMessage] = new TypedEventDispatcher<UndecryptableMessageEvent>(),
-            [EventTypes.Receipt] = new TypedEventDispatcher<ReceiptEvent>(),
-            [EventTypes.ReadReceipt] = new TypedEventDispatcher<ReceiptEvent>(),
-            [EventTypes.Presence] = new TypedEventDispatcher<PresenceEvent>(),
-            [EventTypes.ChatPresence] = new TypedEventDispatcher<ChatPresenceEvent>(),
-            [EventTypes.Connected] = new TypedEventDispatcher<ConnectedEvent>(),
-            [EventTypes.Disconnected] = new TypedEventDispatcher<DisconnectedEvent>(),
-            [EventTypes.Qr] = new TypedEventDispatcher<QrCodeEvent>(),
-            [EventTypes.QrTimeout] = new TypedEventDispatcher<QrTimeoutEvent>(),
-            [EventTypes.QrScannedWithoutMultidevice] = new TypedEventDispatcher<QrScannedWithoutMultideviceEvent>(),
-            [EventTypes.PairSuccess] = new TypedEventDispatcher<PairSuccessEvent>(),
-            [EventTypes.PairError] = new TypedEventDispatcher<PairErrorEvent>(),
-            [EventTypes.LoggedOut] = new TypedEventDispatcher<LoggedOutEvent>(),
-            [EventTypes.ConnectFailure] = new TypedEventDispatcher<ConnectFailureEvent>(),
-            [EventTypes.ClientOutdated] = new TypedEventDispatcher<ClientOutdatedEvent>(),
-            [EventTypes.TemporaryBan] = new TypedEventDispatcher<TemporaryBanEvent>(),
-            [EventTypes.StreamError] = new TypedEventDispatcher<StreamErrorEvent>(),
-            [EventTypes.StreamReplaced] = new TypedEventDispatcher<StreamReplacedEvent>(),
-            [EventTypes.KeepAliveTimeout] = new TypedEventDispatcher<KeepAliveTimeoutEvent>(),
-            [EventTypes.KeepAliveRestored] = new TypedEventDispatcher<KeepAliveRestoredEvent>(),
-            [EventTypes.CallOffer] = new TypedEventDispatcher<CallOfferEvent>(),
-            [EventTypes.CallAccept] = new TypedEventDispatcher<CallAcceptEvent>(),
-            [EventTypes.CallTerminate] = new TypedEventDispatcher<CallTerminateEvent>(),
-            [EventTypes.CallOfferNotice] = new TypedEventDispatcher<CallOfferNoticeEvent>(),
-            [EventTypes.CallRelayLatency] = new TypedEventDispatcher<CallRelayLatencyEvent>(),
-            [EventTypes.GroupInfo] = new TypedEventDispatcher<GroupInfoEvent>(),
-            [EventTypes.JoinedGroup] = new TypedEventDispatcher<JoinedGroupEvent>(),
-            [EventTypes.Picture] = new TypedEventDispatcher<PictureEvent>(),
-            [EventTypes.HistorySync] = new TypedEventDispatcher<HistorySyncEvent>(),
-            [EventTypes.AppState] = new TypedEventDispatcher<AppStateEvent>(),
-            [EventTypes.AppStateSyncComplete] = new TypedEventDispatcher<AppStateSyncCompleteEvent>(),
-            [EventTypes.OfflineSyncCompleted] = new TypedEventDispatcher<OfflineSyncCompletedEvent>(),
-            [EventTypes.OfflineSyncPreview] = new TypedEventDispatcher<OfflineSyncPreviewEvent>(),
-            [EventTypes.PrivacySettings] = new TypedEventDispatcher<PrivacySettingsEvent>(),
-            [EventTypes.PushNameSetting] = new TypedEventDispatcher<PushNameSettingEvent>(),
-            [EventTypes.BlocklistChange] = new TypedEventDispatcher<BlocklistChangeEvent>(),
-            [EventTypes.Blocklist] = new TypedEventDispatcher<BlocklistEvent>(),
-            [EventTypes.IdentityChange] = new TypedEventDispatcher<IdentityChangeEvent>(),
-            [EventTypes.NewsletterJoin] = new TypedEventDispatcher<NewsletterJoinEvent>(),
-            [EventTypes.NewsletterLeave] = new TypedEventDispatcher<NewsletterLeaveEvent>(),
-            [EventTypes.NewsletterMuteChange] = new TypedEventDispatcher<NewsletterMuteChangeEvent>(),
-            [EventTypes.NewsletterLiveUpdate] = new TypedEventDispatcher<NewsletterLiveUpdateEvent>(),
-            [EventTypes.MediaRetry] = new TypedEventDispatcher<MediaRetryEvent>(),
-            [EventTypes.UserAbout] = new TypedEventDispatcher<UserAboutEvent>(),
-            [EventTypes.FbMessage] = new TypedEventDispatcher<FbMessageEvent>(),
-            [EventTypes.CatRefreshError] = new TypedEventDispatcher<CatRefreshErrorEvent>(),
+            [EventTypes.Message] = CreateDispatcher<MessageEventEnvelope>(loggerFactory),
+            [EventTypes.UndecryptableMessage] = CreateDispatcher<UndecryptableMessageEventEnvelope>(loggerFactory),
+            [EventTypes.Receipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
+            [EventTypes.ReadReceipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
+            [EventTypes.Presence] = CreateDispatcher<PresenceEventEnvelope>(loggerFactory),
+            [EventTypes.ChatPresence] = CreateDispatcher<ChatPresenceEventEnvelope>(loggerFactory),
+            [EventTypes.Connected] = CreateDispatcher<ConnectedEventEnvelope>(loggerFactory),
+            [EventTypes.Disconnected] = CreateDispatcher<DisconnectedEventEnvelope>(loggerFactory),
+            [EventTypes.Qr] = CreateDispatcher<QrCodeEventEnvelope>(loggerFactory),
+            [EventTypes.QrTimeout] = CreateDispatcher<QrTimeoutEventEnvelope>(loggerFactory),
+            [EventTypes.QrScannedWithoutMultidevice] = CreateDispatcher<QrScannedWithoutMultideviceEventEnvelope>(loggerFactory),
+            [EventTypes.PairSuccess] = CreateDispatcher<PairSuccessEventEnvelope>(loggerFactory),
+            [EventTypes.PairError] = CreateDispatcher<PairErrorEventEnvelope>(loggerFactory),
+            [EventTypes.LoggedOut] = CreateDispatcher<LoggedOutEventEnvelope>(loggerFactory),
+            [EventTypes.ConnectFailure] = CreateDispatcher<ConnectFailureEventEnvelope>(loggerFactory),
+            [EventTypes.ClientOutdated] = CreateDispatcher<ClientOutdatedEventEnvelope>(loggerFactory),
+            [EventTypes.TemporaryBan] = CreateDispatcher<TemporaryBanEventEnvelope>(loggerFactory),
+            [EventTypes.StreamError] = CreateDispatcher<StreamErrorEventEnvelope>(loggerFactory),
+            [EventTypes.StreamReplaced] = CreateDispatcher<StreamReplacedEventEnvelope>(loggerFactory),
+            [EventTypes.KeepAliveTimeout] = CreateDispatcher<KeepAliveTimeoutEventEnvelope>(loggerFactory),
+            [EventTypes.KeepAliveRestored] = CreateDispatcher<KeepAliveRestoredEventEnvelope>(loggerFactory),
+            [EventTypes.CallOffer] = CreateDispatcher<CallOfferEventEnvelope>(loggerFactory),
+            [EventTypes.CallAccept] = CreateDispatcher<CallAcceptEventEnvelope>(loggerFactory),
+            [EventTypes.CallTerminate] = CreateDispatcher<CallTerminateEventEnvelope>(loggerFactory),
+            [EventTypes.CallOfferNotice] = CreateDispatcher<CallOfferNoticeEventEnvelope>(loggerFactory),
+            [EventTypes.CallRelayLatency] = CreateDispatcher<CallRelayLatencyEventEnvelope>(loggerFactory),
+            [EventTypes.GroupInfo] = CreateDispatcher<GroupInfoEventEnvelope>(loggerFactory),
+            [EventTypes.JoinedGroup] = CreateDispatcher<JoinedGroupEventEnvelope>(loggerFactory),
+            [EventTypes.Picture] = CreateDispatcher<PictureEventEnvelope>(loggerFactory),
+            [EventTypes.HistorySync] = CreateDispatcher<HistorySyncEventEnvelope>(loggerFactory),
+            [EventTypes.AppState] = CreateDispatcher<AppStateEventEnvelope>(loggerFactory),
+            [EventTypes.AppStateSyncComplete] = CreateDispatcher<AppStateSyncCompleteEventEnvelope>(loggerFactory),
+            [EventTypes.OfflineSyncCompleted] = CreateDispatcher<OfflineSyncCompletedEventEnvelope>(loggerFactory),
+            [EventTypes.OfflineSyncPreview] = CreateDispatcher<OfflineSyncPreviewEventEnvelope>(loggerFactory),
+            [EventTypes.PrivacySettings] = CreateDispatcher<PrivacySettingsEventEnvelope>(loggerFactory),
+            [EventTypes.PushNameSetting] = CreateDispatcher<PushNameSettingEventEnvelope>(loggerFactory),
+            [EventTypes.BlocklistChange] = CreateDispatcher<BlocklistChangeEventEnvelope>(loggerFactory),
+            [EventTypes.Blocklist] = CreateDispatcher<BlocklistEventEnvelope>(loggerFactory),
+            [EventTypes.IdentityChange] = CreateDispatcher<IdentityChangeEventEnvelope>(loggerFactory),
+            [EventTypes.NewsletterJoin] = CreateDispatcher<NewsletterJoinEventEnvelope>(loggerFactory),
+            [EventTypes.NewsletterLeave] = CreateDispatcher<NewsletterLeaveEventEnvelope>(loggerFactory),
+            [EventTypes.NewsletterMuteChange] = CreateDispatcher<NewsletterMuteChangeEventEnvelope>(loggerFactory),
+            [EventTypes.NewsletterLiveUpdate] = CreateDispatcher<NewsletterLiveUpdateEventEnvelope>(loggerFactory),
+            [EventTypes.MediaRetry] = CreateDispatcher<MediaRetryEventEnvelope>(loggerFactory),
+            [EventTypes.UserAbout] = CreateDispatcher<UserAboutEventEnvelope>(loggerFactory),
+            [EventTypes.FbMessage] = CreateDispatcher<FbMessageEventEnvelope>(loggerFactory),
+            [EventTypes.CatRefreshError] = CreateDispatcher<CatRefreshErrorEventEnvelope>(loggerFactory),
         };
+    }
+
+    private static TypedEventDispatcher<TEvent> CreateDispatcher<TEvent>(ILoggerFactory loggerFactory)
+        where TEvent : class, IWhatsAppEnvelope
+    {
+        return new TypedEventDispatcher<TEvent>(loggerFactory.CreateLogger<TypedEventDispatcher<TEvent>>());
     }
 
     /// <inheritdoc/>

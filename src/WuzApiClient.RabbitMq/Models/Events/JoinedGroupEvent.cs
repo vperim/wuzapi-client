@@ -7,7 +7,16 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for joining a group.
 /// Maps to whatsmeow events.JoinedGroup.
 /// </summary>
-public sealed record JoinedGroupEvent
+public sealed record JoinedGroupEventEnvelope : WhatsAppEventEnvelope<JoinedGroupEventData>
+{
+    [JsonPropertyName("event")]
+    public override required JoinedGroupEventData Event { get; init; }
+}
+
+/// <summary>
+/// Data for a joined group event.
+/// </summary>
+public sealed record JoinedGroupEventData
 {
     /// <summary>
     /// Gets the group JID that was joined.

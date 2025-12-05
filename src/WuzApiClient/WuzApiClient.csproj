@@ -13,7 +13,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="D:\dev\github-vperim\wuzapi-client\LICENSE" />
+	  <Compile Include="..\WuzApiClient.Common\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -31,7 +31,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\WuzApiClient.Results\WuzApiClient.Results.csproj" />
+	  <ProjectReference Include="..\WuzApiClient.Common\WuzApiClient.Common.csproj" />
 	</ItemGroup>
 
 </Project>

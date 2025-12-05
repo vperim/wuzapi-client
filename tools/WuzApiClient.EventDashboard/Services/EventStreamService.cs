@@ -4,7 +4,7 @@ using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.RabbitMq.Core;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using System.Text.Json;
-using WuzApiClient.RabbitMq.Models;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Services;
 
@@ -62,7 +62,7 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
     public event Action? OnEventsChanged;
     public event Action? OnConnectionStateChanged;
 
-    public void AddEvent(WuzEventEnvelope envelope, EventMetadata metadata)
+    public void AddEvent(IWuzEventEnvelope envelope, EventMetadata metadata)
     {
         var entry = CreateEntry(envelope, metadata);
 
@@ -141,19 +141,19 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
         WriteIndented = true
     };
 
-    private EventEntry CreateEntry(WuzEventEnvelope envelope, EventMetadata metadata)
+    private EventEntry CreateEntry(IWuzEventEnvelope envelope, EventMetadata metadata)
     {
         return new EventEntry
         {
             Id = Guid.NewGuid().ToString(),
             Timestamp = envelope.ReceivedAt,
-            EventType = envelope.EventType,
+            EventType = envelope.Metadata.WaEventMetadata.Type,
             Category = metadata.Category,
-            UserId = envelope.UserId,
-            InstanceName = envelope.InstanceName,
+            UserId = envelope.Metadata.WuzEnvelope.UserId,
+            InstanceName = envelope.Metadata.WuzEnvelope.InstanceName,
             Metadata = metadata,
             Event = envelope,
-            RawJson = FormatJson(envelope.RawJson)
+            RawJson = FormatJson(envelope.Metadata.WuzEnvelope.JsonData)
         };
     }
 

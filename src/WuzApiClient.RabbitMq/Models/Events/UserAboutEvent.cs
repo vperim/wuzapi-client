@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// User about/status update event from whatsmeow events.UserAbout.
 /// Emitted when a user's about status is changed.
 /// </summary>
-public sealed record UserAboutEvent
+public sealed record UserAboutEventEnvelope : WhatsAppEventEnvelope<UserAboutEventData>
+{
+    [JsonPropertyName("event")]
+    public override required UserAboutEventData Event { get; init; }
+}
+
+/// <summary>
+/// User about/status update event data from whatsmeow events.UserAbout.
+/// Emitted when a user's about status is changed.
+/// </summary>
+public sealed record UserAboutEventData
 {
     /// <summary>
     /// Gets the JID of the user whose about status changed.

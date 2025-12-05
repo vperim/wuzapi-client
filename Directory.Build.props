@@ -3,7 +3,7 @@
     <!-- Common package metadata -->
     <Authors>Perim</Authors>
     <Copyright>Copyright © 2025 Perim</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageLicenseExpression>MPL-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/vperim/wuzapi-client</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vperim/wuzapi-client.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

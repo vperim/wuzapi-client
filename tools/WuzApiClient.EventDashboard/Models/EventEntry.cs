@@ -1,5 +1,5 @@
 using WuzApiClient.EventDashboard.Models.Metadata;
-using WuzApiClient.RabbitMq.Models;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Models;
 
@@ -16,7 +16,7 @@ public sealed record EventEntry
     public required EventMetadata Metadata { get; init; }
 
     // Original envelope and raw JSON for diagnostics/backward compatibility
-    public required WuzEventEnvelope Event { get; init; }
+    public required IWuzEventEnvelope Event { get; init; }
     public required string RawJson { get; init; }
     public string? Error { get; init; }
 }

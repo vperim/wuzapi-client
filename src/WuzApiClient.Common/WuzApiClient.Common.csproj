@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <!-- Package-specific metadata -->
+        <PackageId>WuzApiClient.Common</PackageId>
+        <Description>Common types and utilities for WuzAPI Client libraries.</Description>
+        <PackageTags>wuzapiclient;common;shared</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Memory" Version="4.6.3" />
+      <PackageReference Include="System.Text.Json" Version="8.0.6" />
+    </ItemGroup>
+
+</Project>

@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for profile/group picture updates.
 /// Maps to whatsmeow events.Picture.
 /// </summary>
-public sealed record PictureEvent
+public sealed record PictureEventEnvelope : WhatsAppEventEnvelope<PictureEventData>
+{
+    [JsonPropertyName("event")]
+    public override required PictureEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event data for profile/group picture updates.
+/// Maps to whatsmeow events.Picture.
+/// </summary>
+public sealed record PictureEventData
 {
     /// <summary>
     /// Gets the JID of the user or group whose picture changed.

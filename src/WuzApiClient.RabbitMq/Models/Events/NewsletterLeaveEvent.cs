@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event when a newsletter is left.
 /// Maps to whatsmeow events.NewsletterLeave.
 /// </summary>
-public sealed record NewsletterLeaveEvent
+public sealed record NewsletterLeaveEventEnvelope : WhatsAppEventEnvelope<NewsletterLeaveEventData>
+{
+    [JsonPropertyName("event")]
+    public override required NewsletterLeaveEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event when a newsletter is left.
+/// Maps to whatsmeow events.NewsletterLeave.
+/// </summary>
+public sealed record NewsletterLeaveEventData
 {
     /// <summary>
     /// Gets the newsletter JID.

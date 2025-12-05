@@ -13,15 +13,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="D:\dev\github-vperim\wuzapi-client\LICENSE" />
-    </ItemGroup>
-
-    <ItemGroup>
         <InternalsVisibleTo Include="WuzApiClient.RabbitMq.UnitTests" />
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Include="..\WuzApiClient\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+      <Compile Include="..\WuzApiClient.Common\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
       <Compile Include="..\WuzApiClient\Extensions\StringExtensions.cs" Link="Extensions\StringExtensions.cs" />
     </ItemGroup>
 
@@ -31,14 +27,13 @@
 
     <ItemGroup>
         <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
-        <PackageReference Include="System.Text.Json" Version="8.0.6" />
         <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
         <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="8.0.22" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\WuzApiClient.Results\WuzApiClient.Results.csproj" />
+      <ProjectReference Include="..\WuzApiClient.Common\WuzApiClient.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

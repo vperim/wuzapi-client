@@ -1,7 +1,17 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WuzApiClient.RabbitMq.Models.Events;
 
 namespace WuzApiClient.RabbitMq.Models;
+
+/// <summary>
+/// Fallback event envelope for unknown or failed event types.
+/// Provides forward compatibility when wuzapi adds new event types.
+/// </summary>
+public sealed record UnknownEventEnvelope : WhatsAppEventEnvelope<UnknownEventData>
+{
+    public override required UnknownEventData Event { get; init; }
+}
 
 /// <summary>
 /// Fallback event data for unknown or failed event types.

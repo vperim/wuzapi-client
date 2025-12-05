@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using WuzApiClient.RabbitMq.Core.Interfaces;
+using WuzApiClient.RabbitMq.Models.Events;
 
 namespace WuzApiClient.RabbitMq.Configuration;
 
@@ -26,7 +27,7 @@ public sealed class WuzEventBuilder
     /// <param name="lifetime">Service lifetime (default: Scoped).</param>
     /// <returns>The builder for chaining.</returns>
     public WuzEventBuilder AddHandler<TEvent, THandler>(ServiceLifetime lifetime = ServiceLifetime.Scoped)
-        where TEvent : class
+        where TEvent : class, IWhatsAppEnvelope
         where THandler : class, IEventHandler<TEvent>
     {
         this.services.Add(new ServiceDescriptor(

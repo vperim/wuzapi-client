@@ -7,7 +7,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event for user presence (online/offline) updates.
 /// Maps to whatsmeow events.Presence with wuzapi additions.
 /// </summary>
-public sealed record PresenceEvent
+public sealed record PresenceEventEnvelope : WhatsAppEventEnvelope<PresenceEventData>
+{
+    [JsonPropertyName("event")]
+    public override required PresenceEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event data for user presence (online/offline) updates.
+/// Maps to whatsmeow events.Presence with wuzapi additions.
+/// </summary>
+public sealed record PresenceEventData
 {
     // === whatsmeow Presence fields ===
 

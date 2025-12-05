@@ -1,25 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
-using WuzApiClient.RabbitMq.Serialization;
-using WuzApiClient.Results;
+using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.RabbitMq.Infrastructure;
-
-internal static class TypedEventDispatcherSerializationHelper
-{
-    public static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
-}
 
 /// <summary>
 /// Generic typed event dispatcher that handles deserialization and handler invocation
@@ -27,157 +16,96 @@ internal static class TypedEventDispatcherSerializationHelper
 /// </summary>
 /// <typeparam name="TEvent">The event type this dispatcher handles.</typeparam>
 public sealed class TypedEventDispatcher<TEvent> : ITypedEventDispatcher
-    where TEvent : class
+    where TEvent : class, IWhatsAppEnvelope
 {
+    private readonly ILogger<TypedEventDispatcher<TEvent>> logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TypedEventDispatcher{TEvent}"/> class.
+    /// </summary>
+    /// <param name="logger">The logger instance.</param>
+    public TypedEventDispatcher(ILogger<TypedEventDispatcher<TEvent>> logger)
+    {
+        this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+    }
+
     /// <inheritdoc/>
-    public async Task<WuzResult> DispatchAsync(
-        JsonElement eventElement,
-        JsonElement rootElement,
-        string type,
-        string userId,
-        string instanceName,
+    public async Task DispatchAsync(
+        WuzEventMetadata metadata,
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken)
     {
-        var logger = serviceProvider.GetRequiredService<ILogger<TypedEventDispatcher<TEvent>>>();
-
         try
         {
-            // Step 1: Deserialize event data
-            TEvent? eventData;
-
-            if (typeof(TEvent) == typeof(UnknownEventData))
-            {
-                // Special handling for unknown events
-                eventData = (TEvent)(object)new UnknownEventData
-                {
-                    Raw = rootElement.Clone(),
-                    OriginalType = type,
-                };
-            }
-            else
-            {
-                // Build merged JSON and deserialize using shared helper
-                var mergedJson = JsonMergeHelper.BuildEventDataJson(eventElement, rootElement);
-                eventData = JsonSerializer.Deserialize<TEvent>(mergedJson, TypedEventDispatcherSerializationHelper.JsonOptions);
-            }
-
-            if (eventData == null)
-            {
-                logger.LogError(
-                    "Failed to deserialize event type '{EventType}' (null result)",
-                    type);
-
-                return WuzResult.Failure(new WuzApiError(
-                    WuzApiErrorCode.Unknown,
-                    $"Deserialization returned null for {type}"));
-            }
-
-            // Step 2: Create typed envelope
-            var envelope = new WuzEventEnvelope<TEvent>
-            {
-                EventType = type,
-                UserId = userId,
-                InstanceName = instanceName,
-                ReceivedAt = DateTimeOffset.UtcNow,
-                Event = eventData,
-                RawJson = JsonSerializer.Serialize(rootElement)
-            };
-
-            // Step 3: Resolve and invoke typed handlers (no reflection!)
-            var errors = new List<WuzApiError>();
-            var handlerCount = 0;
+            // Step 1: Deserialize to typed envelope
+            var envelope = metadata.ToEnvelope<TEvent>();
 
             // Typed handlers - direct resolution and invocation
             var typedHandlers = serviceProvider.GetServices<IEventHandler<TEvent>>();
             foreach (var handler in typedHandlers)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 try
                 {
-                    logger.LogDebug(
+                    this.logger.LogDebug(
                         "Invoking handler {HandlerType} for event {EventType}",
                         handler.GetType().Name,
-                        type);
+                        typeof(TEvent).Name);
 
                     // Direct call - no reflection!
                     await handler.HandleAsync(envelope, cancellationToken).ConfigureAwait(false);
-                    handlerCount++;
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(
+                    this.logger.LogError(
                         ex,
                         "Error in handler {HandlerType} for event {EventType}",
                         handler.GetType().Name,
-                        type);
+                        typeof(TEvent).Name);
 
-                    errors.Add(new WuzApiError(
-                        WuzApiErrorCode.Unknown,
-                        $"Handler {handler.GetType().Name} failed: {ex.Message}"));
+                 
                 }
             }
 
-            // Non-generic handlers (catch-all)
-            var nonGenericHandlers = serviceProvider.GetServices<IEventHandler>();
-            foreach (var handler in nonGenericHandlers)
-            {
-                try
-                {
-                    if (handler.EventTypes.Count == 0 || handler.EventTypes.Contains(type))
-                    {
-                        logger.LogDebug(
-                            "Invoking catch-all handler {HandlerType} for event {EventType}",
-                            handler.GetType().Name,
-                            type);
+            // TODO: Disabled for now, will re-design this later on.
+            //// Non-generic handlers (catch-all)
+            //var nonGenericHandlers = serviceProvider.GetServices<IEventHandler>();
+            //foreach (var handler in nonGenericHandlers)
+            //{
+            //    cancellationToken.ThrowIfCancellationRequested();
 
-                        await handler.HandleAsync(envelope, cancellationToken).ConfigureAwait(false);
-                        handlerCount++;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(
-                        ex,
-                        "Error in catch-all handler {HandlerType} for event {EventType}",
-                        handler.GetType().Name,
-                        type);
+            //    try
+            //    {
+            //        if (handler.EventTypes.Count == 0 || handler.EventTypes.Contains(metadata.Type))
+            //        {
+            //            this.logger.LogDebug(
+            //                "Invoking catch-all handler {HandlerType} for event {EventType}",
+            //                handler.GetType().Name,
+            //                metadata.Type);
 
-                    errors.Add(new WuzApiError(
-                        WuzApiErrorCode.Unknown,
-                        $"Handler {handler.GetType().Name} failed: {ex.Message}"));
-                }
-            }
+            //            await handler.HandleAsync(envelope, cancellationToken).ConfigureAwait(false);
+            //            handlerCount++;
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        this.logger.LogError(
+            //            ex,
+            //            "Error in catch-all handler {HandlerType} for event {EventType}",
+            //            handler.GetType().Name,
+            //            metadata.Type);
 
-            // Warn if no handlers
-            if (handlerCount == 0)
-            {
-                logger.LogWarning(
-                    "No handlers registered for event type {EventType}",
-                    type);
-            }
+            //        errors.Add(new WuzApiError(
+            //            WuzApiErrorCode.Unknown,
+            //            $"Handler {handler.GetType().Name} failed: {ex.Message}"));
+            //    }
+            //}
 
-            // Return result
-            if (errors.Count > 0)
-            {
-                var aggregatedMessage = string.Join("; ", errors.Select(e => e.Message));
-                return WuzResult.Failure(new WuzApiError(
-                    WuzApiErrorCode.Unknown,
-                    $"Event processing failed with {errors.Count} error(s): {aggregatedMessage}"));
-            }
-
-            logger.LogDebug(
-                "Event {EventType} dispatched to {HandlerCount} handler(s)",
-                type,
-                handlerCount);
-
-            return WuzResult.Success();
         }
         catch (JsonException ex)
         {
-            logger.LogError(ex, "Failed to deserialize event type '{EventType}'", type);
-            return WuzResult.Failure(new WuzApiError(
-                WuzApiErrorCode.Unknown,
-                $"Deserialization failed: {ex.Message}"));
+            this.logger.LogError(ex, "JSON error while processing event type '{EventType}'", metadata.WaEventMetadata.Type);
         }
     }
 }

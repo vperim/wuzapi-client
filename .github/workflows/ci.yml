@@ -44,6 +44,12 @@ jobs:
 
       - name: Test (Unit Tests only)
         run: |
+          dotnet test tests/WuzApiClient.Common.UnitTests/WuzApiClient.Common.UnitTests.csproj \
+            --configuration Release \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
+
           dotnet test tests/WuzApiClient.UnitTests/WuzApiClient.UnitTests.csproj \
             --configuration Release \
             --no-build \
@@ -118,6 +124,13 @@ jobs:
         run: |
           mkdir -p ${{ env.NUGET_DIRECTORY }}
 
+          dotnet pack src/WuzApiClient.Common/WuzApiClient.Common.csproj \
+            --configuration Release \
+            --no-build \
+            --output ${{ env.NUGET_DIRECTORY }} \
+            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            -p:ContinuousIntegrationBuild=true
+
           dotnet pack src/WuzApiClient/WuzApiClient.csproj \
             --configuration Release \
             --no-build \
@@ -126,13 +139,6 @@ jobs:
             -p:ContinuousIntegrationBuild=true
 
           dotnet pack src/WuzApiClient.RabbitMq/WuzApiClient.RabbitMq.csproj \
-            --configuration Release \
-            --no-build \
-            --output ${{ env.NUGET_DIRECTORY }} \
-            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
-            -p:ContinuousIntegrationBuild=true
-
-          dotnet pack src/WuzApiClient.Results/WuzApiClient.Results.csproj \
             --configuration Release \
             --no-build \
             --output ${{ env.NUGET_DIRECTORY }} \

@@ -3,13 +3,11 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Message event from whatsmeow events.Message.
+/// Message event data from whatsmeow events.Message.
 /// Contains message metadata, content, and optional media attachments.
 /// </summary>
-public sealed record MessageEvent
+public sealed record MessageEventData
 {
-    // === whatsmeow fields (from "event" object) ===
-
     /// <summary>
     /// Gets the message information (metadata).
     /// </summary>
@@ -51,8 +49,16 @@ public sealed record MessageEvent
     /// </summary>
     [JsonPropertyName("IsLottieSticker")]
     public bool IsLottieSticker { get; init; }
+}
 
-    // === wuzapi-added fields (from root level) ===
+/// <summary>
+/// Message event envelope from whatsmeow events.Message.
+/// Contains message metadata, content, optional media attachments, and wuzapi-specific fields.
+/// </summary>
+public sealed record MessageEventEnvelope : WhatsAppEventEnvelope<MessageEventData>
+{
+    [JsonPropertyName("event")]
+    public override required MessageEventData Event { get; init; }
 
     /// <summary>
     /// Gets the base64-encoded media content (added by wuzapi).

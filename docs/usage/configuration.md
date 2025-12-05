@@ -233,83 +233,6 @@ builder.Services.AddWuzEvents(options =>
 });
 ```
 
-## Configuration Best Practices
-
-### 1. Never Hardcode Secrets
-
-Store tokens securely (database, Key Vault, User Secrets) and retrieve them at runtime.
-
-❌ **Bad:**
-```csharp
-var client = factory.CreateClient("hardcoded-token-123"); // Never do this!
-```
-
-✅ **Good:**
-```csharp
-var token = await tokenRepository.GetTokenAsync(accountId);
-var client = factory.CreateClient(token);
-```
-
-### 2. Use Configuration Providers
-
-ASP.NET Core supports multiple configuration sources in priority order:
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-
-// Priority (last wins):
-// 1. appsettings.json
-// 2. appsettings.{Environment}.json
-// 3. User secrets (development only)
-// 4. Environment variables
-// 5. Command-line arguments
-
-builder.Configuration
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
-    .AddEnvironmentVariables()
-    .AddCommandLine(args);
-```
-
-See [ASP.NET Core Configuration](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/) for details.
-
-### 3. Validate Configuration
-
-`WuzApiOptions` validates configuration automatically when creating clients. Invalid configuration throws `WuzApiConfigurationException`:
-
-- `BaseUrl` must be a valid absolute URI with http/https scheme
-- `TimeoutSeconds` must be positive
-
-Custom validation can be added via options validation:
-
-```csharp
-builder.Services.AddOptions<WuzApiOptions>()
-    .Bind(builder.Configuration.GetSection("WuzApi"))
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
-```
-
-### 4. Separate by Environment
-
-Use different configuration files per environment:
-
-```
-appsettings.json                   # Defaults
-appsettings.Development.json       # Dev overrides
-appsettings.Staging.json           # Staging overrides
-appsettings.Production.json        # Production overrides
-```
-
-### 5. Use User Secrets in Development
-
-For local development, use [User Secrets](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets):
-
-```bash
-dotnet user-secrets init
-dotnet user-secrets set "WuzApi:UserToken" "dev-token-123"
-dotnet user-secrets set "WuzEvents:ConnectionString" "amqp://guest:guest@localhost:5672/"
-```
-
 ## Concurrency Configuration
 
 ### Sequential Processing
@@ -343,17 +266,6 @@ builder.Services.AddWuzEvents(options =>
 - Processing is I/O bound
 
 > **Warning:** `MaxConcurrentMessages > 1` breaks message ordering guarantees. Messages may be processed out of order.
-
-### Calculating MaxConcurrentMessages
-
-Formula: `MaxConcurrentMessages = CPU_Cores * 2` (for I/O bound workloads)
-
-Example for 4-core machine:
-```csharp
-options.MaxConcurrentMessages = 8; // 4 cores * 2
-```
-
-Monitor CPU and adjust based on actual load.
 
 ## Connection Resilience
 

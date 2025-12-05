@@ -6,7 +6,17 @@ namespace WuzApiClient.RabbitMq.Models.Events;
 /// Event when a newsletter is joined.
 /// Maps to whatsmeow events.NewsletterJoin (embeds types.NewsletterMetadata).
 /// </summary>
-public sealed record NewsletterJoinEvent
+public sealed record NewsletterJoinEventEnvelope : WhatsAppEventEnvelope<NewsletterJoinEventData>
+{
+    [JsonPropertyName("event")]
+    public override required NewsletterJoinEventData Event { get; init; }
+}
+
+/// <summary>
+/// Event when a newsletter is joined.
+/// Maps to whatsmeow events.NewsletterJoin (embeds types.NewsletterMetadata).
+/// </summary>
+public sealed record NewsletterJoinEventData
 {
     /// <summary>
     /// Gets the newsletter JID.

@@ -53,7 +53,7 @@ using WuzApiClient.Events.Core.Interfaces;
 using WuzApiClient.Events.Models.Events;
 using WuzApiClient.Models.Common;
 
-public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
+public sealed class MessageReceivedHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly ILogger<MessageReceivedHandler> logger;
     private readonly IWaClient client;
@@ -67,9 +67,10 @@ public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
     }
 
     public async Task HandleAsync(
-        MessageEvent @event,
+        IWuzEventEnvelope<MessageEventEnvelope> envelope,
         CancellationToken cancellationToken)
     {
+        var @event = envelope.Payload.Event;
         var text = @event.Message?.Conversation ?? @event.Message?.ExtendedTextMessage?.Text;
         var sender = @event.Info?.Sender;
 
@@ -113,9 +114,9 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 // Or register individual handlers explicitly
 builder.Services.AddWuzEvents(builder.Configuration, b => b
-    .AddHandler<MessageEvent, MessageReceivedHandler>(ServiceLifetime.Scoped)
-    .AddHandler<ReceiptEvent, MessageStatusHandler>(ServiceLifetime.Scoped)
-    .AddHandler<GroupInfoEvent, GroupUpdateHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, MessageReceivedHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEventEnvelope, MessageStatusHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEventEnvelope, GroupUpdateHandler>(ServiceLifetime.Scoped)
 );
 ```
 
@@ -123,15 +124,7 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 ## Event Types
 
-WuzAPI Client includes 44 strongly-typed event classes. Common events:
-
-| Event Type | Triggered When | Key Properties |
-|------------|----------------|----------------|
-| `MessageEvent` | Incoming message | `Info.Sender`, `Message.Conversation`, `Info.Type` |
-| `ReceiptEvent` | Message status change | `MessageIDs`, `State`, `ReceiptType` |
-| `GroupInfoEvent` | Group information update | `GroupJid`, `Name`, `Topic` |
-| `PresenceEvent` | Contact online status | `From`, `Unavailable`, `State` |
-
+WuzAPI Client includes multiple strongly-typed event classes.
 For complete event reference, see [Event Types Reference](../api/event-types-reference.md).
 
 ## Handling Different Event Types
@@ -139,10 +132,11 @@ For complete event reference, see [Event Types Reference](../api/event-types-ref
 ### Text Messages
 
 ```csharp
-public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
+public sealed class MessageReceivedHandler : IEventHandler<MessageEventEnvelope>
 {
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         if (@event.Info?.Type == "text")
         {
             var text = @event.Message?.Conversation ?? @event.Message?.ExtendedTextMessage?.Text;
@@ -155,24 +149,27 @@ public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
 ### Media Messages
 
 ```csharp
-public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
 {
+    var @event = envelope.Payload.Event;
+    var messageEnvelope = envelope.Payload; // Access envelope-level properties
+
     switch (@event.Info?.Type)
     {
         case "image":
-            var s3Info = @event.S3;
+            var s3Info = messageEnvelope.S3;
             var caption = @event.Message?.ImageMessage?.Caption;
             // Download and process image from S3...
             break;
 
         case "document":
-            var fileName = @event.FileName;
-            var documentS3 = @event.S3;
+            var fileName = messageEnvelope.FileName;
+            var documentS3 = messageEnvelope.S3;
             // Download and process document from S3...
             break;
 
         case "audio":
-            var audioS3 = @event.S3;
+            var audioS3 = messageEnvelope.S3;
             // Download and process audio from S3...
             break;
     }
@@ -182,11 +179,12 @@ public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
 ### Message Status Updates
 
 ```csharp
-public sealed class MessageStatusHandler : IEventHandler<ReceiptEvent>
+public sealed class MessageStatusHandler : IEventHandler<ReceiptEventEnvelope>
 {
-    public async Task HandleAsync(ReceiptEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<ReceiptEventEnvelope> envelope, CancellationToken ct)
     {
-        switch (@event.State)
+        var receiptEnvelope = envelope.Payload; // Envelope has State property
+        switch (receiptEnvelope.State)
         {
             case "Delivered":
                 // Message delivered to recipient
@@ -205,7 +203,7 @@ public sealed class MessageStatusHandler : IEventHandler<ReceiptEvent>
 ### Group Events
 
 ```csharp
-public sealed class GroupUpdateHandler : IEventHandler<GroupInfoEvent>
+public sealed class GroupUpdateHandler : IEventHandler<GroupInfoEventEnvelope>
 {
     private readonly ILogger<GroupUpdateHandler> logger;
 
@@ -214,8 +212,9 @@ public sealed class GroupUpdateHandler : IEventHandler<GroupInfoEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(GroupInfoEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<GroupInfoEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         this.logger.LogInformation(
             "Group info updated - JID: {GroupJid}, Name: {Name}, Topic: {Topic}",
             @event.GroupJid,
@@ -242,7 +241,7 @@ By default, if a handler throws an exception:
 **Custom Error Logic:** Implement error handling within your event handlers using try-catch blocks:
 
 ```csharp
-public sealed class ResilientMessageHandler : IEventHandler<MessageEvent>
+public sealed class ResilientMessageHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly ILogger<ResilientMessageHandler> logger;
 
@@ -251,8 +250,9 @@ public sealed class ResilientMessageHandler : IEventHandler<MessageEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         try
         {
             // Process message...
@@ -302,7 +302,7 @@ builder.Services.AddWuzEvents(options =>
 Handlers are resolved from a **scoped DI container** per message:
 
 ```csharp
-public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
+public sealed class MessageReceivedHandler : IEventHandler<MessageEventEnvelope>
 {
     // All standard DI lifetimes work
     private readonly IWaClient client;              // Scoped
@@ -319,86 +319,13 @@ public sealed class MessageReceivedHandler : IEventHandler<MessageEvent>
         this.dbContext = dbContext;
     }
 
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         // Use scoped services safely
         var entity = new MyEntity { Message = @event.Body };
         this.dbContext.Add(entity);
         await this.dbContext.SaveChangesAsync(ct);
-    }
-}
-```
-
-## Testing Event Handlers
-
-### Unit Testing
-
-Mock the event and test handler logic:
-
-```csharp
-[Fact]
-public async Task HandleAsync_LogsMessage()
-{
-    // Arrange
-    var loggerMock = new Mock<ILogger<MessageReceivedHandler>>();
-    var clientMock = new Mock<IWaClient>();
-    var handler = new MessageReceivedHandler(loggerMock.Object, clientMock.Object);
-
-    var @event = new MessageEvent
-    {
-        Info = new MessageInfo
-        {
-            Sender = "5511999999999@c.us",
-            Type = "text"
-        },
-        Message = new MessageContent
-        {
-            Conversation = "Hello"
-        }
-    };
-
-    // Act
-    await handler.HandleAsync(@event, CancellationToken.None);
-
-    // Assert
-    loggerMock.Verify(
-        x => x.Log(
-            LogLevel.Information,
-            It.IsAny<EventId>(),
-            It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Hello")),
-            null,
-            It.IsAny<Func<It.IsAnyType, Exception, string>>()),
-        Times.Once);
-}
-```
-
-### Integration Testing
-
-Use RabbitMQ test container:
-
-```csharp
-public sealed class EventHandlerIntegrationTests : IClassFixture<RabbitMqFixture>
-{
-    [Fact]
-    public async Task EventConsumer_ProcessesMessage()
-    {
-        // Setup test host with real RabbitMQ
-        var host = Host.CreateDefaultBuilder()
-            .ConfigureServices(services =>
-            {
-                services.AddWuzEvents(options =>
-                {
-                    options.HostName = "localhost";
-                    options.QueueName = "test-queue";
-                });
-                services.AddScoped<IEventHandler<MessageEvent>, TestHandler>();
-            })
-            .Build();
-
-        await host.StartAsync();
-
-        // Publish test message to RabbitMQ
-        // ... assert handler was invoked
     }
 }
 ```
@@ -431,10 +358,11 @@ If handlers are slow, messages queue in RabbitMQ. Consider:
 Route text messages to commands:
 
 ```csharp
-public sealed class CommandHandler : IEventHandler<MessageEvent>
+public sealed class CommandHandler : IEventHandler<MessageEventEnvelope>
 {
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         var text = @event.Message?.Conversation ?? @event.Message?.ExtendedTextMessage?.Text;
 
         if (@event.Info?.Type != "text" || string.IsNullOrEmpty(text))
@@ -463,7 +391,7 @@ public sealed class CommandHandler : IEventHandler<MessageEvent>
 Track conversation state per user:
 
 ```csharp
-public sealed class ConversationHandler : IEventHandler<MessageEvent>
+public sealed class ConversationHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly IConversationStateRepository stateRepo;
 
@@ -472,8 +400,9 @@ public sealed class ConversationHandler : IEventHandler<MessageEvent>
         this.stateRepo = stateRepo;
     }
 
-    public async Task HandleAsync(MessageEvent @event, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
+        var @event = envelope.Payload.Event;
         var sender = @event.Info?.Sender;
         if (sender == null) return;
 

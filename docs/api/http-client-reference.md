@@ -1311,6 +1311,203 @@ Common `WuzApiErrorCode` values:
 | `InvalidRequest` | 1004 | Invalid request parameters |
 | `UnexpectedResponse` | 9999 | Unexpected response from API |
 
+## Data Types
+
+### DataUri
+
+RFC 2397 compliant Data URI type for embedding media data. Useful for handling base64-encoded media in messages and responses.
+
+**Namespace:** `WuzApiClient.Common.DataTypes`
+
+#### Structure
+
+```csharp
+public sealed class DataUri : IEquatable<DataUri>
+{
+    public string MediaType { get; }      // MIME type (e.g., "image/png", "application/pdf")
+    public string Base64Data { get; }     // Raw base64-encoded data
+
+    public byte[] GetBytes();             // Decode base64 to bytes
+    public override string ToString();    // Returns full Data URI string
+}
+```
+
+#### Creating Data URIs
+
+**From bytes:**
+```csharp
+var imageBytes = await File.ReadAllBytesAsync("photo.png");
+var dataUri = DataUri.Create("image/png", imageBytes);
+
+// Result: data:image/png;base64,iVBORw0KG...
+```
+
+**From base64 string:**
+```csharp
+var base64 = Convert.ToBase64String(imageBytes);
+var dataUri = DataUri.Create("image/jpeg", base64);
+```
+
+#### Parsing Data URIs
+
+**Parse (throws on invalid):**
+```csharp
+var dataUri = DataUri.Parse("data:image/png;base64,iVBORw0KG...");
+Console.WriteLine($"Media Type: {dataUri.MediaType}");
+Console.WriteLine($"Data Length: {dataUri.Base64Data.Length}");
+```
+
+**TryParse (safe parsing):**
+```csharp
+if (DataUri.TryParse(input, out var dataUri))
+{
+    var bytes = dataUri.GetBytes();
+    await File.WriteAllBytesAsync("output.png", bytes);
+}
+else
+{
+    Console.WriteLine("Invalid Data URI format");
+}
+```
+
+#### Using with Messages
+
+**Sending media with Data URI:**
+```csharp
+// Read image file
+var imageBytes = await File.ReadAllBytesAsync("photo.jpg");
+var dataUri = DataUri.Create("image/jpeg", imageBytes);
+
+// Send as base64 (extract just the base64 part)
+var request = new SendImageRequest
+{
+    Phone = new Phone("5511999999999"),
+    Image = dataUri.Base64Data,  // Use Base64Data property
+    MimeType = dataUri.MediaType,
+    Caption = "Check this out!"
+};
+var result = await client.SendImageAsync(request);
+```
+
+**Processing received media:**
+```csharp
+// In event handler - MessageEventEnvelope with Base64 property
+public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
+{
+    var messageEnvelope = envelope.Payload;
+
+    if (!string.IsNullOrEmpty(messageEnvelope.Base64))
+    {
+        // Create Data URI from base64 and mime type
+        var dataUri = DataUri.Create(
+            messageEnvelope.MimeType ?? "application/octet-stream",
+            messageEnvelope.Base64
+        );
+
+        // Save to file
+        var bytes = dataUri.GetBytes();
+        await File.WriteAllBytesAsync($"media_{DateTime.UtcNow.Ticks}.jpg", bytes);
+
+        _logger.LogInformation("Saved media file: {MediaType}, {Size} bytes",
+            dataUri.MediaType,
+            bytes.Length);
+    }
+}
+```
+
+#### JSON Serialization
+
+DataUri has a custom JSON converter that automatically handles serialization:
+
+```csharp
+public class MyModel
+{
+    public DataUri? ProfilePicture { get; set; }
+}
+
+// Serializes to: {"profilePicture":"data:image/png;base64,iVBORw0KG..."}
+var json = JsonSerializer.Serialize(new MyModel
+{
+    ProfilePicture = DataUri.Create("image/png", imageBytes)
+});
+
+// Deserializes back to DataUri instance
+var model = JsonSerializer.Deserialize<MyModel>(json);
+```
+
+#### Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `MediaType` | `string` | MIME type extracted from Data URI (defaults to "text/plain" if not specified) |
+| `Base64Data` | `string` | Raw base64-encoded data portion of the Data URI |
+
+#### Methods
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `GetBytes()` | `byte[]` | Decodes base64 data and returns as byte array. Returns empty array if decoding fails. |
+| `ToString()` | `string` | Returns the complete Data URI string in format: `data:[mediatype];base64,[data]` |
+| `Parse(string)` | `DataUri` | Parses a Data URI string. Throws `FormatException` if invalid. |
+| `TryParse(string, out DataUri)` | `bool` | Safely parses a Data URI string. Returns false if invalid. |
+| `Create(string, string)` | `DataUri` | Creates DataUri from media type and base64 string. |
+| `Create(string, byte[])` | `DataUri` | Creates DataUri from media type and raw bytes. |
+
+#### Common Use Cases
+
+**1. Download and convert media:**
+```csharp
+// Download image from message
+var result = await client.DownloadImageAsync(messageId);
+if (result.IsSuccess)
+{
+    var dataUri = DataUri.Create(
+        result.Value.MimeType ?? "image/jpeg",
+        result.Value.Data
+    );
+
+    // Save to file
+    var bytes = dataUri.GetBytes();
+    await File.WriteAllBytesAsync("download.jpg", bytes);
+}
+```
+
+**2. Validate and process Data URIs:**
+```csharp
+public async Task<WuzResult> ProcessDataUri(string input)
+{
+    if (!DataUri.TryParse(input, out var dataUri))
+        return WuzResult.Failure(WuzApiErrorCode.InvalidRequest, "Invalid Data URI");
+
+    // Validate media type
+    if (!dataUri.MediaType.StartsWith("image/"))
+        return WuzResult.Failure(WuzApiErrorCode.InvalidFile, "Only images allowed");
+
+    // Validate size
+    var bytes = dataUri.GetBytes();
+    if (bytes.Length > 5_000_000)
+        return WuzResult.Failure(WuzApiErrorCode.InvalidFile, "File too large (max 5MB)");
+
+    // Process the image...
+    return WuzResult.Success();
+}
+```
+
+**3. Converting between formats:**
+```csharp
+// Convert file to Data URI
+var bytes = await File.ReadAllBytesAsync("document.pdf");
+var dataUri = DataUri.Create("application/pdf", bytes);
+var dataUriString = dataUri.ToString();
+
+// Convert Data URI back to file
+var parsedUri = DataUri.Parse(dataUriString);
+var restoredBytes = parsedUri.GetBytes();
+await File.WriteAllBytesAsync("restored.pdf", restoredBytes);
+```
+
+---
+
 ## Next Steps
 
 - **Handle Events** → [Event Types Reference](event-types-reference.md)

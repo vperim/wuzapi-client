@@ -2,32 +2,40 @@
 
 Reference for all 46 WhatsApp event types available in `WuzApiClient.RabbitMq`.
 
-> **Note:** The most commonly used event types (`MessageEvent`, `ReceiptEvent`, `PresenceEvent`, `GroupInfoEvent`) include detailed code examples below. For all other event types, see the [Complete Event Type Catalog](#complete-event-type-catalog).
+> **Note:** The most commonly used event types (`MessageEventEnvelope`, `ReceiptEventEnvelope`, `PresenceEventEnvelope`, `GroupInfoEventEnvelope`) include detailed code examples below. For all other event types, see the [Complete Event Type Catalog](#complete-event-type-catalog).
 
 ## Event Envelope Structure
 
-All events are wrapped in `WuzEventEnvelope<TEvent>`:
+All events are wrapped in a two-layer envelope structure:
 
 ```csharp
-public sealed record WuzEventEnvelope<TEvent> : WuzEventEnvelope
-    where TEvent : class
+// Outer envelope - generic wrapper
+public sealed record WuzEventEnvelope<TPayload> : IWuzEventEnvelope<TPayload>
+    where TPayload : class
 {
-    public string EventType { get; init; }          // Event type identifier (e.g., "Message", "Receipt")
-    public string UserId { get; init; }             // User ID that generated this event
-    public string InstanceName { get; init; }       // Instance name
-    public DateTimeOffset ReceivedAt { get; init; } // Timestamp when event was received by client
-    public required TEvent Event { get; init; }     // Typed event data (non-nullable)
-    public string RawJson { get; init; }            // Raw JSON string of entire event envelope
+    public required TPayload Payload { get; init; }         // Typed event payload (non-nullable)
+    public required WuzEventMetadata Metadata { get; init; } // Metadata (UserId, InstanceName, etc.)
+    public DateTimeOffset ReceivedAt { get; init; }         // Timestamp when event was received
+}
+
+// Payload structure - event-specific (example: MessageEventEnvelope)
+public sealed record MessageEventEnvelope : IWhatsAppEnvelope
+{
+    public required string Type { get; init; }               // Event type identifier (e.g., "Message")
+    public required MessageEventData Event { get; init; }    // Actual event data
+    // Additional envelope-level properties (varies by event type)
+    public string? Base64 { get; init; }                     // Base64-encoded media (MessageEventEnvelope only)
+    public S3MediaInfo? S3 { get; init; }                    // S3 media info (MessageEventEnvelope only)
+    public string? State { get; init; }                      // Receipt state (ReceiptEventEnvelope only)
 }
 ```
 
 **Key Points:**
-- Event handlers receive `WuzEventEnvelope<TEvent>`, not raw event objects
-- Access the typed event data via the `Event` property
-- `RawJson` contains the complete JSON for debugging/logging purposes
-- Event classes (like `MessageEvent`, `ReceiptEvent`) are POCOs that don't inherit from a base class
-
-> **JSON Property Naming:** Event properties use camelCase in JSON serialization but PascalCase in C# code. For example, the `GroupJid` property in C# corresponds to `"groupJid"` in JSON. When examining raw JSON payloads, expect camelCase property names. The library handles this conversion automatically during deserialization.
+- Event handlers receive `IWuzEventEnvelope<TPayload>` (e.g., `IWuzEventEnvelope<MessageEventEnvelope>`)
+- Access the payload via `envelope.Payload`
+- Access the actual event data via `envelope.Payload.Event`
+- Some payloads have envelope-level properties (e.g., `MessageEventEnvelope` has `Base64`, `S3`, `FileName`)
+- Payload types (like `MessageEventEnvelope`) implement `IWhatsAppEnvelope`
 
 ## Commonly Used Events (Detailed Examples)
 
@@ -38,19 +46,28 @@ public sealed record WuzEventEnvelope<TEvent> : WuzEventEnvelope
 > using WuzApiClient.RabbitMq.Core.Interfaces;
 > ```
 
-### MessageEvent
+### MessageEventEnvelope
 
 Triggered when a message is received (text, image, document, audio, video, etc.).
 
 ```csharp
-public sealed record MessageEvent
+// Payload structure
+public sealed record MessageEventEnvelope : IWhatsAppEnvelope
 {
-    public MessageInfo? Info { get; init; }          // Message metadata (ID, timestamp, sender, chat)
-    public MessageContent? Message { get; init; }    // Message content (text, media, etc.)
+    public required string Type { get; init; }       // "Message"
+    public required MessageEventData Event { get; init; }  // Actual event data
+    // Envelope-level properties
     public string? Base64 { get; init; }             // Base64-encoded media content
     public string? MimeType { get; init; }           // Media MIME type
     public string? FileName { get; init; }           // Media file name
     public S3MediaInfo? S3 { get; init; }            // S3 media information
+}
+
+// Event data
+public sealed record MessageEventData
+{
+    public MessageInfo? Info { get; init; }          // Message metadata (ID, timestamp, sender, chat)
+    public MessageContent? Message { get; init; }    // Message content (text, media, etc.)
     public bool IsSticker { get; init; }             // True if sticker message
     public bool StickerAnimated { get; init; }       // True if animated sticker
     public bool IsViewOnce { get; init; }            // True if view-once message
@@ -61,7 +78,7 @@ public sealed record MessageEvent
 **Example Handler:**
 
 ```csharp
-public sealed class MessageHandler : IEventHandler<MessageEvent>
+public sealed class MessageHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly ILogger<MessageHandler> logger;
 
@@ -70,9 +87,10 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event; // Extract typed event data
+        var @event = envelope.Payload.Event; // Extract event data
+        var messageEnvelope = envelope.Payload; // For envelope-level properties
 
         if (@event.Info == null || @event.Message == null)
             return;
@@ -84,18 +102,30 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
             @event.Info.ID
         );
 
-        // Access message content through Message property
-        // (specific fields depend on message type)
+        // Access envelope-level properties for media messages
+        if (messageEnvelope.S3 != null)
+        {
+            this.logger.LogInformation("Media available at S3: {S3Key}", messageEnvelope.S3.Key);
+        }
     }
 }
 ```
 
-### ReceiptEvent
+### ReceiptEventEnvelope
 
 Triggered when message delivery or read receipts are received.
 
 ```csharp
-public sealed record ReceiptEvent
+// Payload structure
+public sealed record ReceiptEventEnvelope : IWhatsAppEnvelope
+{
+    public required string Type { get; init; }       // "Receipt"
+    public required ReceiptEventData Event { get; init; }  // Actual event data
+    public string? State { get; init; }              // Receipt state: "Read", "ReadSelf", "Delivered"
+}
+
+// Event data
+public sealed record ReceiptEventData
 {
     public string? Chat { get; init; }                      // Chat JID
     public string? Sender { get; init; }                    // Sender JID
@@ -105,14 +135,13 @@ public sealed record ReceiptEvent
     public DateTimeOffset? Timestamp { get; init; }         // Receipt timestamp
     public string? ReceiptType { get; init; }               // Receipt type from whatsmeow
     public string? MessageSender { get; init; }             // Message sender JID (for group receipts)
-    public string? State { get; init; }                     // Receipt state: "Read", "ReadSelf", "Delivered"
 }
 ```
 
 **Example Handler:**
 
 ```csharp
-public sealed class ReceiptHandler : IEventHandler<ReceiptEvent>
+public sealed class ReceiptHandler : IEventHandler<ReceiptEventEnvelope>
 {
     private readonly ILogger<ReceiptHandler> logger;
 
@@ -121,14 +150,15 @@ public sealed class ReceiptHandler : IEventHandler<ReceiptEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(WuzEventEnvelope<ReceiptEvent> envelope, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<ReceiptEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event; // Extract typed event data
+        var @event = envelope.Payload.Event; // Extract event data
+        var receiptEnvelope = envelope.Payload; // For State property
 
         if (@event.MessageIDs == null || @event.MessageIDs.Count == 0)
             return;
 
-        switch (@event.State)
+        switch (receiptEnvelope.State) // State is on envelope, not event data
         {
             case "Delivered":
                 this.logger.LogInformation(
@@ -148,12 +178,20 @@ public sealed class ReceiptHandler : IEventHandler<ReceiptEvent>
 }
 ```
 
-### PresenceEvent
+### PresenceEventEnvelope
 
 Triggered when contact's online/offline status changes.
 
 ```csharp
-public sealed record PresenceEvent
+// Payload structure
+public sealed record PresenceEventEnvelope : IWhatsAppEnvelope
+{
+    public required string Type { get; init; }       // "Presence"
+    public required PresenceEventData Event { get; init; }  // Actual event data
+}
+
+// Event data
+public sealed record PresenceEventData
 {
     public string? From { get; init; }           // JID of user whose presence changed
     public bool Unavailable { get; init; }       // True if user is offline
@@ -165,7 +203,7 @@ public sealed record PresenceEvent
 **Example Handler:**
 
 ```csharp
-public sealed class PresenceHandler : IEventHandler<PresenceEvent>
+public sealed class PresenceHandler : IEventHandler<PresenceEventEnvelope>
 {
     private readonly ILogger<PresenceHandler> logger;
 
@@ -174,9 +212,9 @@ public sealed class PresenceHandler : IEventHandler<PresenceEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(WuzEventEnvelope<PresenceEvent> envelope, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<PresenceEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event; // Extract typed event data
+        var @event = envelope.Payload.Event; // Extract event data
 
         if (@event.State == "online" || !@event.Unavailable)
         {
@@ -194,12 +232,20 @@ public sealed class PresenceHandler : IEventHandler<PresenceEvent>
 }
 ```
 
-### GroupInfoEvent
+### GroupInfoEventEnvelope
 
 Triggered when group information (name, topic) is updated.
 
 ```csharp
-public sealed record GroupInfoEvent
+// Payload structure
+public sealed record GroupInfoEventEnvelope : IWhatsAppEnvelope
+{
+    public required string Type { get; init; }       // "GroupInfo"
+    public required GroupInfoEventData Event { get; init; }  // Actual event data
+}
+
+// Event data
+public sealed record GroupInfoEventData
 {
     public string? GroupJid { get; init; }  // Group JID
     public string? Name { get; init; }      // Group name
@@ -210,7 +256,7 @@ public sealed record GroupInfoEvent
 **Example Handler:**
 
 ```csharp
-public sealed class GroupInfoHandler : IEventHandler<GroupInfoEvent>
+public sealed class GroupInfoHandler : IEventHandler<GroupInfoEventEnvelope>
 {
     private readonly ILogger<GroupInfoHandler> logger;
 
@@ -219,9 +265,9 @@ public sealed class GroupInfoHandler : IEventHandler<GroupInfoEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(WuzEventEnvelope<GroupInfoEvent> envelope, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<GroupInfoEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event; // Extract typed event data
+        var @event = envelope.Payload.Event; // Extract event data
 
         this.logger.LogInformation(
             "Group {GroupJid} updated: Name='{Name}', Topic='{Topic}'",
@@ -262,11 +308,11 @@ The library includes 46 event types total. Below is the complete list organized 
 
 | Event Type | Triggered When |
 |------------|----------------|
-| `MessageEvent` | Incoming WhatsApp message (text, media, etc.) |
-| `ReceiptEvent` | Message delivery/read receipt received |
-| `UndecryptableMessageEvent` | Message cannot be decrypted |
-| `MediaRetryEvent` | Media download retry is requested |
-| `FBMessageEvent` | Facebook message event |
+| `MessageEventEnvelope` | Incoming WhatsApp message (text, media, etc.) |
+| `ReceiptEventEnvelope` | Message delivery/read receipt received |
+| `UndecryptableMessageEventEnvelope` | Message cannot be decrypted |
+| `MediaRetryEventEnvelope` | Media download retry is requested |
+| `FBMessageEventEnvelope` | Facebook message event |
 
 ### Call Events
 
@@ -337,10 +383,10 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 // Or register explicitly
 builder.Services.AddWuzEvents(builder.Configuration, b => b
-    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
-    .AddHandler<ReceiptEvent, ReceiptHandler>(ServiceLifetime.Scoped)
-    .AddHandler<GroupInfoEvent, GroupInfoHandler>(ServiceLifetime.Scoped)
-    .AddHandler<PresenceEvent, PresenceHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, MessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<ReceiptEventEnvelope, ReceiptHandler>(ServiceLifetime.Scoped)
+    .AddHandler<GroupInfoEventEnvelope, GroupInfoHandler>(ServiceLifetime.Scoped)
+    .AddHandler<PresenceEventEnvelope, PresenceHandler>(ServiceLifetime.Scoped)
 );
 ```
 
@@ -350,9 +396,9 @@ A single class can handle multiple event types:
 
 ```csharp
 public sealed class MultiEventHandler :
-    IEventHandler<MessageEvent>,
-    IEventHandler<ReceiptEvent>,
-    IEventHandler<GroupInfoEvent>
+    IEventHandler<MessageEventEnvelope>,
+    IEventHandler<ReceiptEventEnvelope>,
+    IEventHandler<GroupInfoEventEnvelope>
 {
     private readonly ILogger<MultiEventHandler> logger;
 
@@ -361,23 +407,23 @@ public sealed class MultiEventHandler :
         this.logger = logger;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
+    public Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event;
+        var @event = envelope.Payload.Event;
         this.logger.LogInformation("Message received from {Sender}", @event.Info?.Sender);
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ReceiptEvent> envelope, CancellationToken ct)
+    public Task HandleAsync(IWuzEventEnvelope<ReceiptEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event;
-        this.logger.LogInformation("Receipt: {State}", @event.State);
+        var receiptEnvelope = envelope.Payload;
+        this.logger.LogInformation("Receipt: {State}", receiptEnvelope.State);
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<GroupInfoEvent> envelope, CancellationToken ct)
+    public Task HandleAsync(IWuzEventEnvelope<GroupInfoEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event;
+        var @event = envelope.Payload.Event;
         this.logger.LogInformation("Group {Name} updated", @event.Name);
         return Task.CompletedTask;
     }
@@ -394,7 +440,7 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 You can implement filtering logic directly in your handlers:
 
 ```csharp
-public sealed class MessageHandler : IEventHandler<MessageEvent>
+public sealed class MessageHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly ILogger<MessageHandler> logger;
 
@@ -403,12 +449,12 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
         this.logger = logger;
     }
 
-    public async Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken ct)
+    public async Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken ct)
     {
-        var @event = envelope.Event;
+        var @event = envelope.Payload.Event;
 
         // Filter: Only process messages from specific user
-        if (envelope.UserId != "expected-user-id")
+        if (envelope.Metadata.UserId != "expected-user-id")
             return;
 
         // Filter: Ignore messages from ourselves

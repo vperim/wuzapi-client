@@ -2,8 +2,8 @@ using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.EventDashboard.Models.Metadata;
 using WuzApiClient.EventDashboard.Services;
 using WuzApiClient.RabbitMq.Core.Interfaces;
-using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
+using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.EventDashboard.Handlers;
 
@@ -11,8 +11,8 @@ namespace WuzApiClient.EventDashboard.Handlers;
 /// Handles presence events (Presence, ChatPresence).
 /// </summary>
 public sealed class PresenceCategoryHandler :
-    IEventHandler<PresenceEvent>,
-    IEventHandler<ChatPresenceEvent>
+    IEventHandler<PresenceEventEnvelope>,
+    IEventHandler<ChatPresenceEventEnvelope>
 {
     private readonly IEventStreamService eventStream;
 
@@ -21,9 +21,9 @@ public sealed class PresenceCategoryHandler :
         this.eventStream = eventStream;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<PresenceEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<PresenceEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new PresenceMetadata
         {
             Category = EventCategory.Presence,
@@ -39,9 +39,9 @@ public sealed class PresenceCategoryHandler :
         return Task.CompletedTask;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<ChatPresenceEvent> envelope, CancellationToken cancellationToken = default)
+    public Task HandleAsync(IWuzEventEnvelope<ChatPresenceEventEnvelope> envelope, CancellationToken cancellationToken = default)
     {
-        var evt = envelope.Event;
+        var evt = envelope.Payload.Event;
         var metadata = new PresenceMetadata
         {
             Category = EventCategory.Presence,

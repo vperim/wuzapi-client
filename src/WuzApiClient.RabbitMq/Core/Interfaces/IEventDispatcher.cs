@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.RabbitMq.Core.Interfaces;
 
@@ -17,5 +16,5 @@ public interface IEventDispatcher
     /// <param name="body">The raw message bytes from RabbitMQ.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>WuzResult indicating success or failure with error details.</returns>
-    Task<WuzResult> DispatchAsync(ReadOnlyMemory<byte> body, CancellationToken cancellationToken = default);
+    Task DispatchAsync(ReadOnlyMemory<byte> body, CancellationToken cancellationToken = default);
 }

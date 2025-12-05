@@ -243,7 +243,7 @@ Implement `IEventHandler<TEvent>` for the events you want to process:
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using WuzApiClient.RabbitMq.Models.Events;
 
-public sealed class MessageHandler : IEventHandler<MessageEvent>
+public sealed class MessageHandler : IEventHandler<MessageEventEnvelope>
 {
     private readonly ILogger<MessageHandler> logger;
 
@@ -252,9 +252,9 @@ public sealed class MessageHandler : IEventHandler<MessageEvent>
         this.logger = logger;
     }
 
-    public Task HandleAsync(WuzEventEnvelope<MessageEvent> envelope, CancellationToken cancellationToken)
+    public Task HandleAsync(IWuzEventEnvelope<MessageEventEnvelope> envelope, CancellationToken cancellationToken)
     {
-        var @event = envelope.Event;
+        var @event = envelope.Payload.Event;
 
         // Get sender information
         var sender = @event.Info?.Sender ?? "Unknown";
@@ -288,7 +288,7 @@ builder.Services.AddWuzEvents(builder.Configuration, b => b
 
 // Or register explicitly
 builder.Services.AddWuzEvents(builder.Configuration, b => b
-    .AddHandler<MessageEvent, MessageHandler>(ServiceLifetime.Scoped)
+    .AddHandler<MessageEventEnvelope, MessageHandler>(ServiceLifetime.Scoped)
 );
 ```
 
