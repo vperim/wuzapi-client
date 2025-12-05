@@ -152,5 +152,5 @@ public sealed class DeserializationTests
     // === Helper Methods ===
 
     private static async Task<byte[]> LoadAsset(string fileName) =>
-        await File.ReadAllBytesAsync(Path.Combine(AppContext.BaseDirectory, $"Assets\\{fileName}"));
+        await File.ReadAllBytesAsync(Path.Combine(AppContext.BaseDirectory, "Assets", fileName));
 }
