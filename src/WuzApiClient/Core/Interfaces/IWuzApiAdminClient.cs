@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Responses.Admin;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Interfaces;
 

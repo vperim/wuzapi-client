@@ -1,9 +1,9 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Chat;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.IntegrationTests.Messaging;
 

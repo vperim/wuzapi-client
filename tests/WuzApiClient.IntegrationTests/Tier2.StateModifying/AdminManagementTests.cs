@@ -1,9 +1,9 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Ordering;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Responses.Admin;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.IntegrationTests.Tier2.StateModifying;
 

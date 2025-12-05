@@ -1,7 +1,7 @@
 using System.Net;
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Core.Internal;
-using WuzApiClient.Results;
 using WuzApiClient.UnitTests.TestInfrastructure.Mocks;
 
 namespace WuzApiClient.UnitTests.Core.Internal;

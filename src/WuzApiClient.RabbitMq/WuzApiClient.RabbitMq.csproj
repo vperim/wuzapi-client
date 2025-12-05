@@ -18,7 +18,7 @@
 
     <ItemGroup>
       <Compile Include="..\WuzApiClient.Common\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
-      <Compile Include="..\WuzApiClient\Extensions\StringExtensions.cs" Link="Extensions\StringExtensions.cs" />
+      <Compile Include="..\WuzApiClient.Common\Extensions\StringExtensions.cs" Link="Extensions\StringExtensions.cs" />
     </ItemGroup>
 
     <ItemGroup>

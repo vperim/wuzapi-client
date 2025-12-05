@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Chat;
 using WuzApiClient.Models.Requests.Group;
@@ -12,7 +13,6 @@ using WuzApiClient.Models.Responses.Group;
 using WuzApiClient.Models.Responses.Session;
 using WuzApiClient.Models.Responses.User;
 using WuzApiClient.Models.Responses.Webhook;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Interfaces;
 

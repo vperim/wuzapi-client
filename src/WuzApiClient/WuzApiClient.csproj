@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <Compile Include="..\WuzApiClient.Common\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+	  <Compile Include="..\WuzApiClient.Common\Extensions\StringExtensions.cs" Link="Extensions\StringExtensions.cs" />
 	</ItemGroup>
 
     <ItemGroup>
@@ -32,6 +33,10 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\WuzApiClient.Common\WuzApiClient.Common.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Extensions\" />
 	</ItemGroup>
 
 </Project>

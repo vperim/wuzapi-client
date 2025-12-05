@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace WuzApiClient.Extensions;
+namespace WuzApiClient.Common.Extensions;
 
 /// <summary>
 /// String extension methods for netstandard2.0 compatibility with nullable flow analysis.

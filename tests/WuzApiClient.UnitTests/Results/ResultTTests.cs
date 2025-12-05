@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using WuzApiClient.Results;
+using WuzApiClient.Common.Results;
 
 namespace WuzApiClient.UnitTests.Results;
 

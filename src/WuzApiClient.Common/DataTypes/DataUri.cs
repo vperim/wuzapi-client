@@ -1,4 +1,5 @@
 using System;
+using WuzApiClient.Common.Extensions;
 
 namespace WuzApiClient.Common.DataTypes;
 
@@ -83,7 +84,7 @@ public sealed class DataUri : IEquatable<DataUri>
     {
         result = null;
 
-        if (string.IsNullOrEmpty(value))
+        if (value.IsNullOrEmpty())
             return false;
 
         // Must start with "data:"
@@ -101,7 +102,7 @@ public sealed class DataUri : IEquatable<DataUri>
             mediaType = "text/plain";
 
         // Extract base64 data (after ";base64,")
-        var base64Data = value.Substring(base64Index + Base64Marker.Length);
+        var base64Data = value[(base64Index + Base64Marker.Length)..];
 
         result = new DataUri(value, mediaType, base64Data);
         return true;

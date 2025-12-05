@@ -1,6 +1,6 @@
 using System;
 
-namespace WuzApiClient.Results;
+namespace WuzApiClient.Common.Results;
 
 /// <summary>
 /// Represents the result of an operation without a return value.

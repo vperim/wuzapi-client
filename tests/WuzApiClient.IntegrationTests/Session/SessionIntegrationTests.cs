@@ -1,7 +1,7 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.Models.Requests.Session;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.IntegrationTests.Session;
 

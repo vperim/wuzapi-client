@@ -1,6 +1,6 @@
 using System;
 
-namespace WuzApiClient.Results;
+namespace WuzApiClient.Common.Results;
 
 /// <summary>
 /// Represents an error from the WuzAPI service.

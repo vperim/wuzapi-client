@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Extensions;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Internal;
 

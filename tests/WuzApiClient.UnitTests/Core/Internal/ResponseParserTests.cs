@@ -1,7 +1,7 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Core.Internal;
 using WuzApiClient.Json;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.UnitTests.Core.Internal;
 

@@ -1,10 +1,10 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Chat;
 using WuzApiClient.Models.Responses.Chat;
-using WuzApiClient.Results;
 using WuzApiClient.Utilities;
 
 namespace WuzApiClient.Core.Implementations;

@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Models.Responses.Download;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Implementations;
 

@@ -1,7 +1,7 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Results;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Ordering;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.IntegrationTests.Tier0.ReadOnly;
 

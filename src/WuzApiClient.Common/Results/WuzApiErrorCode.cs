@@ -1,4 +1,4 @@
-namespace WuzApiClient.Results;
+namespace WuzApiClient.Common.Results;
 
 /// <summary>
 /// Defines error codes for WuzAPI operations.

@@ -2,11 +2,11 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.Common.Results;
 using WuzApiClient.Core.Interfaces;
 using WuzApiClient.Core.Internal;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Responses.Admin;
-using WuzApiClient.Results;
 
 namespace WuzApiClient.Core.Implementations;
 
