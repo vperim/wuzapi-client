@@ -1,5 +1,106 @@
 {
   "instanceName": "DashboardUser",
-  "jsonData": "{\"event\":{\"Info\":{\"Chat\":\"5511991367947@s.whatsapp.net\",\"Sender\":\"5511991367947@s.whatsapp.net\",\"IsFromMe\":true,\"IsGroup\":false,\"AddressingMode\":\"\",\"SenderAlt\":\"137637125972097@lid\",\"RecipientAlt\":\"\",\"BroadcastListOwner\":\"\",\"BroadcastRecipients\":null,\"ID\":\"A5CF0541AC3C968F32730AD532BD9D97\",\"ServerID\":0,\"Type\":\"text\",\"PushName\":\"\",\"Timestamp\":\"2025-12-03T19:23:26-03:00\",\"Category\":\"peer\",\"Multicast\":false,\"MediaType\":\"\",\"Edit\":\"\",\"MsgBotInfo\":{\"EditType\":\"\",\"EditTargetID\":\"\",\"EditSenderTimestampMS\":\"0001-01-01T00:00:00Z\"},\"MsgMetaInfo\":{\"TargetID\":\"\",\"TargetSender\":\"\",\"TargetChat\":\"\",\"DeprecatedLIDSession\":null,\"ThreadMessageID\":\"\",\"ThreadMessageSenderJID\":\"\"},\"VerifiedName\":null,\"DeviceSentMeta\":null},\"Message\":{\"protocolMessage\":{\"type\":6,\"appStateSyncKeyShare\":{\"keys\":[{\"keyID\":{\"keyID\":\"AAAAAB4z\"},\"keyData\":{\"keyData\":\"YObYKR+ZYlNXWa9hC2ke5xASsqiHYtCVGEgZcj7CDu8=\",\"fingerprint\":{\"rawID\":1525016409,\"currentIndex\":1,\"deviceIndexes\":[0,1]},\"timestamp\":1764800602597}}]}}},\"IsEphemeral\":false,\"IsViewOnce\":false,\"IsViewOnceV2\":false,\"IsViewOnceV2Extension\":false,\"IsDocumentWithCaption\":false,\"IsLottieSticker\":false,\"IsBotInvoke\":false,\"IsEdit\":false,\"SourceWebMsg\":null,\"UnavailableRequestID\":\"\",\"RetryCount\":0,\"NewsletterMeta\":null,\"RawMessage\":{\"protocolMessage\":{\"type\":6,\"appStateSyncKeyShare\":{\"keys\":[{\"keyID\":{\"keyID\":\"AAAAAB4z\"},\"keyData\":{\"keyData\":\"YObYKR+ZYlNXWa9hC2ke5xASsqiHYtCVGEgZcj7CDu8=\",\"fingerprint\":{\"rawID\":1525016409,\"currentIndex\":1,\"deviceIndexes\":[0,1]},\"timestamp\":1764800602597}}]}}}},\"type\":\"Message\"}",
-  "userID": "eeb9c96d4ac15602fda4db3b759d12c0"
+  "userID": "eeb9c96d4ac15602fda4db3b759d12c0",
+  "event": {
+    "Info": {
+      "Chat": "5511991367947@s.whatsapp.net",
+      "Sender": "5511991367947@s.whatsapp.net",
+      "IsFromMe": true,
+      "IsGroup": false,
+      "AddressingMode": "",
+      "SenderAlt": "137637125972097@lid",
+      "RecipientAlt": "",
+      "BroadcastListOwner": "",
+      "BroadcastRecipients": null,
+      "ID": "A5CF0541AC3C968F32730AD532BD9D97",
+      "ServerID": 0,
+      "Type": "text",
+      "PushName": "",
+      "Timestamp": "2025-12-03T19:23:26-03:00",
+      "Category": "peer",
+      "Multicast": false,
+      "MediaType": "",
+      "Edit": "",
+      "MsgBotInfo": {
+        "EditType": "",
+        "EditTargetID": "",
+        "EditSenderTimestampMS": "0001-01-01T00:00:00Z"
+      },
+      "MsgMetaInfo": {
+        "TargetID": "",
+        "TargetSender": "",
+        "TargetChat": "",
+        "DeprecatedLIDSession": null,
+        "ThreadMessageID": "",
+        "ThreadMessageSenderJID": ""
+      },
+      "VerifiedName": null,
+      "DeviceSentMeta": null
+    },
+    "Message": {
+      "protocolMessage": {
+        "type": 6,
+        "appStateSyncKeyShare": {
+          "keys": [
+            {
+              "keyID": {
+                "keyID": "AAAAAB4z"
+              },
+              "keyData": {
+                "keyData": "YObYKR+ZYlNXWa9hC2ke5xASsqiHYtCVGEgZcj7CDu8=",
+                "fingerprint": {
+                  "rawID": 1525016409,
+                  "currentIndex": 1,
+                  "deviceIndexes": [
+                    0,
+                    1
+                  ]
+                },
+                "timestamp": 1764800602597
+              }
+            }
+          ]
+        }
+      }
+    },
+    "IsEphemeral": false,
+    "IsViewOnce": false,
+    "IsViewOnceV2": false,
+    "IsViewOnceV2Extension": false,
+    "IsDocumentWithCaption": false,
+    "IsLottieSticker": false,
+    "IsBotInvoke": false,
+    "IsEdit": false,
+    "SourceWebMsg": null,
+    "UnavailableRequestID": "",
+    "RetryCount": 0,
+    "NewsletterMeta": null,
+    "RawMessage": {
+      "protocolMessage": {
+        "type": 6,
+        "appStateSyncKeyShare": {
+          "keys": [
+            {
+              "keyID": {
+                "keyID": "AAAAAB4z"
+              },
+              "keyData": {
+                "keyData": "YObYKR+ZYlNXWa9hC2ke5xASsqiHYtCVGEgZcj7CDu8=",
+                "fingerprint": {
+                  "rawID": 1525016409,
+                  "currentIndex": 1,
+                  "deviceIndexes": [
+                    0,
+                    1
+                  ]
+                },
+                "timestamp": 1764800602597
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "type": "Message"
 }

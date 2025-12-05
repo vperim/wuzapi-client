@@ -1,5 +1,11 @@
 {
   "instanceName": "DashboardUser",
-  "jsonData": "{\"event\":{\"ID\":\"5511991367947:20@s.whatsapp.net\",\"LID\":\"137637125972097:20@lid\",\"BusinessName\":\"Banqer\",\"Platform\":\"smba\"},\"type\":\"PairSuccess\"}",
-  "userID": "eeb9c96d4ac15602fda4db3b759d12c0"
+  "userID": "eeb9c96d4ac15602fda4db3b759d12c0",
+  "event": {
+    "ID": "5511991367947:20@s.whatsapp.net",
+    "LID": "137637125972097:20@lid",
+    "BusinessName": "Banqer",
+    "Platform": "smba"
+  },
+  "type": "PairSuccess"
 }

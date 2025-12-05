@@ -1,5 +1,1214 @@
 {
   "instanceName": "DashboardUser",
-  "jsonData": "{\"event\":{\"Data\":{\"syncType\":0,\"conversations\":[{\"ID\":\"5527997552218@s.whatsapp.net\",\"messages\":[{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC4603406D8034DD78C9DE9EA842D997\"},\"message\":{\"conversation\":\"Blz?\",\"messageContextInfo\":{\"messageSecret\":\"NzydKWcXsGo29KadFHFwMprAub6u4MF8s6eYsLVmjyM=\"}},\"messageTimestamp\":1764783131,\"messageSecret\":\"NzydKWcXsGo29KadFHFwMprAub6u4MF8s6eYsLVmjyM=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ1fRhLHNH6v9GWwoYmmCO85D9U=\"},\"isMentionedInStatus\":false},\"msgOrderID\":286},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A50708458A30606D30B38C35D5B1D120\"},\"message\":{\"conversation\":\"Message\",\"messageContextInfo\":{\"messageSecret\":\"/z7QEo3eIEALuyYnXk/6E8FeDWoLNmImjwvueK6/0xg=\"}},\"messageTimestamp\":1764783112,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764783113,\"readTimestamp\":1764783122,\"playedTimestamp\":0}],\"reactions\":[{\"key\":{\"remoteJID\":\"22999684120770@lid\",\"fromMe\":false,\"ID\":\"AC5F2555FAF0D7F3C9C854E7B5D80D02\"},\"text\":\"👍\",\"senderTimestampMS\":1764783124718}],\"messageSecret\":\"/z7QEo3eIEALuyYnXk/6E8FeDWoLNmImjwvueK6/0xg=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":285},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A54B5E83E74F2A5CDF59A2275B95E03E\"},\"message\":{\"conversation\":\"Hi\",\"messageContextInfo\":{\"messageSecret\":\"sooXdb9+FEJrHr/mrdeN8cXwhEtR2KZeDZYCf/9e9UQ=\"}},\"messageTimestamp\":1764779000,\"status\":4,\"messageC2STimestamp\":1764779001,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764779001,\"readTimestamp\":1764783122,\"playedTimestamp\":0}],\"messageSecret\":\"sooXdb9+FEJrHr/mrdeN8cXwhEtR2KZeDZYCf/9e9UQ=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":284},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB0BB2F361213D18ACE04\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/o1/v/t24/f2/m234/AQP4crPWZDGZxdSx282y5eEXaz5Jn_2alE2NoaqDDbGpB5_rDS1bor7RYWIlVIHxqoQCDh2OiBUlQbj2V4r6U1t6gWYt4T8R89_UA1YoOA?ccb=9-4\\u0026oh=01_Q5Aa3AGbZjclxwLdLiObP6aj3gqx_dLnD0fNiABxovPDPo5dAA\\u0026oe=6952F8CC\\u0026_nc_sid=e6ed6c\\u0026mms3=true\",\"mimetype\":\"image/png\",\"caption\":\"Integration test image from file\",\"fileSHA256\":\"a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=\",\"fileLength\":70,\"height\":1,\"width\":1,\"mediaKey\":\"kz6oC86ZJX1Z0vPoCJWflWieiAmQ0bO+H7nu+I9PpYQ=\",\"fileEncSHA256\":\"ZF+zSdZg791FUW5uS7iqLkEf6vMGjNwAKN7nQ0dZp1M=\",\"directPath\":\"/o1/v/t24/f2/m234/AQP4crPWZDGZxdSx282y5eEXaz5Jn_2alE2NoaqDDbGpB5_rDS1bor7RYWIlVIHxqoQCDh2OiBUlQbj2V4r6U1t6gWYt4T8R89_UA1YoOA?ccb=9-4\\u0026oh=01_Q5Aa3AGbZjclxwLdLiObP6aj3gqx_dLnD0fNiABxovPDPo5dAA\\u0026oe=6952F8CC\\u0026_nc_sid=e6ed6c\",\"contextInfo\":{\"pairedMediaType\":0}}},\"messageTimestamp\":1764465888,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764465890,\"readTimestamp\":1764465899,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":283},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB034AF73FE2950F7C3CD\"},\"message\":{\"documentMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7119-24/592894951_714934218332774_1934844645124816324_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHyyz9BUgtDRs07cIQYyabzNpdwnWYnxRf6_LoX9e9Jmg\\u0026oe=6952E230\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"application/pdf\",\"fileSHA256\":\"RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=\",\"fileLength\":139,\"pageCount\":0,\"mediaKey\":\"5QutlQIj8jnKPEAzjnzZsBqt78NblFDBSzzYee+STFo=\",\"fileName\":\"test-document.pdf\",\"fileEncSHA256\":\"U2L2YmIe08xUGNr1Zb+uebYQhWlfFc1uoVKracP0VK0=\",\"directPath\":\"/v/t62.7119-24/592894951_714934218332774_1934844645124816324_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHyyz9BUgtDRs07cIQYyabzNpdwnWYnxRf6_LoX9e9Jmg\\u0026oe=6952E230\\u0026_nc_sid=5e03e0\",\"caption\":\"Integration test PDF document\"}},\"messageTimestamp\":1764457453,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Documents/Sent/test-document.pdf\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":0,\"readTimestamp\":1764457453,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":282},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC5382F8F95920CC22A5BF83201713D9\"},\"message\":{\"conversation\":\"Pretty\",\"messageContextInfo\":{\"messageSecret\":\"9HUlFdcvRiubXvHkXXV86IyeyTy3ZHyiO/1zolACqEw=\"}},\"messageTimestamp\":1764457434,\"messageSecret\":\"9HUlFdcvRiubXvHkXXV86IyeyTy3ZHyiO/1zolACqEw=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ1Xqpk6MD1eFZeYHC8iXErCx/A=\"},\"isMentionedInStatus\":false},\"msgOrderID\":281},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB0E708BE070F52B2987F\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/o1/v/t24/f2/m231/AQOzk2uGXnebGve4LITkd1hgXxYdf0bakVlTBN6uA4iBRin1VCAUJX8BW7QSDI4PWbrH-rOPus6W_Yjm7_HRexeUycRTnUvcl2e5qDk1Vw?ccb=9-4\\u0026oh=01_Q5Aa3AH95k5R3XOIZDO9iXQ5-tQgUZ5mFMkHa6aKtB6-6HGx7w\\u0026oe=6952D4A1\\u0026_nc_sid=e6ed6c\\u0026mms3=true\",\"mimetype\":\"image/png\",\"caption\":\"Integration test image from file\",\"fileSHA256\":\"a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=\",\"fileLength\":70,\"mediaKey\":\"mhF4nzSBd7tQvBlIPympFlGXyucTTigure8C9BEMJYY=\",\"fileEncSHA256\":\"s6Ta3306Shv5swSmSFR5nhGS51Sqou5qvu48zozJSB0=\",\"directPath\":\"/o1/v/t24/f2/m231/AQOzk2uGXnebGve4LITkd1hgXxYdf0bakVlTBN6uA4iBRin1VCAUJX8BW7QSDI4PWbrH-rOPus6W_Yjm7_HRexeUycRTnUvcl2e5qDk1Vw?ccb=9-4\\u0026oh=01_Q5Aa3AH95k5R3XOIZDO9iXQ5-tQgUZ5mFMkHa6aKtB6-6HGx7w\\u0026oe=6952D4A1\\u0026_nc_sid=e6ed6c\",\"contextInfo\":{\"pairedMediaType\":0}}},\"messageTimestamp\":1764457422,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":0,\"readTimestamp\":1764457424,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":280},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB0E9E549587AEEB7680E\"},\"message\":{\"documentMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7119-24/593297062_2703940093290045_2613172873464004409_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHabqvFwBIR-5GqGvCeUW69mkk2op3YMyXVd_8eaVeicQ\\u0026oe=6952FFFF\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"application/pdf\",\"fileSHA256\":\"RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=\",\"fileLength\":139,\"pageCount\":0,\"mediaKey\":\"liHGygsj6lHRrya7O/5NvLXXBJglCjlUeuab9CyImX0=\",\"fileName\":\"wuzapi-test-c8bfb7b2-7eb8-42c1-bece-17f50c532aa0.pdf\",\"fileEncSHA256\":\"MnIyT3XIlULqf+DKLUDI1E3qo376BadINHz5OmbMkkg=\",\"directPath\":\"/v/t62.7119-24/593297062_2703940093290045_2613172873464004409_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHabqvFwBIR-5GqGvCeUW69mkk2op3YMyXVd_8eaVeicQ\\u0026oe=6952FFFF\\u0026_nc_sid=5e03e0\",\"caption\":\"Integration test document from file\"}},\"messageTimestamp\":1764457405,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Documents/Sent/test-document.pdf\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764457407,\"readTimestamp\":1764457411,\"playedTimestamp\":0}],\"reactions\":[{\"key\":{\"remoteJID\":\"22999684120770@lid\",\"fromMe\":false,\"ID\":\"AC83BD74778C04D64A3E87B740F7FD42\"},\"text\":\"👍\",\"senderTimestampMS\":1764457415580}],\"isMentionedInStatus\":false},\"msgOrderID\":279},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB0520F8EBF578291DB28\"},\"message\":{\"documentMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7119-24/590954199_1162424656085048_4554515106583606293_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHS-lqPWkDxfBiSktm18ovAQ6PA_GzQFnDTuZh2PMezAw\\u0026oe=6952F038\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"application/pdf\",\"fileSHA256\":\"RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=\",\"fileLength\":139,\"pageCount\":0,\"mediaKey\":\"3bsAR+aLC993eOU5USxcRyAx2aCNYFagpNYY6bumARo=\",\"fileName\":\"test.pdf\",\"fileEncSHA256\":\"ZDAVvmv00fO/njsrHjS8OA4NEjosxDSYm3dkmoDd7Q4=\",\"directPath\":\"/v/t62.7119-24/590954199_1162424656085048_4554515106583606293_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHS-lqPWkDxfBiSktm18ovAQ6PA_GzQFnDTuZh2PMezAw\\u0026oe=6952F038\\u0026_nc_sid=5e03e0\",\"caption\":\"Integration test document from stream\"}},\"messageTimestamp\":1764457360,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Documents/Sent/test-document.pdf\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764457361,\"readTimestamp\":1764457411,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":278},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"ACACE56028DB571507522B5ECE57890A\"},\"message\":{\"conversation\":\"Received\"},\"messageTimestamp\":1764457352,\"reportingTokenInfo\":{\"reportingTag\":\"AQ0bRaPv9D+KEz2RPPM8kb70agI=\"},\"isMentionedInStatus\":false},\"msgOrderID\":277},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB060E293A49567AB94FB\"},\"message\":{\"documentMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7119-24/593290501_1403064667895930_8195264893397784257_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AEAidnrzhsp8ttfby84b-cRvWFZk7MzI7gZdkLYmhBuhQ\\u0026oe=6952F570\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"application/pdf\",\"fileSHA256\":\"RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=\",\"fileLength\":139,\"pageCount\":0,\"mediaKey\":\"3mDKmbk4g5X2x7hCMRuCshnLtl8ZKKW8/i0ZE7zBaUM=\",\"fileName\":\"wuzapi-test-7d9c5623-90b8-445d-91d3-5a8bc0503185.pdf\",\"fileEncSHA256\":\"WXd9NETFJZ/SKdz2LezUdwofgrYt4ldZQoiAUEofPw0=\",\"directPath\":\"/v/t62.7119-24/593290501_1403064667895930_8195264893397784257_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AEAidnrzhsp8ttfby84b-cRvWFZk7MzI7gZdkLYmhBuhQ\\u0026oe=6952F570\\u0026_nc_sid=5e03e0\",\"caption\":\"Integration test document from file\"}},\"messageTimestamp\":1764457100,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Documents/Sent/test-document.pdf\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764457103,\"readTimestamp\":1764457347,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":276},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB0C29A536B36D9858F43\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/o1/v/t24/f2/m231/AQMiSKaAR2HpXVCIVDqcmUVClqLqT93O7CILORUWie3VicxWxuFi1ZXYKnAMt5HkxgTF33UlydfKJrvqUZ13JbcDCqF_s4D-YyPKDxxi8Q?ccb=9-4\\u0026oh=01_Q5Aa3AGCDFRpU3WgoKn7crZOiq-HtkgBBi4kFFn1VnFWr12gDQ\\u0026oe=6952F178\\u0026_nc_sid=e6ed6c\\u0026mms3=true\",\"mimetype\":\"image/jpeg\",\"caption\":\"Integration test image from stream\",\"fileSHA256\":\"a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=\",\"fileLength\":70,\"mediaKey\":\"KiGOtbgTNGaSYWkEKK5y2FVIW1SqYTAz//WBwN1M2d4=\",\"fileEncSHA256\":\"EsFcH2KpzmsEetN23esGrJPBWJI9odldS7NTBCFSTug=\",\"directPath\":\"/o1/v/t24/f2/m231/AQMiSKaAR2HpXVCIVDqcmUVClqLqT93O7CILORUWie3VicxWxuFi1ZXYKnAMt5HkxgTF33UlydfKJrvqUZ13JbcDCqF_s4D-YyPKDxxi8Q?ccb=9-4\\u0026oh=01_Q5Aa3AGCDFRpU3WgoKn7crZOiq-HtkgBBi4kFFn1VnFWr12gDQ\\u0026oe=6952F178\\u0026_nc_sid=e6ed6c\",\"contextInfo\":{\"pairedMediaType\":0}}},\"messageTimestamp\":1764456985,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":0,\"readTimestamp\":1764456985,\"playedTimestamp\":0}],\"reactions\":[{\"key\":{\"remoteJID\":\"22999684120770@lid\",\"fromMe\":false,\"ID\":\"AC529512E9E3B4AA13CC5E6161D30F23\"},\"text\":\"👍\",\"senderTimestampMS\":1764457013387,\"unread\":true}],\"isMentionedInStatus\":false},\"msgOrderID\":275},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"3EB03C3954E7B483F747F3\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/o1/v/t24/f2/m237/AQPXqehLuJwVk8Gh0bfe7_pjpwTCgpgCop_DAyyahqehkmC1lz9NrStz-sNz20FTo2RH9Omv7Ca_2j1ucInMGfZCS5SJMh1qElGMcBirlA?ccb=9-4\\u0026oh=01_Q5Aa3AF49gbvyNcEvc3WUNGXX0e8Psk2yIlEVX9YOqvPzYyuKQ\\u0026oe=6952E03B\\u0026_nc_sid=e6ed6c\\u0026mms3=true\",\"mimetype\":\"image/png\",\"caption\":\"Integration test image from file\",\"fileSHA256\":\"a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=\",\"fileLength\":70,\"mediaKey\":\"F586GpyOi551cBs2lsnCnxZYPnR/ZY+J4oezNQ0Cnfc=\",\"fileEncSHA256\":\"1ikcHjvz7z2oteR8WKG1UHOHstDXM2iT3Efhr69aIj4=\",\"directPath\":\"/o1/v/t24/f2/m237/AQPXqehLuJwVk8Gh0bfe7_pjpwTCgpgCop_DAyyahqehkmC1lz9NrStz-sNz20FTo2RH9Omv7Ca_2j1ucInMGfZCS5SJMh1qElGMcBirlA?ccb=9-4\\u0026oh=01_Q5Aa3AF49gbvyNcEvc3WUNGXX0e8Psk2yIlEVX9YOqvPzYyuKQ\\u0026oe=6952E03B\\u0026_nc_sid=e6ed6c\",\"contextInfo\":{\"pairedMediaType\":0}}},\"messageTimestamp\":1764456932,\"status\":4,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg\"},\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764456935,\"readTimestamp\":1764456958,\"playedTimestamp\":0}],\"isMentionedInStatus\":false},\"msgOrderID\":274},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A56F172661478F7AE1509FF2204378DE\"},\"message\":{\"conversation\":\"Kekeke\",\"messageContextInfo\":{\"messageSecret\":\"EmDqGEq44FTmhSoKHPM3HSnhnt92Rq9EkgdWLzkBCoE=\"}},\"messageTimestamp\":1764388556,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764388556,\"readTimestamp\":1764388586,\"playedTimestamp\":0}],\"messageSecret\":\"EmDqGEq44FTmhSoKHPM3HSnhnt92Rq9EkgdWLzkBCoE=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":273},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A530B818284EA038AE8B453B304AFB4B\"},\"message\":{\"conversation\":\"Tá louco\",\"messageContextInfo\":{\"messageSecret\":\"FL7j4Mbb3mAjVOMkds9bHNYLJbau1cEljZLZiIEE5jI=\"}},\"messageTimestamp\":1764388084,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764388085,\"readTimestamp\":1764388100,\"playedTimestamp\":0}],\"messageSecret\":\"FL7j4Mbb3mAjVOMkds9bHNYLJbau1cEljZLZiIEE5jI=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":272},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A56586B5FC85B73F9ABFD7ED7D9DA3FF\"},\"message\":{\"conversation\":\"Qse 1 da manhã\",\"messageContextInfo\":{\"messageSecret\":\"rjpAYBNGUl176rnRhNPE0dAxKlTGyTuhaz3aQFssc3s=\"}},\"messageTimestamp\":1764388076,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764388076,\"readTimestamp\":1764388100,\"playedTimestamp\":0}],\"messageSecret\":\"rjpAYBNGUl176rnRhNPE0dAxKlTGyTuhaz3aQFssc3s=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":271},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A5850F33EE90DB56F8968F883111B618\"},\"message\":{\"conversation\":\"Vai dormir mano\",\"messageContextInfo\":{\"messageSecret\":\"PF2asEJ67o3DzbLy6uzvbD7tfcHtKUs+LbhA4aIbO58=\"}},\"messageTimestamp\":1764388032,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764388032,\"readTimestamp\":1764388040,\"playedTimestamp\":0}],\"messageSecret\":\"PF2asEJ67o3DzbLy6uzvbD7tfcHtKUs+LbhA4aIbO58=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":270},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC7CF2ABC64971B73125003C6E8692C1\"},\"message\":{\"extendedTextMessage\":{\"text\":\"Source: TudoCelular.com\\n https://search.app/ahbJ3\",\"matchedText\":\"https://search.app/ahbJ3\",\"description\":\"Microsoft quer resolver problema do Teams adicionando mais uma coisa para o Teams carregar.\",\"title\":\"Microsoft quer corrigir um dos maiores problemas do Teams no Windows em breve\",\"previewType\":0,\"JPEGThumbnail\":\"/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACHAIcDASIAAhEBAxEB/8QAHAABAAMBAQEBAQAAAAAAAAAAAAUGBwQDAgEI/8QAQBAAAQMDAQMHCQUGBwAAAAAAAQACAwQFEQYSITEHE1FhcYGRFSIzQVRysbLRFjI1UqEUQnOTo8EjY3SCkuHw/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECAwQFBv/EACgRAAICAgECBQQDAAAAAAAAAAABAhEDBBIhMTIzQVFxExQVkUJSsf/aAAwDAQACEQMRAD8AxtERe0cAREQBERAEREBGSt2JHN6Cvle9YMTZ6QvBZssEREAREQBERAEREBKoiLQqEREAREQBEX60FxAaCSdwA9aA464ecw9q5VoFFyb3i5QxyzOhomEZDZiS/wAAN3eua9cmt7t0Dpqfma6NoyWwk7Y/2kb+7Ks8OTvRZFIRCCCQRgj1IsQEREARfrWlxw0Ele7KVx++Q1KsHOi7200Y4gntKKeLFnsiIrlQiLut9prrhG59JTukY04LsgDPeVKi5OkgcKKY+zN39k/qM+qfZq7eyH+Yz6q/0cn9X+gQ6v8AyTWeKqrai41DQ4U2GxA8Ns8T3D4qr/Zu7eyf1GfVX3k4fNZaGsp7jCYtuQSMO0Dndg8M9A8Vtgwy5rlF/oWaGijYrxTSytja7zzwG8Z8QpEHIBHAr0QYxyyWOKhulPcqZgYys2hK0Ddzgxv7wf0Ko9qtlTdKnmaRm04DLnHc1o6SVpXLhXRltsoGkGUF0zh0DgPHf4Lh5PYo2WN0jQNt8p2j2YwP/dK4I68c2y4ehLdIhZdDVbYdqOqhfJj7pBA8VXn26WnnfFVtMcjDgsPFbGqbruNjamkkGOcc1wd2AjHxK329LHjhzh6FVJlUY1rBhoAC+kReYSEREAREQBaTo0409Tdr/mKzZaNpA40/Tdr/AJiu3R8x/BDJzeTgAk9S/Cx/5HeC79OXd1jvdNcWRNmdAXEMJwDlpHHvWu6F1/Nqa9uoJKGOnaIXS7bZC47iBjh1rr2tjLgXKMLil3uiYRUujZiJZJ+R3gvFxwcHcVs+q+UyoseoKy3R22KZsDgA90pBOWg8Mdax27Vpr7nWVrmBjqiZ8xaDnZ2nE4/VX1c2XMuU4cU+q62JxUeiZG3C5U1sdSVFY8siE7QXBpPSfV2Fe935UbXTUuza4pauo2cNLmljAevO/ux3rmqKOmuU1LBWRCWIzNJaSR1ertKssehdNljSbVFkgfvv+qz2Flc2oNCPYwe6XCqu9xlrK2Qy1Ersk/ADoAU7pe6usxdHI0yQSHLgOIPSFrzND6bYcttcQPvv+qi79pKzUvNPgomtDsgt2nH+65sOrljPlGSsN9CvyaotrYtpr5Hu/IGEH9dyp13uMlzrDPINkY2WNH7oV68gWz2Rv/I/VRGprLRU1sdUU0fNPjI4EkEE49faunaxbE4NyapexVNFPREXkFgiIgCIiALQtJHFgp+13zFZ6r/pU4sVP2u+Yru0PMfwQyZLlfeRI51k/wD0j/mas8c9XfkbrqWi1e+WtqYaaL9le3bmeGNzlu7JXdvRb15pexOPxI4eVN2NeXb32fI1VBz1Y+U2qhqtcXWalmjmhe9mzJG4Oa7zG8CNyqjnrbVVYIX7L/Cs/EzqonZuFL/Fb8Vo8Xo2dgWZ212blS/xW/ELTIvRs7As8vjZK7H0oTVHoYPeKm1Cao9DB7xTF4kH2K8obVv4DUdrfmCmVDat/Aajtb8wW+x5UvhlF3M9REXzRoEREAREQBXjTEg8iwgEEtLgereVR16QzzQ55mWSPPHZcRldGtmWGfJqyGrNGc9eTnrOqi7VTctZVTl3Tzh3Lk8o1vtlT/Nd9V3flIL+I4GluevJz1x6Cp/LlDNG+aodVQO84B+SWngfiPBWn7Ju6arx/wCl0w3FOKkojiRVndm60w/zG/ELUovRs7AqfadNGmrI5NmTLSCXSHgri0YAA9W5UlPnJyqiUqP1QeqPRU/vFTipOp7/AG/yqaN9UxslOMODtwyd/Hh0KcclGSbdEPseKgdZztjszoyfOle1oHYc/wBl0VeoLdTsJE4ld6mx789/BUm8XOW51XOy+axu5jBwaPqo29mEYOMXbZVI4ERF4ZcIiIAi5nVbR91pPbuXi+okd69kdSjkiaOySVkf3jv6FxzVDn7h5rV4oqt2TQREUAk9N3qpsF2irqM5c3c9hO6Rp4tK/oDTWo7fqGjE1DKOcA/xIXHD4z1jo6+C/mxelNUTUszZqaWSGVu9r43Frh2ELfDsPF09BR/VCLB7Tr7UMUbmPrRMG4xzsbSfHGT3pcdX3yvYWTV8jIzxbEBH+o3rt+7hV0VNJ1prGms0ElNRPZNcSMADeIut3X1LGZZHyyvklcXyPJc5xOSSeJXyi5MuV5HbAREWQCIiAIiICKREWZYIiIAiIgCIiA6aE+c8dS7FwUZxNjpGF3q8exDCIikgIiIAiIgCIiAikRFmWCIiAIiIAiIgPqN2y9rugqTRFaJDCIisQEREAREQBERAf//Z\",\"thumbnailDirectPath\":\"/v/t62.36144-24/531684243_877568678279914_115710492889183334_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AFQQdCyUmKNckXwuTrTWxX29Aa5Br1RhvlNAVHATnztnQ\\u0026oe=6951E212\\u0026_nc_sid=5e03e0\",\"thumbnailSHA256\":\"4D/5L4JXxWSob8czxnQ18tumOHIQLDitPtFXFY1lELs=\",\"thumbnailEncSHA256\":\"OTxwCL2S1Tby6oU0oPsSTN5caCl8k5ZQKJXEcKKb+FE=\",\"mediaKey\":\"Ej6n7NLZ6yBEfI7UFgDm0aSfsSXGkYRwY9/Gj1hoUAo=\",\"mediaKeyTimestamp\":1764387284,\"thumbnailHeight\":576,\"thumbnailWidth\":1024,\"inviteLinkGroupTypeV2\":0,\"faviconMMSMetadata\":{\"thumbnailDirectPath\":\"/v/t62.36144-24/590928913_1411296147225569_3309378217497514572_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHsJ8QIJmlfP4ZfqkVvNOqTeSavORme5waPShhtq8KmjQ\\u0026oe=6951CAD2\\u0026_nc_sid=5e03e0\",\"thumbnailSHA256\":\"nVIoMhhkRUpuPKN2MHv/hbIlC1G1x5KJ3w0JyDesq1o=\",\"thumbnailEncSHA256\":\"u8SN/VZvNXKXhayvKVwRpzxZm7lnGT3GaquWF5l98KI=\",\"mediaKey\":\"CHrIHpkMsSzH8coQ4+qGnlGgXP1jJj0fmac5pOyhDEg=\",\"mediaKeyTimestamp\":1764387284,\"thumbnailHeight\":32,\"thumbnailWidth\":32}},\"messageContextInfo\":{\"messageSecret\":\"QW7oKhz8nMvMnRJpmHr452T9hlN94AL510b5ti4WRDQ=\"}},\"messageTimestamp\":1764387285,\"messageSecret\":\"QW7oKhz8nMvMnRJpmHr452T9hlN94AL510b5ti4WRDQ=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ2OidNkB68BBoSE8oD/shYXHkE=\"},\"isMentionedInStatus\":false},\"msgOrderID\":268},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"ACF6F1751BD4BF5032CB546E445D13CE\"},\"message\":{\"conversation\":\"Haha\",\"messageContextInfo\":{\"messageSecret\":\"NsU5kWCUwVgheC/D2lEqogWQOxbLEnqj4HXL5MH7iRU=\"}},\"messageTimestamp\":1764387256,\"messageSecret\":\"NsU5kWCUwVgheC/D2lEqogWQOxbLEnqj4HXL5MH7iRU=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ0ClUMY9QqYPZGHvCdRCk8/YHs=\"},\"isMentionedInStatus\":false},\"msgOrderID\":267},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC8B72DA805EAF76D548FA74F8247347\"},\"message\":{\"conversation\":\"Nice!\",\"messageContextInfo\":{\"messageSecret\":\"qLEQD+ThrF2dZ81ex3xcPy6EAcmOu3z9eZrWlGhC6zM=\"}},\"messageTimestamp\":1764387126,\"messageSecret\":\"qLEQD+ThrF2dZ81ex3xcPy6EAcmOu3z9eZrWlGhC6zM=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ30HJ8vf+djr7QqAy0SNaMhfPk=\"},\"isMentionedInStatus\":false},\"msgOrderID\":266},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A5861AC329F8C3C8AFD1F6CCCC7882D1\"},\"message\":{\"conversation\":\"Cute Kitty\",\"messageContextInfo\":{\"messageSecret\":\"vHw3WaorNGIT1qM4ijJNZPZts2A7UgT5ChqsbQgWYzA=\"}},\"messageTimestamp\":1764387002,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764387003,\"readTimestamp\":1764387003,\"playedTimestamp\":0}],\"messageSecret\":\"vHw3WaorNGIT1qM4ijJNZPZts2A7UgT5ChqsbQgWYzA=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":265},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC146833D135FB68829AB9853B9C1622\"},\"message\":{\"audioMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7117-24/546094393_25133401729664592_6906901153257287821_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AFZMc8OS5CcTa0PXZ-DKJR2lip7WKG7LHcKc-ueFMAZIg\\u0026oe=6951DECA\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"audio/ogg; codecs=opus\",\"fileSHA256\":\"9+QGNRfGx3ED6c6R6wHSxOtEXgAJPljzgf1CMqbm2+k=\",\"fileLength\":3538,\"seconds\":2,\"PTT\":true,\"mediaKey\":\"pZA69iDQMwSOrbOZAkrxhwv5oVdHyS/VEBA8KueOXv0=\",\"fileEncSHA256\":\"oYMgFg+tF5xoOxDWenj2ML0CbALh5dK2lJqU2mF2Rl8=\",\"directPath\":\"/v/t62.7117-24/546094393_25133401729664592_6906901153257287821_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AFZMc8OS5CcTa0PXZ-DKJR2lip7WKG7LHcKc-ueFMAZIg\\u0026oe=6951DECA\\u0026_nc_sid=5e03e0\",\"mediaKeyTimestamp\":1764386981,\"waveform\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJCgAAAAAAAA==\"},\"messageContextInfo\":{\"messageSecret\":\"o2S7XXZ2ZM280FkAWfHfJq6faCvoDhSXjRGTbG2I3g0=\"}},\"messageTimestamp\":1764386981,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Voice Notes/202548/PTT-20251129-WA0003.opus\"},\"messageSecret\":\"o2S7XXZ2ZM280FkAWfHfJq6faCvoDhSXjRGTbG2I3g0=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ2Y8b5uFlouGcjT1uaAkrpcvxU=\"},\"isMentionedInStatus\":false},\"msgOrderID\":264},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"ACA9A7F5DA882B17FEDACA6CA2821C53\"},\"message\":{\"conversation\":\"Damn\",\"messageContextInfo\":{\"messageSecret\":\"gwxkWMD64DB9ZSLPE2jVx+FcmTybIt3UZ1+i5P1f0us=\"}},\"messageTimestamp\":1764386976,\"messageSecret\":\"gwxkWMD64DB9ZSLPE2jVx+FcmTybIt3UZ1+i5P1f0us=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ0aIe5XKiWr78XpTcNEmx4q6VI=\"},\"isMentionedInStatus\":false},\"msgOrderID\":263},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC03C7B7654314EA8A13717775FE863F\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA\\u0026oe=6951CC8A\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"image/jpeg\",\"fileSHA256\":\"KCs9mHPtHFNmGboYO1x7ssh4gOSh04Tj/FWqNakAY/Q=\",\"fileLength\":275020,\"height\":1200,\"width\":1600,\"mediaKey\":\"q0jMaReeHXeTCXP0FVuatqf3RL6ASHrULL3gT8Gp6sw=\",\"fileEncSHA256\":\"Qb3fJVDaFONKZrsojhp2lt2AhSWUJysZ2R3TJQ0cfMk=\",\"directPath\":\"/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA\\u0026oe=6951CC8A\\u0026_nc_sid=5e03e0\\u0026_nc_hot=1764386966\",\"mediaKeyTimestamp\":1764386784,\"contextInfo\":{\"pairedMediaType\":0},\"scansSidecar\":\"j+vqsVU1FZoMd+ip6fQBODnV5CEJ4hm6UKydid2VkoUJMJwpFN+UmA==\",\"scanLengths\":[19899,76408,64922,113791],\"midQualityFileSHA256\":\"Jxz0M1TrpfinEQI5aBMlfu6v14q7Z42G78Nmx8B7y3E=\"},\"messageContextInfo\":{\"messageSecret\":\"d4LOTzbdi+wSDVxp1re6YXCDeXcU6L/YrzY1Vt2XKMY=\"}},\"messageTimestamp\":1764386966,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/IMG-20251129-WA0002.jpg\"},\"messageSecret\":\"d4LOTzbdi+wSDVxp1re6YXCDeXcU6L/YrzY1Vt2XKMY=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ22lGn2yxzftqzUrVgWfA6JKr8=\"},\"isMentionedInStatus\":false},\"msgOrderID\":262},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC78370479853ACC0C3617F0B0530C0B\"},\"message\":{\"conversation\":\"We still doing some checkin\",\"messageContextInfo\":{\"messageSecret\":\"RRM8Y5WhWx+H9sVt3WyrztvmODb0U/z5eQaRtr/iUQc=\"}},\"messageTimestamp\":1764386954,\"messageSecret\":\"RRM8Y5WhWx+H9sVt3WyrztvmODb0U/z5eQaRtr/iUQc=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ2Ezq3Iqr87Kd5NU7Pt38YaTRk=\"},\"isMentionedInStatus\":false},\"msgOrderID\":261},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC145BDE6DEA40040779738C4A9B1550\"},\"message\":{\"imageMessage\":{\"URL\":\"https://mmg.whatsapp.net/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA\\u0026oe=6951CC8A\\u0026_nc_sid=5e03e0\\u0026mms3=true\",\"mimetype\":\"image/jpeg\",\"fileSHA256\":\"KCs9mHPtHFNmGboYO1x7ssh4gOSh04Tj/FWqNakAY/Q=\",\"fileLength\":275020,\"height\":1200,\"width\":1600,\"mediaKey\":\"q0jMaReeHXeTCXP0FVuatqf3RL6ASHrULL3gT8Gp6sw=\",\"fileEncSHA256\":\"Qb3fJVDaFONKZrsojhp2lt2AhSWUJysZ2R3TJQ0cfMk=\",\"directPath\":\"/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4\\u0026oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA\\u0026oe=6951CC8A\\u0026_nc_sid=5e03e0\",\"mediaKeyTimestamp\":1764386784,\"contextInfo\":{\"pairedMediaType\":0},\"scansSidecar\":\"j+vqsVU1FZoMd+ip6fQBODnV5CEJ4hm6UKydid2VkoUJMJwpFN+UmA==\",\"scanLengths\":[19899,76408,64922,113791],\"midQualityFileSHA256\":\"Jxz0M1TrpfinEQI5aBMlfu6v14q7Z42G78Nmx8B7y3E=\"},\"messageContextInfo\":{\"messageSecret\":\"fanA3+cZhaiMCm8vzQQuf/iKbcNXuIYsZ5Menq5nc/s=\"}},\"messageTimestamp\":1764386786,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Images/IMG-20251129-WA0002.jpg\"},\"messageSecret\":\"fanA3+cZhaiMCm8vzQQuf/iKbcNXuIYsZ5Menq5nc/s=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ2uO1OlVg1EO3AIcyzbUsuGsZs=\"},\"isMentionedInStatus\":false},\"msgOrderID\":260},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC23D7C384500539A8476F2035702523\"},\"message\":{\"conversation\":\"Still too early\",\"messageContextInfo\":{\"messageSecret\":\"qI8J3CbKvq6FqgzsE7Kk0G35VY+a/LRPesa5w2C+zdg=\"}},\"messageTimestamp\":1764386777,\"messageSecret\":\"qI8J3CbKvq6FqgzsE7Kk0G35VY+a/LRPesa5w2C+zdg=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ0hyn7seaMcYkzCdRqNaGSej5c=\"},\"isMentionedInStatus\":false},\"msgOrderID\":259},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":true,\"ID\":\"A5D253F7D16A4901E8725139A76E8E69\"},\"message\":{\"conversation\":\"Sup\",\"messageContextInfo\":{\"messageSecret\":\"fjTg8JdyOyNl4VSAge+uOCEsi1qIuYk7gDH3N1jYdC8=\"}},\"messageTimestamp\":1764386765,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764386765,\"readTimestamp\":1764386765,\"playedTimestamp\":0}],\"messageSecret\":\"fjTg8JdyOyNl4VSAge+uOCEsi1qIuYk7gDH3N1jYdC8=\",\"originalSelfAuthorUserJIDString\":\"5511991367947@s.whatsapp.net\",\"isMentionedInStatus\":false},\"msgOrderID\":258},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC667AA125ECB095801CD00DEE15661F\"},\"message\":{\"conversation\":\"Hello\",\"messageContextInfo\":{\"messageSecret\":\"gZoZ4r9sfk3EDLOJkg9Pw39lSUD9FEOl9wWKLDIwDI8=\"}},\"messageTimestamp\":1764386747,\"messageSecret\":\"gZoZ4r9sfk3EDLOJkg9Pw39lSUD9FEOl9wWKLDIwDI8=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ09UW0yNASS3b2CEz5YZJzsUMg=\"},\"isMentionedInStatus\":false},\"msgOrderID\":257},{\"message\":{\"key\":{\"remoteJID\":\"5527997552218@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"AC5DAFF0B0652C49192C4B4E5675DE3D\"},\"message\":{\"conversation\":\"Still there?\",\"messageContextInfo\":{\"messageSecret\":\"/KVdWnJtVqgr13m2P7zdyXTbkFZhTBVXzQUFB5O56Sw=\"}},\"messageTimestamp\":1764386642,\"messageSecret\":\"/KVdWnJtVqgr13m2P7zdyXTbkFZhTBVXzQUFB5O56Sw=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ3c6B2W+jte7H1HtZz2LXjbpfg=\"},\"isMentionedInStatus\":false},\"msgOrderID\":256}],\"unreadCount\":0,\"readOnly\":false,\"ephemeralExpiration\":0,\"ephemeralSettingTimestamp\":0,\"conversationTimestamp\":1764783131,\"notSpam\":true,\"archived\":false,\"disappearingMode\":{\"initiator\":0},\"unreadMentionCount\":0,\"markedAsUnread\":false,\"tcToken\":\"BAEafFWUPrHnfeQ=\",\"tcTokenTimestamp\":1764375586,\"contactPrimaryIdentityKey\":\"oSFpIbazPJDA/fIKIhk/E4DUrtJlRR44BFRlpF4gmAg=\",\"tcTokenSenderTimestamp\":1763941079,\"pnJID\":\"5527997552218@s.whatsapp.net\",\"shareOwnPn\":true,\"lidOriginType\":\"general\",\"commentsCount\":1000000,\"locked\":false,\"accountLid\":\"22999684120770@lid\"},{\"ID\":\"120363425473922359@g.us\",\"messages\":[{\"message\":{\"key\":{\"remoteJID\":\"120363425473922359@g.us\",\"fromMe\":false,\"ID\":\"AC15A4F9778B7A53B5354066A81BBDAA\"},\"message\":{\"conversation\":\"Ir worked\",\"messageContextInfo\":{\"messageSecret\":\"XOVXeJ77UuuDdT12HqSw1s0DeebdM7wJNjZ5oF7n3ag=\"}},\"messageTimestamp\":1764100127,\"participant\":\"22999684120770@lid\",\"messageSecret\":\"XOVXeJ77UuuDdT12HqSw1s0DeebdM7wJNjZ5oF7n3ag=\",\"reportingTokenInfo\":{\"reportingTag\":\"AQ1zxr4NhkErCD30HwytT3KxkUs=\"},\"isMentionedInStatus\":false},\"msgOrderID\":208}],\"unreadCount\":0,\"readOnly\":false,\"ephemeralExpiration\":0,\"ephemeralSettingTimestamp\":0,\"conversationTimestamp\":1764100127,\"name\":\"Test Group 20251125194829\",\"pHash\":\"1:QKBiClPt\",\"notSpam\":true,\"archived\":false,\"disappearingMode\":{\"initiator\":0},\"unreadMentionCount\":0,\"markedAsUnread\":false,\"suspended\":false,\"isDefaultSubgroup\":false,\"commentsCount\":1000000,\"locked\":false},{\"ID\":\"120363424646712058@g.us\",\"messages\":[{\"message\":{\"key\":{\"remoteJID\":\"120363424646712058@g.us\",\"fromMe\":true,\"ID\":\"1755391159\"},\"messageTimestamp\":1764100077,\"status\":1,\"participant\":\"137637125972097@lid\",\"messageStubType\":20,\"messageStubParameters\":[\"Test Group 20251125194756\"],\"isMentionedInStatus\":false},\"msgOrderID\":202}],\"unreadCount\":0,\"readOnly\":false,\"ephemeralExpiration\":0,\"ephemeralSettingTimestamp\":0,\"conversationTimestamp\":1764100077,\"name\":\"Test Group 20251125194756\",\"pHash\":\"1:QKBiClPt\",\"notSpam\":true,\"archived\":false,\"disappearingMode\":{\"initiator\":0},\"unreadMentionCount\":0,\"markedAsUnread\":false,\"suspended\":false,\"isDefaultSubgroup\":false,\"commentsCount\":1000000,\"locked\":false},{\"ID\":\"120363405064312814@g.us\",\"messages\":[{\"message\":{\"key\":{\"remoteJID\":\"120363405064312814@g.us\",\"fromMe\":true,\"ID\":\"A58812B4A8A4674530979F5CDE70C044\"},\"message\":{\"conversation\":\"Eee\",\"messageContextInfo\":{\"messageSecret\":\"+tSArYDjZlKBFt30Bz8kDaFFACdssij6ki2gJUo/8vE=\"}},\"messageTimestamp\":1764099835,\"status\":4,\"userReceipt\":[{\"userJID\":\"5527997552218@s.whatsapp.net\",\"receiptTimestamp\":1764099836,\"readTimestamp\":1764099845,\"playedTimestamp\":0}],\"messageSecret\":\"+tSArYDjZlKBFt30Bz8kDaFFACdssij6ki2gJUo/8vE=\",\"originalSelfAuthorUserJIDString\":\"137637125972097@lid\",\"isMentionedInStatus\":false},\"msgOrderID\":200}],\"unreadCount\":0,\"readOnly\":false,\"ephemeralExpiration\":0,\"ephemeralSettingTimestamp\":0,\"conversationTimestamp\":1764099835,\"name\":\"Test group\",\"pHash\":\"1:QKBiClPt\",\"notSpam\":true,\"archived\":false,\"disappearingMode\":{\"initiator\":0},\"unreadMentionCount\":0,\"markedAsUnread\":false,\"suspended\":false,\"isDefaultSubgroup\":false,\"commentsCount\":1000000,\"locked\":false},{\"ID\":\"0@s.whatsapp.net\",\"messages\":[{\"message\":{\"key\":{\"remoteJID\":\"0@s.whatsapp.net\",\"fromMe\":false,\"ID\":\"785376054348615-1\"},\"message\":{\"videoMessage\":{\"mimetype\":\"video/mp4\",\"fileSHA256\":\"hqSDs8DFzeM0UERgbtkT/PPTciYEnjoeMGD0Bp0mh4g=\",\"fileLength\":6564967,\"seconds\":6,\"mediaKey\":\"AzcrSIG5IOaekXD5ry6PG4pZPcwwUxgwpHcRkyfx3Gw=\",\"caption\":\"*Conheça o WhatsApp Business* 🤩\\n\\nParabéns por melhorar ainda mais sua empresa! Agora, você pode acessar nossas ferramentas poderosas, como os catálogos, o Meta Verified e as mensagens automáticas, que ajudam você a:\\n\\n👋 Alcançar mais clientes\\n\\n🏃 Responder mais rápido\\n\\n📈 Aumentar as vendas\\n\\nQuando o assunto é crescimento, o WhatsApp é muito mais negócio. Acesse a aba Ferramentas para saber mais e começar.\",\"height\":2314,\"width\":2196,\"fileEncSHA256\":\"zsOPXJwY0lBct0BZGMlGxfUWFn+c2kpM+4U4oArBFsQ=\",\"contextInfo\":{\"pairedMediaType\":0},\"staticURL\":\"https://static.whatsapp.net/downloadable?category=PSA\\u0026id=427974683292983656\\u0026num=2d5071a0-b969-4811-b597-38abba45a0f9\\u0026_nc_cat=1\"},\"messageContextInfo\":{\"messageSecret\":\"rLRWaGyAYQ+gmqa4EovxlI7rIMri/t7hdDK1rHkQaPE=\"}},\"messageTimestamp\":1763940876,\"mediaData\":{\"localPath\":\"Media/WhatsApp Business Video/Private/VID-20251123-WA0000.mp4\"},\"messageSecret\":\"rLRWaGyAYQ+gmqa4EovxlI7rIMri/t7hdDK1rHkQaPE=\",\"isMentionedInStatus\":false},\"msgOrderID\":187}],\"unreadCount\":0,\"readOnly\":false,\"ephemeralExpiration\":0,\"ephemeralSettingTimestamp\":0,\"conversationTimestamp\":1763940876,\"name\":\"WhatsApp Business\",\"notSpam\":false,\"archived\":false,\"disappearingMode\":{\"initiator\":0},\"unreadMentionCount\":0,\"markedAsUnread\":false,\"commentsCount\":1000000,\"locked\":false}],\"globalSettings\":{},\"threadIDUserSecret\":\"6yujC1k7ewR+asFoOMnpBjIB3HHsufW/NxsXQ2K3tdM=\",\"threadDsTimeframeOffset\":64941,\"phoneNumberToLidMappings\":[{\"pnJID\":\"5527997552218@s.whatsapp.net\",\"lidJID\":\"22999684120770@lid\"}],\"companionMetaNonce\":\"CP9tm3s/BA4uOxZUQSadrJTcEfdfSj4o\"}},\"type\":\"HistorySync\"}",
-  "userID": "eeb9c96d4ac15602fda4db3b759d12c0"
+  "userID": "eeb9c96d4ac15602fda4db3b759d12c0",
+  "event": {
+    "Data": {
+      "syncType": 0,
+      "conversations": [
+        {
+          "ID": "5527997552218@s.whatsapp.net",
+          "messages": [
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC4603406D8034DD78C9DE9EA842D997"
+                },
+                "message": {
+                  "conversation": "Blz?",
+                  "messageContextInfo": {
+                    "messageSecret": "NzydKWcXsGo29KadFHFwMprAub6u4MF8s6eYsLVmjyM="
+                  }
+                },
+                "messageTimestamp": 1764783131,
+                "messageSecret": "NzydKWcXsGo29KadFHFwMprAub6u4MF8s6eYsLVmjyM=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ1fRhLHNH6v9GWwoYmmCO85D9U="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 286
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A50708458A30606D30B38C35D5B1D120"
+                },
+                "message": {
+                  "conversation": "Message",
+                  "messageContextInfo": {
+                    "messageSecret": "/z7QEo3eIEALuyYnXk/6E8FeDWoLNmImjwvueK6/0xg="
+                  }
+                },
+                "messageTimestamp": 1764783112,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764783113,
+                    "readTimestamp": 1764783122,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "reactions": [
+                  {
+                    "key": {
+                      "remoteJID": "22999684120770@lid",
+                      "fromMe": false,
+                      "ID": "AC5F2555FAF0D7F3C9C854E7B5D80D02"
+                    },
+                    "text": "\ud83d\udc4d",
+                    "senderTimestampMS": 1764783124718
+                  }
+                ],
+                "messageSecret": "/z7QEo3eIEALuyYnXk/6E8FeDWoLNmImjwvueK6/0xg=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 285
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A54B5E83E74F2A5CDF59A2275B95E03E"
+                },
+                "message": {
+                  "conversation": "Hi",
+                  "messageContextInfo": {
+                    "messageSecret": "sooXdb9+FEJrHr/mrdeN8cXwhEtR2KZeDZYCf/9e9UQ="
+                  }
+                },
+                "messageTimestamp": 1764779000,
+                "status": 4,
+                "messageC2STimestamp": 1764779001,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764779001,
+                    "readTimestamp": 1764783122,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "sooXdb9+FEJrHr/mrdeN8cXwhEtR2KZeDZYCf/9e9UQ=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 284
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB0BB2F361213D18ACE04"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/o1/v/t24/f2/m234/AQP4crPWZDGZxdSx282y5eEXaz5Jn_2alE2NoaqDDbGpB5_rDS1bor7RYWIlVIHxqoQCDh2OiBUlQbj2V4r6U1t6gWYt4T8R89_UA1YoOA?ccb=9-4&oh=01_Q5Aa3AGbZjclxwLdLiObP6aj3gqx_dLnD0fNiABxovPDPo5dAA&oe=6952F8CC&_nc_sid=e6ed6c&mms3=true",
+                    "mimetype": "image/png",
+                    "caption": "Integration test image from file",
+                    "fileSHA256": "a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=",
+                    "fileLength": 70,
+                    "height": 1,
+                    "width": 1,
+                    "mediaKey": "kz6oC86ZJX1Z0vPoCJWflWieiAmQ0bO+H7nu+I9PpYQ=",
+                    "fileEncSHA256": "ZF+zSdZg791FUW5uS7iqLkEf6vMGjNwAKN7nQ0dZp1M=",
+                    "directPath": "/o1/v/t24/f2/m234/AQP4crPWZDGZxdSx282y5eEXaz5Jn_2alE2NoaqDDbGpB5_rDS1bor7RYWIlVIHxqoQCDh2OiBUlQbj2V4r6U1t6gWYt4T8R89_UA1YoOA?ccb=9-4&oh=01_Q5Aa3AGbZjclxwLdLiObP6aj3gqx_dLnD0fNiABxovPDPo5dAA&oe=6952F8CC&_nc_sid=e6ed6c",
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    }
+                  }
+                },
+                "messageTimestamp": 1764465888,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764465890,
+                    "readTimestamp": 1764465899,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 283
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB034AF73FE2950F7C3CD"
+                },
+                "message": {
+                  "documentMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7119-24/592894951_714934218332774_1934844645124816324_n.enc?ccb=11-4&oh=01_Q5Aa3AHyyz9BUgtDRs07cIQYyabzNpdwnWYnxRf6_LoX9e9Jmg&oe=6952E230&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "application/pdf",
+                    "fileSHA256": "RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=",
+                    "fileLength": 139,
+                    "pageCount": 0,
+                    "mediaKey": "5QutlQIj8jnKPEAzjnzZsBqt78NblFDBSzzYee+STFo=",
+                    "fileName": "test-document.pdf",
+                    "fileEncSHA256": "U2L2YmIe08xUGNr1Zb+uebYQhWlfFc1uoVKracP0VK0=",
+                    "directPath": "/v/t62.7119-24/592894951_714934218332774_1934844645124816324_n.enc?ccb=11-4&oh=01_Q5Aa3AHyyz9BUgtDRs07cIQYyabzNpdwnWYnxRf6_LoX9e9Jmg&oe=6952E230&_nc_sid=5e03e0",
+                    "caption": "Integration test PDF document"
+                  }
+                },
+                "messageTimestamp": 1764457453,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Documents/Sent/test-document.pdf"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 0,
+                    "readTimestamp": 1764457453,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 282
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC5382F8F95920CC22A5BF83201713D9"
+                },
+                "message": {
+                  "conversation": "Pretty",
+                  "messageContextInfo": {
+                    "messageSecret": "9HUlFdcvRiubXvHkXXV86IyeyTy3ZHyiO/1zolACqEw="
+                  }
+                },
+                "messageTimestamp": 1764457434,
+                "messageSecret": "9HUlFdcvRiubXvHkXXV86IyeyTy3ZHyiO/1zolACqEw=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ1Xqpk6MD1eFZeYHC8iXErCx/A="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 281
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB0E708BE070F52B2987F"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/o1/v/t24/f2/m231/AQOzk2uGXnebGve4LITkd1hgXxYdf0bakVlTBN6uA4iBRin1VCAUJX8BW7QSDI4PWbrH-rOPus6W_Yjm7_HRexeUycRTnUvcl2e5qDk1Vw?ccb=9-4&oh=01_Q5Aa3AH95k5R3XOIZDO9iXQ5-tQgUZ5mFMkHa6aKtB6-6HGx7w&oe=6952D4A1&_nc_sid=e6ed6c&mms3=true",
+                    "mimetype": "image/png",
+                    "caption": "Integration test image from file",
+                    "fileSHA256": "a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=",
+                    "fileLength": 70,
+                    "mediaKey": "mhF4nzSBd7tQvBlIPympFlGXyucTTigure8C9BEMJYY=",
+                    "fileEncSHA256": "s6Ta3306Shv5swSmSFR5nhGS51Sqou5qvu48zozJSB0=",
+                    "directPath": "/o1/v/t24/f2/m231/AQOzk2uGXnebGve4LITkd1hgXxYdf0bakVlTBN6uA4iBRin1VCAUJX8BW7QSDI4PWbrH-rOPus6W_Yjm7_HRexeUycRTnUvcl2e5qDk1Vw?ccb=9-4&oh=01_Q5Aa3AH95k5R3XOIZDO9iXQ5-tQgUZ5mFMkHa6aKtB6-6HGx7w&oe=6952D4A1&_nc_sid=e6ed6c",
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    }
+                  }
+                },
+                "messageTimestamp": 1764457422,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 0,
+                    "readTimestamp": 1764457424,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 280
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB0E9E549587AEEB7680E"
+                },
+                "message": {
+                  "documentMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7119-24/593297062_2703940093290045_2613172873464004409_n.enc?ccb=11-4&oh=01_Q5Aa3AHabqvFwBIR-5GqGvCeUW69mkk2op3YMyXVd_8eaVeicQ&oe=6952FFFF&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "application/pdf",
+                    "fileSHA256": "RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=",
+                    "fileLength": 139,
+                    "pageCount": 0,
+                    "mediaKey": "liHGygsj6lHRrya7O/5NvLXXBJglCjlUeuab9CyImX0=",
+                    "fileName": "wuzapi-test-c8bfb7b2-7eb8-42c1-bece-17f50c532aa0.pdf",
+                    "fileEncSHA256": "MnIyT3XIlULqf+DKLUDI1E3qo376BadINHz5OmbMkkg=",
+                    "directPath": "/v/t62.7119-24/593297062_2703940093290045_2613172873464004409_n.enc?ccb=11-4&oh=01_Q5Aa3AHabqvFwBIR-5GqGvCeUW69mkk2op3YMyXVd_8eaVeicQ&oe=6952FFFF&_nc_sid=5e03e0",
+                    "caption": "Integration test document from file"
+                  }
+                },
+                "messageTimestamp": 1764457405,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Documents/Sent/test-document.pdf"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764457407,
+                    "readTimestamp": 1764457411,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "reactions": [
+                  {
+                    "key": {
+                      "remoteJID": "22999684120770@lid",
+                      "fromMe": false,
+                      "ID": "AC83BD74778C04D64A3E87B740F7FD42"
+                    },
+                    "text": "\ud83d\udc4d",
+                    "senderTimestampMS": 1764457415580
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 279
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB0520F8EBF578291DB28"
+                },
+                "message": {
+                  "documentMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7119-24/590954199_1162424656085048_4554515106583606293_n.enc?ccb=11-4&oh=01_Q5Aa3AHS-lqPWkDxfBiSktm18ovAQ6PA_GzQFnDTuZh2PMezAw&oe=6952F038&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "application/pdf",
+                    "fileSHA256": "RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=",
+                    "fileLength": 139,
+                    "pageCount": 0,
+                    "mediaKey": "3bsAR+aLC993eOU5USxcRyAx2aCNYFagpNYY6bumARo=",
+                    "fileName": "test.pdf",
+                    "fileEncSHA256": "ZDAVvmv00fO/njsrHjS8OA4NEjosxDSYm3dkmoDd7Q4=",
+                    "directPath": "/v/t62.7119-24/590954199_1162424656085048_4554515106583606293_n.enc?ccb=11-4&oh=01_Q5Aa3AHS-lqPWkDxfBiSktm18ovAQ6PA_GzQFnDTuZh2PMezAw&oe=6952F038&_nc_sid=5e03e0",
+                    "caption": "Integration test document from stream"
+                  }
+                },
+                "messageTimestamp": 1764457360,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Documents/Sent/test-document.pdf"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764457361,
+                    "readTimestamp": 1764457411,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 278
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "ACACE56028DB571507522B5ECE57890A"
+                },
+                "message": {
+                  "conversation": "Received"
+                },
+                "messageTimestamp": 1764457352,
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ0bRaPv9D+KEz2RPPM8kb70agI="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 277
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB060E293A49567AB94FB"
+                },
+                "message": {
+                  "documentMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7119-24/593290501_1403064667895930_8195264893397784257_n.enc?ccb=11-4&oh=01_Q5Aa3AEAidnrzhsp8ttfby84b-cRvWFZk7MzI7gZdkLYmhBuhQ&oe=6952F570&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "application/pdf",
+                    "fileSHA256": "RKABB0Kih6CptOpBiZ/dYedM7+n/2XdjsHMcl2BL3EU=",
+                    "fileLength": 139,
+                    "pageCount": 0,
+                    "mediaKey": "3mDKmbk4g5X2x7hCMRuCshnLtl8ZKKW8/i0ZE7zBaUM=",
+                    "fileName": "wuzapi-test-7d9c5623-90b8-445d-91d3-5a8bc0503185.pdf",
+                    "fileEncSHA256": "WXd9NETFJZ/SKdz2LezUdwofgrYt4ldZQoiAUEofPw0=",
+                    "directPath": "/v/t62.7119-24/593290501_1403064667895930_8195264893397784257_n.enc?ccb=11-4&oh=01_Q5Aa3AEAidnrzhsp8ttfby84b-cRvWFZk7MzI7gZdkLYmhBuhQ&oe=6952F570&_nc_sid=5e03e0",
+                    "caption": "Integration test document from file"
+                  }
+                },
+                "messageTimestamp": 1764457100,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Documents/Sent/test-document.pdf"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764457103,
+                    "readTimestamp": 1764457347,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 276
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB0C29A536B36D9858F43"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/o1/v/t24/f2/m231/AQMiSKaAR2HpXVCIVDqcmUVClqLqT93O7CILORUWie3VicxWxuFi1ZXYKnAMt5HkxgTF33UlydfKJrvqUZ13JbcDCqF_s4D-YyPKDxxi8Q?ccb=9-4&oh=01_Q5Aa3AGCDFRpU3WgoKn7crZOiq-HtkgBBi4kFFn1VnFWr12gDQ&oe=6952F178&_nc_sid=e6ed6c&mms3=true",
+                    "mimetype": "image/jpeg",
+                    "caption": "Integration test image from stream",
+                    "fileSHA256": "a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=",
+                    "fileLength": 70,
+                    "mediaKey": "KiGOtbgTNGaSYWkEKK5y2FVIW1SqYTAz//WBwN1M2d4=",
+                    "fileEncSHA256": "EsFcH2KpzmsEetN23esGrJPBWJI9odldS7NTBCFSTug=",
+                    "directPath": "/o1/v/t24/f2/m231/AQMiSKaAR2HpXVCIVDqcmUVClqLqT93O7CILORUWie3VicxWxuFi1ZXYKnAMt5HkxgTF33UlydfKJrvqUZ13JbcDCqF_s4D-YyPKDxxi8Q?ccb=9-4&oh=01_Q5Aa3AGCDFRpU3WgoKn7crZOiq-HtkgBBi4kFFn1VnFWr12gDQ&oe=6952F178&_nc_sid=e6ed6c",
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    }
+                  }
+                },
+                "messageTimestamp": 1764456985,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 0,
+                    "readTimestamp": 1764456985,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "reactions": [
+                  {
+                    "key": {
+                      "remoteJID": "22999684120770@lid",
+                      "fromMe": false,
+                      "ID": "AC529512E9E3B4AA13CC5E6161D30F23"
+                    },
+                    "text": "\ud83d\udc4d",
+                    "senderTimestampMS": 1764457013387,
+                    "unread": true
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 275
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "3EB03C3954E7B483F747F3"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/o1/v/t24/f2/m237/AQPXqehLuJwVk8Gh0bfe7_pjpwTCgpgCop_DAyyahqehkmC1lz9NrStz-sNz20FTo2RH9Omv7Ca_2j1ucInMGfZCS5SJMh1qElGMcBirlA?ccb=9-4&oh=01_Q5Aa3AF49gbvyNcEvc3WUNGXX0e8Psk2yIlEVX9YOqvPzYyuKQ&oe=6952E03B&_nc_sid=e6ed6c&mms3=true",
+                    "mimetype": "image/png",
+                    "caption": "Integration test image from file",
+                    "fileSHA256": "a3+kNPkqi4CqsC2b8aEuSf/K5CTkATocT2i2fj0rvNA=",
+                    "fileLength": 70,
+                    "mediaKey": "F586GpyOi551cBs2lsnCnxZYPnR/ZY+J4oezNQ0Cnfc=",
+                    "fileEncSHA256": "1ikcHjvz7z2oteR8WKG1UHOHstDXM2iT3Efhr69aIj4=",
+                    "directPath": "/o1/v/t24/f2/m237/AQPXqehLuJwVk8Gh0bfe7_pjpwTCgpgCop_DAyyahqehkmC1lz9NrStz-sNz20FTo2RH9Omv7Ca_2j1ucInMGfZCS5SJMh1qElGMcBirlA?ccb=9-4&oh=01_Q5Aa3AF49gbvyNcEvc3WUNGXX0e8Psk2yIlEVX9YOqvPzYyuKQ&oe=6952E03B&_nc_sid=e6ed6c",
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    }
+                  }
+                },
+                "messageTimestamp": 1764456932,
+                "status": 4,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/Sent/IMG-20251128-WA0000.jpg"
+                },
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764456935,
+                    "readTimestamp": 1764456958,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 274
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A56F172661478F7AE1509FF2204378DE"
+                },
+                "message": {
+                  "conversation": "Kekeke",
+                  "messageContextInfo": {
+                    "messageSecret": "EmDqGEq44FTmhSoKHPM3HSnhnt92Rq9EkgdWLzkBCoE="
+                  }
+                },
+                "messageTimestamp": 1764388556,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764388556,
+                    "readTimestamp": 1764388586,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "EmDqGEq44FTmhSoKHPM3HSnhnt92Rq9EkgdWLzkBCoE=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 273
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A530B818284EA038AE8B453B304AFB4B"
+                },
+                "message": {
+                  "conversation": "T\u00e1 louco",
+                  "messageContextInfo": {
+                    "messageSecret": "FL7j4Mbb3mAjVOMkds9bHNYLJbau1cEljZLZiIEE5jI="
+                  }
+                },
+                "messageTimestamp": 1764388084,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764388085,
+                    "readTimestamp": 1764388100,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "FL7j4Mbb3mAjVOMkds9bHNYLJbau1cEljZLZiIEE5jI=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 272
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A56586B5FC85B73F9ABFD7ED7D9DA3FF"
+                },
+                "message": {
+                  "conversation": "Qse 1 da manh\u00e3",
+                  "messageContextInfo": {
+                    "messageSecret": "rjpAYBNGUl176rnRhNPE0dAxKlTGyTuhaz3aQFssc3s="
+                  }
+                },
+                "messageTimestamp": 1764388076,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764388076,
+                    "readTimestamp": 1764388100,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "rjpAYBNGUl176rnRhNPE0dAxKlTGyTuhaz3aQFssc3s=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 271
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A5850F33EE90DB56F8968F883111B618"
+                },
+                "message": {
+                  "conversation": "Vai dormir mano",
+                  "messageContextInfo": {
+                    "messageSecret": "PF2asEJ67o3DzbLy6uzvbD7tfcHtKUs+LbhA4aIbO58="
+                  }
+                },
+                "messageTimestamp": 1764388032,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764388032,
+                    "readTimestamp": 1764388040,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "PF2asEJ67o3DzbLy6uzvbD7tfcHtKUs+LbhA4aIbO58=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 270
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC7CF2ABC64971B73125003C6E8692C1"
+                },
+                "message": {
+                  "extendedTextMessage": {
+                    "text": "Source: TudoCelular.com\n https://search.app/ahbJ3",
+                    "matchedText": "https://search.app/ahbJ3",
+                    "description": "Microsoft quer resolver problema do Teams adicionando mais uma coisa para o Teams carregar.",
+                    "title": "Microsoft quer corrigir um dos maiores problemas do Teams no Windows em breve",
+                    "previewType": 0,
+                    "JPEGThumbnail": "/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACHAIcDASIAAhEBAxEB/8QAHAABAAMBAQEBAQAAAAAAAAAAAAUGBwQDAgEI/8QAQBAAAQMDAQMHCQUGBwAAAAAAAQACAwQFEQYSITEHE1FhcYGRFSIzQVRysbLRFjI1UqEUQnOTo8EjY3SCkuHw/8QAGgEBAAMBAQEAAAAAAAAAAAAAAAECAwQFBv/EACgRAAICAgECBQQDAAAAAAAAAAABAhEDBBIhMTIzQVFxExQVkUJSsf/aAAwDAQACEQMRAD8AxtERe0cAREQBERAEREBGSt2JHN6Cvle9YMTZ6QvBZssEREAREQBERAEREBKoiLQqEREAREQBEX60FxAaCSdwA9aA464ecw9q5VoFFyb3i5QxyzOhomEZDZiS/wAAN3eua9cmt7t0Dpqfma6NoyWwk7Y/2kb+7Ks8OTvRZFIRCCCQRgj1IsQEREARfrWlxw0Ele7KVx++Q1KsHOi7200Y4gntKKeLFnsiIrlQiLut9prrhG59JTukY04LsgDPeVKi5OkgcKKY+zN39k/qM+qfZq7eyH+Yz6q/0cn9X+gQ6v8AyTWeKqrai41DQ4U2GxA8Ns8T3D4qr/Zu7eyf1GfVX3k4fNZaGsp7jCYtuQSMO0Dndg8M9A8Vtgwy5rlF/oWaGijYrxTSytja7zzwG8Z8QpEHIBHAr0QYxyyWOKhulPcqZgYys2hK0Ddzgxv7wf0Ko9qtlTdKnmaRm04DLnHc1o6SVpXLhXRltsoGkGUF0zh0DgPHf4Lh5PYo2WN0jQNt8p2j2YwP/dK4I68c2y4ehLdIhZdDVbYdqOqhfJj7pBA8VXn26WnnfFVtMcjDgsPFbGqbruNjamkkGOcc1wd2AjHxK329LHjhzh6FVJlUY1rBhoAC+kReYSEREAREQBaTo0409Tdr/mKzZaNpA40/Tdr/AJiu3R8x/BDJzeTgAk9S/Cx/5HeC79OXd1jvdNcWRNmdAXEMJwDlpHHvWu6F1/Nqa9uoJKGOnaIXS7bZC47iBjh1rr2tjLgXKMLil3uiYRUujZiJZJ+R3gvFxwcHcVs+q+UyoseoKy3R22KZsDgA90pBOWg8Mdax27Vpr7nWVrmBjqiZ8xaDnZ2nE4/VX1c2XMuU4cU+q62JxUeiZG3C5U1sdSVFY8siE7QXBpPSfV2Fe935UbXTUuza4pauo2cNLmljAevO/ux3rmqKOmuU1LBWRCWIzNJaSR1ertKssehdNljSbVFkgfvv+qz2Flc2oNCPYwe6XCqu9xlrK2Qy1Ersk/ADoAU7pe6usxdHI0yQSHLgOIPSFrzND6bYcttcQPvv+qi79pKzUvNPgomtDsgt2nH+65sOrljPlGSsN9CvyaotrYtpr5Hu/IGEH9dyp13uMlzrDPINkY2WNH7oV68gWz2Rv/I/VRGprLRU1sdUU0fNPjI4EkEE49faunaxbE4NyapexVNFPREXkFgiIgCIiALQtJHFgp+13zFZ6r/pU4sVP2u+Yru0PMfwQyZLlfeRI51k/wD0j/mas8c9XfkbrqWi1e+WtqYaaL9le3bmeGNzlu7JXdvRb15pexOPxI4eVN2NeXb32fI1VBz1Y+U2qhqtcXWalmjmhe9mzJG4Oa7zG8CNyqjnrbVVYIX7L/Cs/EzqonZuFL/Fb8Vo8Xo2dgWZ212blS/xW/ELTIvRs7As8vjZK7H0oTVHoYPeKm1Cao9DB7xTF4kH2K8obVv4DUdrfmCmVDat/Aajtb8wW+x5UvhlF3M9REXzRoEREAREQBXjTEg8iwgEEtLgereVR16QzzQ55mWSPPHZcRldGtmWGfJqyGrNGc9eTnrOqi7VTctZVTl3Tzh3Lk8o1vtlT/Nd9V3flIL+I4GluevJz1x6Cp/LlDNG+aodVQO84B+SWngfiPBWn7Ju6arx/wCl0w3FOKkojiRVndm60w/zG/ELUovRs7AqfadNGmrI5NmTLSCXSHgri0YAA9W5UlPnJyqiUqP1QeqPRU/vFTipOp7/AG/yqaN9UxslOMODtwyd/Hh0KcclGSbdEPseKgdZztjszoyfOle1oHYc/wBl0VeoLdTsJE4ld6mx789/BUm8XOW51XOy+axu5jBwaPqo29mEYOMXbZVI4ERF4ZcIiIAi5nVbR91pPbuXi+okd69kdSjkiaOySVkf3jv6FxzVDn7h5rV4oqt2TQREUAk9N3qpsF2irqM5c3c9hO6Rp4tK/oDTWo7fqGjE1DKOcA/xIXHD4z1jo6+C/mxelNUTUszZqaWSGVu9r43Frh2ELfDsPF09BR/VCLB7Tr7UMUbmPrRMG4xzsbSfHGT3pcdX3yvYWTV8jIzxbEBH+o3rt+7hV0VNJ1prGms0ElNRPZNcSMADeIut3X1LGZZHyyvklcXyPJc5xOSSeJXyi5MuV5HbAREWQCIiAIiICKREWZYIiIAiIgCIiA6aE+c8dS7FwUZxNjpGF3q8exDCIikgIiIAiIgCIiAikRFmWCIiAIiIAiIgPqN2y9rugqTRFaJDCIisQEREAREQBERAf//Z",
+                    "thumbnailDirectPath": "/v/t62.36144-24/531684243_877568678279914_115710492889183334_n.enc?ccb=11-4&oh=01_Q5Aa3AFQQdCyUmKNckXwuTrTWxX29Aa5Br1RhvlNAVHATnztnQ&oe=6951E212&_nc_sid=5e03e0",
+                    "thumbnailSHA256": "4D/5L4JXxWSob8czxnQ18tumOHIQLDitPtFXFY1lELs=",
+                    "thumbnailEncSHA256": "OTxwCL2S1Tby6oU0oPsSTN5caCl8k5ZQKJXEcKKb+FE=",
+                    "mediaKey": "Ej6n7NLZ6yBEfI7UFgDm0aSfsSXGkYRwY9/Gj1hoUAo=",
+                    "mediaKeyTimestamp": 1764387284,
+                    "thumbnailHeight": 576,
+                    "thumbnailWidth": 1024,
+                    "inviteLinkGroupTypeV2": 0,
+                    "faviconMMSMetadata": {
+                      "thumbnailDirectPath": "/v/t62.36144-24/590928913_1411296147225569_3309378217497514572_n.enc?ccb=11-4&oh=01_Q5Aa3AHsJ8QIJmlfP4ZfqkVvNOqTeSavORme5waPShhtq8KmjQ&oe=6951CAD2&_nc_sid=5e03e0",
+                      "thumbnailSHA256": "nVIoMhhkRUpuPKN2MHv/hbIlC1G1x5KJ3w0JyDesq1o=",
+                      "thumbnailEncSHA256": "u8SN/VZvNXKXhayvKVwRpzxZm7lnGT3GaquWF5l98KI=",
+                      "mediaKey": "CHrIHpkMsSzH8coQ4+qGnlGgXP1jJj0fmac5pOyhDEg=",
+                      "mediaKeyTimestamp": 1764387284,
+                      "thumbnailHeight": 32,
+                      "thumbnailWidth": 32
+                    }
+                  },
+                  "messageContextInfo": {
+                    "messageSecret": "QW7oKhz8nMvMnRJpmHr452T9hlN94AL510b5ti4WRDQ="
+                  }
+                },
+                "messageTimestamp": 1764387285,
+                "messageSecret": "QW7oKhz8nMvMnRJpmHr452T9hlN94AL510b5ti4WRDQ=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ2OidNkB68BBoSE8oD/shYXHkE="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 268
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "ACF6F1751BD4BF5032CB546E445D13CE"
+                },
+                "message": {
+                  "conversation": "Haha",
+                  "messageContextInfo": {
+                    "messageSecret": "NsU5kWCUwVgheC/D2lEqogWQOxbLEnqj4HXL5MH7iRU="
+                  }
+                },
+                "messageTimestamp": 1764387256,
+                "messageSecret": "NsU5kWCUwVgheC/D2lEqogWQOxbLEnqj4HXL5MH7iRU=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ0ClUMY9QqYPZGHvCdRCk8/YHs="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 267
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC8B72DA805EAF76D548FA74F8247347"
+                },
+                "message": {
+                  "conversation": "Nice!",
+                  "messageContextInfo": {
+                    "messageSecret": "qLEQD+ThrF2dZ81ex3xcPy6EAcmOu3z9eZrWlGhC6zM="
+                  }
+                },
+                "messageTimestamp": 1764387126,
+                "messageSecret": "qLEQD+ThrF2dZ81ex3xcPy6EAcmOu3z9eZrWlGhC6zM=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ30HJ8vf+djr7QqAy0SNaMhfPk="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 266
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A5861AC329F8C3C8AFD1F6CCCC7882D1"
+                },
+                "message": {
+                  "conversation": "Cute Kitty",
+                  "messageContextInfo": {
+                    "messageSecret": "vHw3WaorNGIT1qM4ijJNZPZts2A7UgT5ChqsbQgWYzA="
+                  }
+                },
+                "messageTimestamp": 1764387002,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764387003,
+                    "readTimestamp": 1764387003,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "vHw3WaorNGIT1qM4ijJNZPZts2A7UgT5ChqsbQgWYzA=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 265
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC146833D135FB68829AB9853B9C1622"
+                },
+                "message": {
+                  "audioMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7117-24/546094393_25133401729664592_6906901153257287821_n.enc?ccb=11-4&oh=01_Q5Aa3AFZMc8OS5CcTa0PXZ-DKJR2lip7WKG7LHcKc-ueFMAZIg&oe=6951DECA&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "audio/ogg; codecs=opus",
+                    "fileSHA256": "9+QGNRfGx3ED6c6R6wHSxOtEXgAJPljzgf1CMqbm2+k=",
+                    "fileLength": 3538,
+                    "seconds": 2,
+                    "PTT": true,
+                    "mediaKey": "pZA69iDQMwSOrbOZAkrxhwv5oVdHyS/VEBA8KueOXv0=",
+                    "fileEncSHA256": "oYMgFg+tF5xoOxDWenj2ML0CbALh5dK2lJqU2mF2Rl8=",
+                    "directPath": "/v/t62.7117-24/546094393_25133401729664592_6906901153257287821_n.enc?ccb=11-4&oh=01_Q5Aa3AFZMc8OS5CcTa0PXZ-DKJR2lip7WKG7LHcKc-ueFMAZIg&oe=6951DECA&_nc_sid=5e03e0",
+                    "mediaKeyTimestamp": 1764386981,
+                    "waveform": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJCgAAAAAAAA=="
+                  },
+                  "messageContextInfo": {
+                    "messageSecret": "o2S7XXZ2ZM280FkAWfHfJq6faCvoDhSXjRGTbG2I3g0="
+                  }
+                },
+                "messageTimestamp": 1764386981,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Voice Notes/202548/PTT-20251129-WA0003.opus"
+                },
+                "messageSecret": "o2S7XXZ2ZM280FkAWfHfJq6faCvoDhSXjRGTbG2I3g0=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ2Y8b5uFlouGcjT1uaAkrpcvxU="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 264
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "ACA9A7F5DA882B17FEDACA6CA2821C53"
+                },
+                "message": {
+                  "conversation": "Damn",
+                  "messageContextInfo": {
+                    "messageSecret": "gwxkWMD64DB9ZSLPE2jVx+FcmTybIt3UZ1+i5P1f0us="
+                  }
+                },
+                "messageTimestamp": 1764386976,
+                "messageSecret": "gwxkWMD64DB9ZSLPE2jVx+FcmTybIt3UZ1+i5P1f0us=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ0aIe5XKiWr78XpTcNEmx4q6VI="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 263
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC03C7B7654314EA8A13717775FE863F"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4&oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA&oe=6951CC8A&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "image/jpeg",
+                    "fileSHA256": "KCs9mHPtHFNmGboYO1x7ssh4gOSh04Tj/FWqNakAY/Q=",
+                    "fileLength": 275020,
+                    "height": 1200,
+                    "width": 1600,
+                    "mediaKey": "q0jMaReeHXeTCXP0FVuatqf3RL6ASHrULL3gT8Gp6sw=",
+                    "fileEncSHA256": "Qb3fJVDaFONKZrsojhp2lt2AhSWUJysZ2R3TJQ0cfMk=",
+                    "directPath": "/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4&oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA&oe=6951CC8A&_nc_sid=5e03e0&_nc_hot=1764386966",
+                    "mediaKeyTimestamp": 1764386784,
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    },
+                    "scansSidecar": "j+vqsVU1FZoMd+ip6fQBODnV5CEJ4hm6UKydid2VkoUJMJwpFN+UmA==",
+                    "scanLengths": [
+                      19899,
+                      76408,
+                      64922,
+                      113791
+                    ],
+                    "midQualityFileSHA256": "Jxz0M1TrpfinEQI5aBMlfu6v14q7Z42G78Nmx8B7y3E="
+                  },
+                  "messageContextInfo": {
+                    "messageSecret": "d4LOTzbdi+wSDVxp1re6YXCDeXcU6L/YrzY1Vt2XKMY="
+                  }
+                },
+                "messageTimestamp": 1764386966,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/IMG-20251129-WA0002.jpg"
+                },
+                "messageSecret": "d4LOTzbdi+wSDVxp1re6YXCDeXcU6L/YrzY1Vt2XKMY=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ22lGn2yxzftqzUrVgWfA6JKr8="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 262
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC78370479853ACC0C3617F0B0530C0B"
+                },
+                "message": {
+                  "conversation": "We still doing some checkin",
+                  "messageContextInfo": {
+                    "messageSecret": "RRM8Y5WhWx+H9sVt3WyrztvmODb0U/z5eQaRtr/iUQc="
+                  }
+                },
+                "messageTimestamp": 1764386954,
+                "messageSecret": "RRM8Y5WhWx+H9sVt3WyrztvmODb0U/z5eQaRtr/iUQc=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ2Ezq3Iqr87Kd5NU7Pt38YaTRk="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 261
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC145BDE6DEA40040779738C4A9B1550"
+                },
+                "message": {
+                  "imageMessage": {
+                    "URL": "https://mmg.whatsapp.net/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4&oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA&oe=6951CC8A&_nc_sid=5e03e0&mms3=true",
+                    "mimetype": "image/jpeg",
+                    "fileSHA256": "KCs9mHPtHFNmGboYO1x7ssh4gOSh04Tj/FWqNakAY/Q=",
+                    "fileLength": 275020,
+                    "height": 1200,
+                    "width": 1600,
+                    "mediaKey": "q0jMaReeHXeTCXP0FVuatqf3RL6ASHrULL3gT8Gp6sw=",
+                    "fileEncSHA256": "Qb3fJVDaFONKZrsojhp2lt2AhSWUJysZ2R3TJQ0cfMk=",
+                    "directPath": "/v/t62.7118-24/592707373_1995703167948962_7696478416674155027_n.enc?ccb=11-4&oh=01_Q5Aa3AHFLCqdzt6hQgydBHwHf_BZLZ2bZgiVG64upM04pAIXAA&oe=6951CC8A&_nc_sid=5e03e0",
+                    "mediaKeyTimestamp": 1764386784,
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    },
+                    "scansSidecar": "j+vqsVU1FZoMd+ip6fQBODnV5CEJ4hm6UKydid2VkoUJMJwpFN+UmA==",
+                    "scanLengths": [
+                      19899,
+                      76408,
+                      64922,
+                      113791
+                    ],
+                    "midQualityFileSHA256": "Jxz0M1TrpfinEQI5aBMlfu6v14q7Z42G78Nmx8B7y3E="
+                  },
+                  "messageContextInfo": {
+                    "messageSecret": "fanA3+cZhaiMCm8vzQQuf/iKbcNXuIYsZ5Menq5nc/s="
+                  }
+                },
+                "messageTimestamp": 1764386786,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Images/IMG-20251129-WA0002.jpg"
+                },
+                "messageSecret": "fanA3+cZhaiMCm8vzQQuf/iKbcNXuIYsZ5Menq5nc/s=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ2uO1OlVg1EO3AIcyzbUsuGsZs="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 260
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC23D7C384500539A8476F2035702523"
+                },
+                "message": {
+                  "conversation": "Still too early",
+                  "messageContextInfo": {
+                    "messageSecret": "qI8J3CbKvq6FqgzsE7Kk0G35VY+a/LRPesa5w2C+zdg="
+                  }
+                },
+                "messageTimestamp": 1764386777,
+                "messageSecret": "qI8J3CbKvq6FqgzsE7Kk0G35VY+a/LRPesa5w2C+zdg=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ0hyn7seaMcYkzCdRqNaGSej5c="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 259
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": true,
+                  "ID": "A5D253F7D16A4901E8725139A76E8E69"
+                },
+                "message": {
+                  "conversation": "Sup",
+                  "messageContextInfo": {
+                    "messageSecret": "fjTg8JdyOyNl4VSAge+uOCEsi1qIuYk7gDH3N1jYdC8="
+                  }
+                },
+                "messageTimestamp": 1764386765,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764386765,
+                    "readTimestamp": 1764386765,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "fjTg8JdyOyNl4VSAge+uOCEsi1qIuYk7gDH3N1jYdC8=",
+                "originalSelfAuthorUserJIDString": "5511991367947@s.whatsapp.net",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 258
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC667AA125ECB095801CD00DEE15661F"
+                },
+                "message": {
+                  "conversation": "Hello",
+                  "messageContextInfo": {
+                    "messageSecret": "gZoZ4r9sfk3EDLOJkg9Pw39lSUD9FEOl9wWKLDIwDI8="
+                  }
+                },
+                "messageTimestamp": 1764386747,
+                "messageSecret": "gZoZ4r9sfk3EDLOJkg9Pw39lSUD9FEOl9wWKLDIwDI8=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ09UW0yNASS3b2CEz5YZJzsUMg="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 257
+            },
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "5527997552218@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "AC5DAFF0B0652C49192C4B4E5675DE3D"
+                },
+                "message": {
+                  "conversation": "Still there?",
+                  "messageContextInfo": {
+                    "messageSecret": "/KVdWnJtVqgr13m2P7zdyXTbkFZhTBVXzQUFB5O56Sw="
+                  }
+                },
+                "messageTimestamp": 1764386642,
+                "messageSecret": "/KVdWnJtVqgr13m2P7zdyXTbkFZhTBVXzQUFB5O56Sw=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ3c6B2W+jte7H1HtZz2LXjbpfg="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 256
+            }
+          ],
+          "unreadCount": 0,
+          "readOnly": false,
+          "ephemeralExpiration": 0,
+          "ephemeralSettingTimestamp": 0,
+          "conversationTimestamp": 1764783131,
+          "notSpam": true,
+          "archived": false,
+          "disappearingMode": {
+            "initiator": 0
+          },
+          "unreadMentionCount": 0,
+          "markedAsUnread": false,
+          "tcToken": "BAEafFWUPrHnfeQ=",
+          "tcTokenTimestamp": 1764375586,
+          "contactPrimaryIdentityKey": "oSFpIbazPJDA/fIKIhk/E4DUrtJlRR44BFRlpF4gmAg=",
+          "tcTokenSenderTimestamp": 1763941079,
+          "pnJID": "5527997552218@s.whatsapp.net",
+          "shareOwnPn": true,
+          "lidOriginType": "general",
+          "commentsCount": 1000000,
+          "locked": false,
+          "accountLid": "22999684120770@lid"
+        },
+        {
+          "ID": "120363425473922359@g.us",
+          "messages": [
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "120363425473922359@g.us",
+                  "fromMe": false,
+                  "ID": "AC15A4F9778B7A53B5354066A81BBDAA"
+                },
+                "message": {
+                  "conversation": "Ir worked",
+                  "messageContextInfo": {
+                    "messageSecret": "XOVXeJ77UuuDdT12HqSw1s0DeebdM7wJNjZ5oF7n3ag="
+                  }
+                },
+                "messageTimestamp": 1764100127,
+                "participant": "22999684120770@lid",
+                "messageSecret": "XOVXeJ77UuuDdT12HqSw1s0DeebdM7wJNjZ5oF7n3ag=",
+                "reportingTokenInfo": {
+                  "reportingTag": "AQ1zxr4NhkErCD30HwytT3KxkUs="
+                },
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 208
+            }
+          ],
+          "unreadCount": 0,
+          "readOnly": false,
+          "ephemeralExpiration": 0,
+          "ephemeralSettingTimestamp": 0,
+          "conversationTimestamp": 1764100127,
+          "name": "Test Group 20251125194829",
+          "pHash": "1:QKBiClPt",
+          "notSpam": true,
+          "archived": false,
+          "disappearingMode": {
+            "initiator": 0
+          },
+          "unreadMentionCount": 0,
+          "markedAsUnread": false,
+          "suspended": false,
+          "isDefaultSubgroup": false,
+          "commentsCount": 1000000,
+          "locked": false
+        },
+        {
+          "ID": "120363424646712058@g.us",
+          "messages": [
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "120363424646712058@g.us",
+                  "fromMe": true,
+                  "ID": "1755391159"
+                },
+                "messageTimestamp": 1764100077,
+                "status": 1,
+                "participant": "137637125972097@lid",
+                "messageStubType": 20,
+                "messageStubParameters": [
+                  "Test Group 20251125194756"
+                ],
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 202
+            }
+          ],
+          "unreadCount": 0,
+          "readOnly": false,
+          "ephemeralExpiration": 0,
+          "ephemeralSettingTimestamp": 0,
+          "conversationTimestamp": 1764100077,
+          "name": "Test Group 20251125194756",
+          "pHash": "1:QKBiClPt",
+          "notSpam": true,
+          "archived": false,
+          "disappearingMode": {
+            "initiator": 0
+          },
+          "unreadMentionCount": 0,
+          "markedAsUnread": false,
+          "suspended": false,
+          "isDefaultSubgroup": false,
+          "commentsCount": 1000000,
+          "locked": false
+        },
+        {
+          "ID": "120363405064312814@g.us",
+          "messages": [
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "120363405064312814@g.us",
+                  "fromMe": true,
+                  "ID": "A58812B4A8A4674530979F5CDE70C044"
+                },
+                "message": {
+                  "conversation": "Eee",
+                  "messageContextInfo": {
+                    "messageSecret": "+tSArYDjZlKBFt30Bz8kDaFFACdssij6ki2gJUo/8vE="
+                  }
+                },
+                "messageTimestamp": 1764099835,
+                "status": 4,
+                "userReceipt": [
+                  {
+                    "userJID": "5527997552218@s.whatsapp.net",
+                    "receiptTimestamp": 1764099836,
+                    "readTimestamp": 1764099845,
+                    "playedTimestamp": 0
+                  }
+                ],
+                "messageSecret": "+tSArYDjZlKBFt30Bz8kDaFFACdssij6ki2gJUo/8vE=",
+                "originalSelfAuthorUserJIDString": "137637125972097@lid",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 200
+            }
+          ],
+          "unreadCount": 0,
+          "readOnly": false,
+          "ephemeralExpiration": 0,
+          "ephemeralSettingTimestamp": 0,
+          "conversationTimestamp": 1764099835,
+          "name": "Test group",
+          "pHash": "1:QKBiClPt",
+          "notSpam": true,
+          "archived": false,
+          "disappearingMode": {
+            "initiator": 0
+          },
+          "unreadMentionCount": 0,
+          "markedAsUnread": false,
+          "suspended": false,
+          "isDefaultSubgroup": false,
+          "commentsCount": 1000000,
+          "locked": false
+        },
+        {
+          "ID": "0@s.whatsapp.net",
+          "messages": [
+            {
+              "message": {
+                "key": {
+                  "remoteJID": "0@s.whatsapp.net",
+                  "fromMe": false,
+                  "ID": "785376054348615-1"
+                },
+                "message": {
+                  "videoMessage": {
+                    "mimetype": "video/mp4",
+                    "fileSHA256": "hqSDs8DFzeM0UERgbtkT/PPTciYEnjoeMGD0Bp0mh4g=",
+                    "fileLength": 6564967,
+                    "seconds": 6,
+                    "mediaKey": "AzcrSIG5IOaekXD5ry6PG4pZPcwwUxgwpHcRkyfx3Gw=",
+                    "caption": "*Conhe\u00e7a o WhatsApp Business* \ud83e\udd29\n\nParab\u00e9ns por melhorar ainda mais sua empresa! Agora, voc\u00ea pode acessar nossas ferramentas poderosas, como os cat\u00e1logos, o Meta Verified e as mensagens autom\u00e1ticas, que ajudam voc\u00ea a:\n\n\ud83d\udc4b Alcan\u00e7ar mais clientes\n\n\ud83c\udfc3 Responder mais r\u00e1pido\n\n\ud83d\udcc8 Aumentar as vendas\n\nQuando o assunto \u00e9 crescimento, o WhatsApp \u00e9 muito mais neg\u00f3cio. Acesse a aba Ferramentas para saber mais e come\u00e7ar.",
+                    "height": 2314,
+                    "width": 2196,
+                    "fileEncSHA256": "zsOPXJwY0lBct0BZGMlGxfUWFn+c2kpM+4U4oArBFsQ=",
+                    "contextInfo": {
+                      "pairedMediaType": 0
+                    },
+                    "staticURL": "https://static.whatsapp.net/downloadable?category=PSA&id=427974683292983656&num=2d5071a0-b969-4811-b597-38abba45a0f9&_nc_cat=1"
+                  },
+                  "messageContextInfo": {
+                    "messageSecret": "rLRWaGyAYQ+gmqa4EovxlI7rIMri/t7hdDK1rHkQaPE="
+                  }
+                },
+                "messageTimestamp": 1763940876,
+                "mediaData": {
+                  "localPath": "Media/WhatsApp Business Video/Private/VID-20251123-WA0000.mp4"
+                },
+                "messageSecret": "rLRWaGyAYQ+gmqa4EovxlI7rIMri/t7hdDK1rHkQaPE=",
+                "isMentionedInStatus": false
+              },
+              "msgOrderID": 187
+            }
+          ],
+          "unreadCount": 0,
+          "readOnly": false,
+          "ephemeralExpiration": 0,
+          "ephemeralSettingTimestamp": 0,
+          "conversationTimestamp": 1763940876,
+          "name": "WhatsApp Business",
+          "notSpam": false,
+          "archived": false,
+          "disappearingMode": {
+            "initiator": 0
+          },
+          "unreadMentionCount": 0,
+          "markedAsUnread": false,
+          "commentsCount": 1000000,
+          "locked": false
+        }
+      ],
+      "globalSettings": {},
+      "threadIDUserSecret": "6yujC1k7ewR+asFoOMnpBjIB3HHsufW/NxsXQ2K3tdM=",
+      "threadDsTimeframeOffset": 64941,
+      "phoneNumberToLidMappings": [
+        {
+          "pnJID": "5527997552218@s.whatsapp.net",
+          "lidJID": "22999684120770@lid"
+        }
+      ],
+      "companionMetaNonce": "CP9tm3s/BA4uOxZUQSadrJTcEfdfSj4o"
+    }
+  },
+  "type": "HistorySync"
 }

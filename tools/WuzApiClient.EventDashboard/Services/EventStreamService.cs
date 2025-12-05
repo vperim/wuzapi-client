@@ -153,7 +153,7 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
             InstanceName = envelope.Metadata.WuzEnvelope.InstanceName,
             Metadata = metadata,
             Event = envelope,
-            RawJson = FormatJson(envelope.Metadata.WuzEnvelope.JsonData)
+            RawJson = FormatJson(envelope.Metadata.RawJson)
         };
     }
 

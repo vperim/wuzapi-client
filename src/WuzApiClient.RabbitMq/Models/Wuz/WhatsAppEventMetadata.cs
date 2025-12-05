@@ -6,10 +6,8 @@ namespace WuzApiClient.RabbitMq.Models.Wuz;
 
 public sealed record WhatsAppEventMetadata(string Event, string Type)
 {
-    public static WhatsAppEventMetadata Parse(string jsonData)
+    public static WhatsAppEventMetadata Parse(JsonElement root)
     {
-        using var document = JsonDocument.Parse(jsonData);
-        var root = document.RootElement;
         var eventValue = root.GetProperty("event").GetRawText(); // Serializes to JSON string
         var typeValue = root.GetProperty("type").GetString();
         if (typeValue.IsNullOrWhiteSpace())

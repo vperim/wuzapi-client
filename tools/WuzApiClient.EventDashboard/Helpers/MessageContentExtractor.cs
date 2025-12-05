@@ -20,13 +20,13 @@ public static class MessageContentExtractor
     private static MessagePreviewResult ExtractMessage(IWuzEventEnvelope envelope)
     {
         // Parse RawJson string to JsonElement
-        if (string.IsNullOrWhiteSpace(envelope.Metadata.WuzEnvelope.JsonData))
+        if (string.IsNullOrWhiteSpace(envelope.Metadata.RawJson))
             return new MessagePreviewResult("[No content]", "unknown-message");
 
         JsonDocument? document = null;
         try
         {
-            document = JsonDocument.Parse(envelope.Metadata.WuzEnvelope.JsonData);
+            document = JsonDocument.Parse(envelope.Metadata.RawJson);
             var raw = document.RootElement;
 
             return ExtractMessageFromElement(raw);
@@ -116,13 +116,13 @@ public static class MessageContentExtractor
     /// </summary>
     public static (bool IsFromMe, string? PushName, string? SenderJid) ExtractSenderInfo(IWuzEventEnvelope envelope)
     {
-        if (string.IsNullOrWhiteSpace(envelope.Metadata.WuzEnvelope.JsonData))
+        if (string.IsNullOrWhiteSpace(envelope.Metadata.RawJson))
             return (false, null, null);
 
         JsonDocument? document = null;
         try
         {
-            document = JsonDocument.Parse(envelope.Metadata.WuzEnvelope.JsonData);
+            document = JsonDocument.Parse(envelope.Metadata.RawJson);
             var raw = document.RootElement;
 
             bool isFromMe = false;

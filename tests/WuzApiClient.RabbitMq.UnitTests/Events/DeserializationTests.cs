@@ -45,7 +45,7 @@ public sealed class DeserializationTests
         metadata.WuzEnvelope.Should().NotBeNull();
         metadata.WuzEnvelope.UserId.Should().NotBeNullOrEmpty();
         metadata.WuzEnvelope.InstanceName.Should().Be("DashboardUser");
-        metadata.WuzEnvelope.JsonData.Should().NotBeNullOrEmpty();
+        metadata.RawJson.Should().NotBeNullOrEmpty();
 
         metadata.WaEventMetadata.Should().NotBeNull();
         metadata.WaEventMetadata.Type.Should().Be(expectedEventType);
