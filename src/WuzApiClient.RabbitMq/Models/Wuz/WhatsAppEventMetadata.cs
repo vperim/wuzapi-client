@@ -1,6 +1,6 @@
 using System;
 using System.Text.Json;
-using WuzApiClient.Extensions;
+using WuzApiClient.Common.Extensions;
 
 namespace WuzApiClient.RabbitMq.Models.Wuz;
 

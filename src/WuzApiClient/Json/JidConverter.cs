@@ -1,7 +1,7 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WuzApiClient.Extensions;
+using WuzApiClient.Common.Extensions;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Json;

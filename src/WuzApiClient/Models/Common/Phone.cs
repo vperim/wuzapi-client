@@ -1,6 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
-using WuzApiClient.Extensions;
+using WuzApiClient.Common.Extensions;
 
 namespace WuzApiClient.Models.Common;
 

@@ -1,5 +1,5 @@
 using System;
-using WuzApiClient.Extensions;
+using WuzApiClient.Common.Extensions;
 
 namespace WuzApiClient.Models.Common;
 
