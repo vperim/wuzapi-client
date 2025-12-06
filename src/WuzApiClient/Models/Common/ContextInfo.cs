@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Common;
 
@@ -17,7 +19,8 @@ public sealed class ContextInfo
     /// Gets or sets the participant JID (for group messages).
     /// </summary>
     [JsonPropertyName("Participant")]
-    public string? Participant { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Participant { get; set; }
 
     /// <summary>
     /// Gets or sets the quoted message content.
@@ -29,7 +32,8 @@ public sealed class ContextInfo
     /// Gets or sets the list of mentioned JIDs.
     /// </summary>
     [JsonPropertyName("MentionedJid")]
-    public string[]? MentionedJid { get; set; }
+    [JsonConverter(typeof(JidArrayConverter))]
+    public Jid[]? MentionedJid { get; set; }
 
     /// <summary>
     /// Gets or sets whether this message is forwarded.

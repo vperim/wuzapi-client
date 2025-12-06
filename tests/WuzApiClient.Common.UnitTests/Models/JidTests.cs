@@ -1,7 +1,7 @@
 using AwesomeAssertions;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 
-namespace WuzApiClient.UnitTests.Models.Common;
+namespace WuzApiClient.Common.UnitTests.Models;
 
 [Trait("Category", "Unit")]
 public sealed class JidTests
@@ -9,7 +9,7 @@ public sealed class JidTests
     private const string UserSuffix = "@s.whatsapp.net";
     private const string GroupSuffix = "@g.us";
 
-    #region Constructor
+    #region Constructor and Nullability
 
     [Fact]
     public void Constructor_ValidJid_SetsValue()
@@ -20,12 +20,59 @@ public sealed class JidTests
     }
 
     [Fact]
-    public void Constructor_NullValue_ThrowsArgumentNullException()
+    public void Constructor_NullValue_AllowsNull()
     {
-        var act = () => new Jid(null!);
+        var jid = new Jid(null);
 
-        act.Should().Throw<ArgumentNullException>()
-            .WithParameterName("value");
+        jid.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public void DefaultStruct_HasNullValue()
+    {
+        var jid = default(Jid);
+
+        jid.Value.Should().BeNull();
+    }
+
+    [Fact]
+    public void DefaultStruct_IsUserReturnsFalse()
+    {
+        var jid = default(Jid);
+
+        jid.IsUser.Should().BeFalse();
+    }
+
+    [Fact]
+    public void DefaultStruct_IsGroupReturnsFalse()
+    {
+        var jid = default(Jid);
+
+        jid.IsGroup.Should().BeFalse();
+    }
+
+    [Fact]
+    public void DefaultStruct_NumberReturnsEmpty()
+    {
+        var jid = default(Jid);
+
+        jid.Number.Should().Be(string.Empty);
+    }
+
+    [Fact]
+    public void DefaultStruct_ToStringReturnsEmpty()
+    {
+        var jid = default(Jid);
+
+        jid.ToString().Should().Be(string.Empty);
+    }
+
+    [Fact]
+    public void NullableJid_CanBeNull()
+    {
+        Jid? nullableJid = null;
+
+        nullableJid.Should().BeNull();
     }
 
     #endregion
@@ -222,6 +269,14 @@ public sealed class JidTests
         jid1.GetHashCode().Should().Be(jid2.GetHashCode());
     }
 
+    [Fact]
+    public void GetHashCode_DefaultJid_ReturnsZero()
+    {
+        var jid = default(Jid);
+
+        jid.GetHashCode().Should().Be(0);
+    }
+
     #endregion
 
     #region Conversions
@@ -231,11 +286,20 @@ public sealed class JidTests
     {
         var original = new Jid("5511999999999@s.whatsapp.net");
 
-        string asString = original;
+        string? asString = original;
         Jid backToJid = asString;
 
         asString.Should().Be("5511999999999@s.whatsapp.net");
         backToJid.Value.Should().Be(original.Value);
+    }
+
+    [Fact]
+    public void ImplicitConversion_NullString_CreatesDefaultJid()
+    {
+        string? nullString = null;
+        Jid jid = nullString;
+
+        jid.Value.Should().BeNull();
     }
 
     [Fact]
@@ -244,6 +308,36 @@ public sealed class JidTests
         var jid = new Jid("5511999999999@s.whatsapp.net");
 
         jid.ToString().Should().Be("5511999999999@s.whatsapp.net");
+    }
+
+    #endregion
+
+    #region Dictionary HashCode Consistency
+
+    [Fact]
+    public void Dictionary_JidAsKey_WorksCorrectly()
+    {
+        var dict = new Dictionary<Jid, string>();
+        var jid1 = new Jid("5511999999999@s.whatsapp.net");
+        var jid2 = new Jid("5511999999999@S.WHATSAPP.NET"); // Different case
+
+        dict[jid1] = "value1";
+        dict[jid2] = "value2"; // Should overwrite due to case-insensitive equality
+
+        dict.Count.Should().Be(1);
+        dict[jid1].Should().Be("value2");
+    }
+
+    [Fact]
+    public void Dictionary_JidAsKey_ConsistentHashCode()
+    {
+        var jid1 = new Jid("5511999999999@s.whatsapp.net");
+        var jid2 = new Jid("5511999999999@S.WHATSAPP.NET");
+
+        var hash1 = jid1.GetHashCode();
+        var hash2 = jid2.GetHashCode();
+
+        hash1.Should().Be(hash2);
     }
 
     #endregion

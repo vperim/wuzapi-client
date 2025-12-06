@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Requests.Chat;
 
@@ -30,5 +31,6 @@ public sealed class ReactRequest
     /// Gets or sets the participant for group chat reactions.
     /// </summary>
     [JsonPropertyName("Participant")]
-    public string? Participant { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Participant { get; set; }
 }

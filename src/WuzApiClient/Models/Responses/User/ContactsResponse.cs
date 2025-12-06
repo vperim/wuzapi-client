@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.User;
 
@@ -12,12 +14,13 @@ public sealed class ContactsResponse
     /// <summary>
     /// Gets or sets the contacts dictionary (JID -> ContactInfo).
     /// </summary>
-    public Dictionary<string, ContactInfo> Contacts { get; set; } = new();
+    [JsonConverter(typeof(JidDictionaryConverter<ContactInfo>))]
+    public Dictionary<Jid, ContactInfo>? Contacts { get; set; }
 
     /// <summary>
     /// Creates a ContactsResponse from a dictionary.
     /// </summary>
-    internal static ContactsResponse FromDictionary(Dictionary<string, ContactInfo> contacts)
+    internal static ContactsResponse FromDictionary(Dictionary<Jid, ContactInfo> contacts)
         => new() { Contacts = contacts };
 }
 

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Requests.Group;
 
@@ -18,5 +19,6 @@ public sealed class CreateGroupRequest
     /// Gets or sets the initial participants.
     /// </summary>
     [JsonPropertyName("participants")]
-    public Phone[] Participants { get; set; } = [];
+    [JsonConverter(typeof(JidArrayConverter))]
+    public Jid[]? Participants { get; set; }
 }

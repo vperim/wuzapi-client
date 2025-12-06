@@ -1,5 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -25,7 +27,8 @@ public sealed record PresenceEventData
     /// Gets the JID of the user whose presence changed.
     /// </summary>
     [JsonPropertyName("From")]
-    public string? From { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? From { get; init; }
 
     /// <summary>
     /// Gets whether the user is unavailable (offline).

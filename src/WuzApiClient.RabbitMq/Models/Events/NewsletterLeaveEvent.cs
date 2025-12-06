@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -22,7 +24,8 @@ public sealed record NewsletterLeaveEventData
     /// Gets the newsletter JID.
     /// </summary>
     [JsonPropertyName("id")]
-    public string? Id { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Id { get; init; }
 
     /// <summary>
     /// Gets the viewer's role in the newsletter ("subscriber", "guest", "admin", "owner").

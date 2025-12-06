@@ -1,5 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -23,13 +25,15 @@ public sealed record PictureEventData
     /// Gets the JID of the user or group whose picture changed.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; init; }
 
     /// <summary>
     /// Gets the author of the picture change (for groups).
     /// </summary>
     [JsonPropertyName("Author")]
-    public string? Author { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Author { get; init; }
 
     /// <summary>
     /// Gets the timestamp of the picture change.

@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using WuzApiClient.Common.Extensions;
 
-namespace WuzApiClient.Models.Common;
+namespace WuzApiClient.Common.Models;
 
 /// <summary>
 /// Represents a validated phone number in E.164 format.
@@ -90,8 +90,8 @@ public readonly struct Phone : IEquatable<Phone>
     /// <summary>
     /// Converts the phone to WhatsApp JID format.
     /// </summary>
-    /// <returns>The phone number as a WhatsApp JID (e.g., "5511999999999@s.whatsapp.net").</returns>
-    public string ToJid() => $"{this.Value}@s.whatsapp.net";
+    /// <returns>The phone number as a WhatsApp JID.</returns>
+    public Jid ToJid() => Jid.FromPhone(this);
 
     /// <inheritdoc/>
     public bool Equals(Phone other) => this.Value == other.Value;

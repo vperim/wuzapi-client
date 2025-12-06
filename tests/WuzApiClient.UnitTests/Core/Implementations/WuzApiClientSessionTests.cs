@@ -1,6 +1,6 @@
 using System.Net;
 using AwesomeAssertions;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Session;
 using WuzApiClient.UnitTests.TestInfrastructure.Builders;
 using WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
@@ -131,7 +131,7 @@ public sealed class WuzApiClientSessionTests : WuzApiClientTestBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Connected.Should().BeTrue();
         result.Value.LoggedIn.Should().BeTrue();
-        result.Value.Jid.Should().Be("5511999999999@s.whatsapp.net");
+        result.Value.Jid?.Value.Should().Be("5511999999999@s.whatsapp.net");
     }
 
     [Fact]

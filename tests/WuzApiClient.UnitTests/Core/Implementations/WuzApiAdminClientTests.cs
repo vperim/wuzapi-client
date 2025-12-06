@@ -1,8 +1,9 @@
+using WuzApiClient.Json;
 using System.Net;
 using System.Text.Json;
 using AwesomeAssertions;
 using WuzApiClient.Core.Implementations;
-using WuzApiClient.Json;
+using WuzApiClient.Common.Serialization;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Responses.Admin;
 using WuzApiClient.UnitTests.TestInfrastructure.Mocks;

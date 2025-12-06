@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.Admin;
 
@@ -53,5 +55,6 @@ public sealed class UserResponse
     /// Gets or sets the JID (WhatsApp ID) when logged in.
     /// </summary>
     [JsonPropertyName("jid")]
-    public string? Jid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; set; }
 }

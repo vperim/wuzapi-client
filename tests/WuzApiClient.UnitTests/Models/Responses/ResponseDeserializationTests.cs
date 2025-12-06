@@ -1,6 +1,7 @@
+using WuzApiClient.Json;
 using System.Text.Json;
 using AwesomeAssertions;
-using WuzApiClient.Json;
+using WuzApiClient.Common.Serialization;
 using WuzApiClient.Models.Responses.Admin;
 using WuzApiClient.Models.Responses.Chat;
 using WuzApiClient.Models.Responses.Download;
@@ -28,7 +29,7 @@ public sealed class ResponseDeserializationTests
         response.Should().NotBeNull();
         response!.Connected.Should().BeTrue();
         response.LoggedIn.Should().BeTrue();
-        response.Jid.Should().Be("5511999999999@s.whatsapp.net");
+        response.Jid?.Value.Should().Be("5511999999999@s.whatsapp.net");
     }
 
     [Fact]
@@ -65,13 +66,13 @@ public sealed class ResponseDeserializationTests
         var response = JsonSerializer.Deserialize<GroupInfoResponse>(json, this.options);
 
         response.Should().NotBeNull();
-        response!.Jid.Should().Be("123456789@g.us");
+        response!.Jid?.Value.Should().Be("123456789@g.us");
         response.Name.Should().Be("Test Group");
         response.Topic.Should().Be("Group topic");
         response.GroupCreated.Should().Be("2023-11-14T00:00:00Z");
-        response.OwnerJid.Should().Be("5511999999999@s.whatsapp.net");
+        response.OwnerJid?.Value.Should().Be("5511999999999@s.whatsapp.net");
         response.Participants.Should().HaveCount(2);
-        response.Participants[0].Jid.Should().Be("5511999999999@s.whatsapp.net");
+        response.Participants[0].Jid?.Value.Should().Be("5511999999999@s.whatsapp.net");
         response.Participants[0].IsAdmin.Should().BeTrue();
         response.Participants[0].IsSuperAdmin.Should().BeTrue();
         response.Participants[1].IsAdmin.Should().BeFalse();
@@ -95,7 +96,7 @@ public sealed class ResponseDeserializationTests
         response!.Users.Should().HaveCount(2);
         response.Users[0].Query.Should().Be("5511999999999");
         response.Users[0].IsInWhatsapp.Should().BeTrue();
-        response.Users[0].Jid.Should().Be("5511999999999@s.whatsapp.net");
+        response.Users[0].Jid?.Value.Should().Be("5511999999999@s.whatsapp.net");
         response.Users[1].IsInWhatsapp.Should().BeFalse();
         response.Users[1].Jid.Should().BeNull();
     }

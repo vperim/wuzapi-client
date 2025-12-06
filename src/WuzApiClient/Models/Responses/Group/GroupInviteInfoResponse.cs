@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.Group;
 
@@ -11,7 +13,8 @@ public sealed class GroupInviteInfoResponse
     /// Gets or sets the group JID.
     /// </summary>
     [JsonPropertyName("groupJid")]
-    public string? GroupJid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? GroupJid { get; set; }
 
     /// <summary>
     /// Gets or sets the group name.
@@ -29,5 +32,6 @@ public sealed class GroupInviteInfoResponse
     /// Gets or sets the group creator JID.
     /// </summary>
     [JsonPropertyName("creator")]
-    public string? Creator { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Creator { get; set; }
 }

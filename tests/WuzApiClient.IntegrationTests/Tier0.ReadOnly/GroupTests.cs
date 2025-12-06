@@ -53,7 +53,7 @@ public sealed class GroupTests
         // Assert
         result.IsSuccess.Should().BeTrue($"Expected success but got error: {(result.IsFailure ? result.Error.ToString() : "N/A")}");
         result.Value.Should().NotBeNull();
-        result.Value!.Jid.Should().NotBeNullOrEmpty();
+        result.Value!.Jid.Should().NotBeNull();
     }
 
     [Fact]

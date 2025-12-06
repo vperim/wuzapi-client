@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -24,13 +26,15 @@ public sealed record ChatPresenceEventData
     /// Gets the chat JID.
     /// </summary>
     [JsonPropertyName("Chat")]
-    public string? Chat { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Chat { get; init; }
 
     /// <summary>
     /// Gets the sender JID.
     /// </summary>
     [JsonPropertyName("Sender")]
-    public string? Sender { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Sender { get; init; }
 
     /// <summary>
     /// Gets whether this is from the current user.

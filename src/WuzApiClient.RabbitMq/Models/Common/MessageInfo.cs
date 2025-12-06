@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Common;
 
@@ -16,13 +18,15 @@ public sealed record MessageInfo
     /// Gets the chat JID where the message was sent.
     /// </summary>
     [JsonPropertyName("Chat")]
-    public string? Chat { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Chat { get; init; }
 
     /// <summary>
     /// Gets the sender JID.
     /// </summary>
     [JsonPropertyName("Sender")]
-    public string? Sender { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Sender { get; init; }
 
     /// <summary>
     /// Gets whether the message was sent by the current user.
@@ -46,19 +50,22 @@ public sealed record MessageInfo
     /// Gets the alternative address of the sender (LID).
     /// </summary>
     [JsonPropertyName("SenderAlt")]
-    public string? SenderAlt { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? SenderAlt { get; init; }
 
     /// <summary>
     /// Gets the alternative address of the recipient for DMs.
     /// </summary>
     [JsonPropertyName("RecipientAlt")]
-    public string? RecipientAlt { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? RecipientAlt { get; init; }
 
     /// <summary>
     /// Gets the broadcast list owner JID.
     /// </summary>
     [JsonPropertyName("BroadcastListOwner")]
-    public string? BroadcastListOwner { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? BroadcastListOwner { get; init; }
 
     /// <summary>
     /// Gets the broadcast recipients.
@@ -156,13 +163,15 @@ public sealed record BroadcastRecipient
     /// Gets the recipient JID.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; init; }
 
     /// <summary>
     /// Gets the alternative JID (LID).
     /// </summary>
     [JsonPropertyName("LID")]
-    public string? Lid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Lid { get; init; }
 }
 
 /// <summary>
@@ -198,7 +207,8 @@ public sealed record MsgMetaInfo
     /// Gets the target chat.
     /// </summary>
     [JsonPropertyName("TargetChat")]
-    public string? TargetChat { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? TargetChat { get; init; }
 
     /// <summary>
     /// Gets the target ID.
@@ -210,7 +220,8 @@ public sealed record MsgMetaInfo
     /// Gets the target sender.
     /// </summary>
     [JsonPropertyName("TargetSender")]
-    public string? TargetSender { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? TargetSender { get; init; }
 
     /// <summary>
     /// Gets the thread message ID.
@@ -222,7 +233,8 @@ public sealed record MsgMetaInfo
     /// Gets the thread message sender JID.
     /// </summary>
     [JsonPropertyName("ThreadMessageSenderJID")]
-    public string? ThreadMessageSenderJid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? ThreadMessageSenderJid { get; init; }
 
     /// <summary>
     /// Gets the deprecated LID session.
@@ -252,7 +264,8 @@ public sealed record DeviceSentMeta
     /// Gets the destination JID.
     /// </summary>
     [JsonPropertyName("DestinationJID")]
-    public string? DestinationJid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? DestinationJid { get; init; }
 
     /// <summary>
     /// Gets the phash.

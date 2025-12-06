@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -22,7 +24,8 @@ public sealed record BlocklistChangeEventData
     /// Gets the JID of the contact whose block status changed.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; init; }
 
     /// <summary>
     /// Gets the action performed ("block" or "unblock").

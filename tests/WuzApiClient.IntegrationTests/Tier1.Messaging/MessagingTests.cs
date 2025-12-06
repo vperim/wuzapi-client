@@ -3,7 +3,7 @@ using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Ordering;
 using WuzApiClient.IntegrationTests.TestInfrastructure.RateLimiting;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Chat;
 using Xunit.Abstractions;
 

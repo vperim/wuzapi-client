@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.Group;
 
@@ -11,7 +13,8 @@ public sealed class GroupInfoResponse
     /// Gets or sets the group JID.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; set; }
 
     /// <summary>
     /// Gets or sets the group name.
@@ -35,7 +38,8 @@ public sealed class GroupInfoResponse
     /// Gets or sets the group owner JID.
     /// </summary>
     [JsonPropertyName("OwnerJID")]
-    public string? OwnerJid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? OwnerJid { get; set; }
 
     /// <summary>
     /// Gets or sets the participants.
@@ -53,7 +57,8 @@ public sealed class GroupParticipant
     /// Gets or sets the participant JID.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; set; }
 
     /// <summary>
     /// Gets or sets whether participant is admin.

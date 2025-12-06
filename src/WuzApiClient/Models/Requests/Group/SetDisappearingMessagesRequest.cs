@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Requests.Group;
 
@@ -11,7 +13,8 @@ public sealed class SetDisappearingMessagesRequest
     /// Gets or sets the group ID (JID).
     /// </summary>
     [JsonPropertyName("groupId")]
-    public string GroupId { get; set; } = string.Empty;
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? GroupId { get; set; }
 
     /// <summary>
     /// Gets or sets the timer in seconds.

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Json;
 
@@ -43,6 +44,9 @@ public static class WuzApiJsonSerializerOptions
         options.Converters.Add(new PhoneConverter());
         options.Converters.Add(new JidConverter());
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+
+        // Note: JidDictionaryConverter and JidArrayConverter are applied via attributes on properties
+        // because they are generic and need specific type parameters
 
         return options;
     }

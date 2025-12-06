@@ -1,7 +1,7 @@
 using AwesomeAssertions;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Group;
 
 namespace WuzApiClient.IntegrationTests.Group;
@@ -46,7 +46,7 @@ public sealed class GroupIntegrationTests
         // Assert
         result.IsSuccess.Should().BeTrue($"Expected success but got error: {(result.IsFailure ? result.Error.ToString() : "N/A")}");
         result.Value.Should().NotBeNull();
-        result.Value!.Jid.Should().NotBeNullOrEmpty();
+        result.Value!.Jid.Should().NotBeNull();
     }
 
     [Fact]
@@ -59,7 +59,7 @@ public sealed class GroupIntegrationTests
         var request = new CreateGroupRequest
         {
             Name = $"Test Group {DateTime.UtcNow:yyyyMMddHHmmss}",
-            Participants = [Phone.Create(TestConfiguration.TestPhoneNumber)]
+            Participants = [Jid.FromPhone(Phone.Create(TestConfiguration.TestPhoneNumber))]
         };
 
         // Act
@@ -68,7 +68,7 @@ public sealed class GroupIntegrationTests
         // Assert
         result.IsSuccess.Should().BeTrue($"Expected success but got error: {(result.IsFailure ? result.Error.ToString() : "N/A")}");
         result.Value.Should().NotBeNull();
-        result.Value!.Jid.Should().NotBeNullOrEmpty();
+        result.Value!.Jid.Should().NotBeNull();
         result.Value.Name.Should().Be(request.Name);
     }
 

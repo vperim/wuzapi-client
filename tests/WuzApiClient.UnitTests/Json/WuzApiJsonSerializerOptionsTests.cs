@@ -1,7 +1,8 @@
+using WuzApiClient.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using AwesomeAssertions;
-using WuzApiClient.Json;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.UnitTests.Json;
 

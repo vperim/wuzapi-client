@@ -1,5 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -22,7 +24,8 @@ public sealed record JoinedGroupEventData
     /// Gets the group JID that was joined.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; init; }
 
     /// <summary>
     /// Gets the reason for joining (e.g., created, added, invited).

@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Models.Requests.Group;
@@ -12,13 +14,15 @@ public sealed class ManageParticipantsRequest
     /// Gets or sets the group ID (JID).
     /// </summary>
     [JsonPropertyName("groupId")]
-    public string GroupId { get; set; } = string.Empty;
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? GroupId { get; set; }
 
     /// <summary>
     /// Gets or sets the participants to manage.
     /// </summary>
     [JsonPropertyName("participants")]
-    public Phone[] Participants { get; set; } = [];
+    [JsonConverter(typeof(JidArrayConverter))]
+    public Jid[]? Participants { get; set; }
 
     /// <summary>
     /// Gets or sets the action to perform.

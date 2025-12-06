@@ -1,4 +1,4 @@
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 
 namespace WuzApiClient.UnitTests.TestInfrastructure.Builders;
 

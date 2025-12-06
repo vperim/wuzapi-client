@@ -1,9 +1,9 @@
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 
-namespace WuzApiClient.Json;
+namespace WuzApiClient.Common.Serialization;
 
 /// <summary>
 /// JSON converter for <see cref="Phone"/> type.

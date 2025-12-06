@@ -16,12 +16,12 @@ public interface IWuzEventEnvelope
     public DateTimeOffset ReceivedAt { get; }
 }
 
-public interface IWuzEventEnvelope<out TEvent> : IWuzEventEnvelope
-    where TEvent : class
+public interface IWuzEventEnvelope<out T> : IWuzEventEnvelope
+    where T : class
 {
     /// <summary>
     /// Gets the non-nullable typed event data.
     /// If envelope exists, event was successfully parsed.
     /// </summary>
-    public TEvent Payload { get; }
+    public T Payload { get; }
 }

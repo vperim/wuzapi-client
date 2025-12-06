@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Requests.Group;
 
@@ -11,5 +13,6 @@ public sealed class RemoveGroupPhotoRequest
     /// Gets or sets the group ID (JID).
     /// </summary>
     [JsonPropertyName("groupId")]
-    public string GroupId { get; set; } = string.Empty;
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? GroupId { get; set; }
 }

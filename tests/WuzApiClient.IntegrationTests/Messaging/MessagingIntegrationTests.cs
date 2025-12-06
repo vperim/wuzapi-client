@@ -2,7 +2,7 @@ using AwesomeAssertions;
 using WuzApiClient.Common.Results;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Chat;
 
 namespace WuzApiClient.IntegrationTests.Messaging;

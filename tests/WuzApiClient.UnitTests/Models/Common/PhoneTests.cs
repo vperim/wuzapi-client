@@ -1,5 +1,5 @@
 using AwesomeAssertions;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 
 namespace WuzApiClient.UnitTests.Models.Common;
 
@@ -52,9 +52,10 @@ public sealed class PhoneTests
     {
         var phone = Phone.Create("5511999999999");
 
-        var jid = phone.ToJid();
+        var jid = Jid.FromPhone(phone);
 
-        jid.Should().Be("5511999999999@s.whatsapp.net");
+        jid.Value.Should().Be("5511999999999@s.whatsapp.net");
+        jid.IsUser.Should().BeTrue();
     }
 
     [Fact]

@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.User;
 
@@ -35,7 +37,8 @@ public sealed class CheckPhoneResult
     /// Gets or sets the JID if on WhatsApp.
     /// </summary>
     [JsonPropertyName("JID")]
-    public string? Jid { get; set; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? Jid { get; set; }
 
     /// <summary>
     /// Gets or sets the verified business name.

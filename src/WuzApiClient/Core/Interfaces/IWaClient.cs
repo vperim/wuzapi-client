@@ -2,7 +2,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.Common.Results;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Chat;
 using WuzApiClient.Models.Requests.Group;
 using WuzApiClient.Models.Requests.Session;

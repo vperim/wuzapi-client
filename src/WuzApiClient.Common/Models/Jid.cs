@@ -1,7 +1,7 @@
 using System;
 using WuzApiClient.Common.Extensions;
 
-namespace WuzApiClient.Models.Common;
+namespace WuzApiClient.Common.Models;
 
 /// <summary>
 /// Represents a WhatsApp JID (Jabber ID).
@@ -15,7 +15,7 @@ public readonly struct Jid : IEquatable<Jid>
     /// <summary>
     /// Gets the full JID value.
     /// </summary>
-    public string Value { get; }
+    public string? Value { get; }
 
     /// <summary>
     /// Gets a value indicating whether this JID represents a user.
@@ -37,8 +37,8 @@ public readonly struct Jid : IEquatable<Jid>
             if (string.IsNullOrEmpty(this.Value))
                 return string.Empty;
 
-            var atIndex = this.Value.IndexOf('@');
-            return atIndex > 0 ? this.Value[..atIndex] : this.Value;
+            var atIndex = this.Value!.IndexOf('@');
+            return atIndex > 0 ? this.Value![..atIndex] : this.Value!;
         }
     }
 
@@ -46,9 +46,10 @@ public readonly struct Jid : IEquatable<Jid>
     /// Initializes a new instance of <see cref="Jid"/>.
     /// </summary>
     /// <param name="value">The JID value.</param>
-    public Jid(string value)
+    public Jid(string? value)
     {
-        this.Value = value ?? throw new ArgumentNullException(nameof(value));
+        // Allow null for default struct initialization
+        this.Value = value;
     }
 
     /// <summary>
@@ -131,17 +132,17 @@ public readonly struct Jid : IEquatable<Jid>
         this.Value?.ToLowerInvariant().GetHashCode() ?? 0;
 
     /// <inheritdoc/>
-    public override string ToString() => this.Value;
+    public override string ToString() => this.Value ?? string.Empty;
 
     /// <summary>
     /// Implicitly converts a Jid to its string value.
     /// </summary>
-    public static implicit operator string(Jid jid) => jid.Value;
+    public static implicit operator string?(Jid jid) => jid.Value;
 
     /// <summary>
     /// Implicitly converts a string to a Jid.
     /// </summary>
-    public static implicit operator Jid(string value) => new(value);
+    public static implicit operator Jid(string? value) => new(value);
 
     /// <summary>
     /// Determines whether two JIDs are equal.

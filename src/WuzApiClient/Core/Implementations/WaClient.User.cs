@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.Common.Results;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.User;
 using WuzApiClient.Models.Responses.User;
 
@@ -58,8 +58,9 @@ public sealed partial class WaClient
     public async Task<WuzResult<ContactsResponse>> GetContactsAsync(
         CancellationToken cancellationToken = default)
     {
-        // The API returns contacts as a dictionary directly in the data field
-        var result = await this.httpClient.GetAsync<Dictionary<string, ContactInfo>>(
+        // The API returns contacts as a dictionary in the "Contacts" field or directly in the data field
+        // We need to handle both cases by wrapping in ContactsResponse which has the JidDictionaryConverter
+        var result = await this.httpClient.GetAsync<Dictionary<Jid, ContactInfo>>(
             "/user/contacts",
             "Token",
             this.UserToken,

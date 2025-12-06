@@ -92,8 +92,10 @@ public sealed class DeserializationTests
         var envelope = metadata.ToEnvelope<MessageEventEnvelope>();
 
         envelope.Payload.Event.Info.Should().NotBeNull();
-        envelope.Payload.Event.Info!.Chat.Should().NotBeNullOrEmpty();
-        envelope.Payload.Event.Info.Sender.Should().NotBeNullOrEmpty();
+        envelope.Payload.Event.Info!.Chat.Should().NotBeNull();
+        envelope.Payload.Event.Info.Chat!.Value.Value.Should().NotBeNullOrEmpty();
+        envelope.Payload.Event.Info.Sender.Should().NotBeNull();
+        envelope.Payload.Event.Info.Sender!.Value.Value.Should().NotBeNullOrEmpty();
         envelope.Payload.Event.Info.Id.Should().NotBeNullOrEmpty();
         envelope.Payload.Event.Info.Timestamp.Should().NotBe(default);
 
@@ -112,8 +114,10 @@ public sealed class DeserializationTests
         var envelope = metadata.ToEnvelope<UndecryptableMessageEventEnvelope>();
 
         envelope.Payload.Event.Info.Should().NotBeNull();
-        envelope.Payload.Event.Info!.Chat.Should().NotBeNullOrEmpty();
-        envelope.Payload.Event.Info.Sender.Should().NotBeNullOrEmpty();
+        envelope.Payload.Event.Info!.Chat.Should().NotBeNull();
+        envelope.Payload.Event.Info.Chat!.Value.Value.Should().NotBeNullOrEmpty();
+        envelope.Payload.Event.Info.Sender.Should().NotBeNull();
+        envelope.Payload.Event.Info.Sender!.Value.Value.Should().NotBeNullOrEmpty();
         envelope.Payload.Event.Info.Id.Should().NotBeNullOrEmpty();
 
         envelope.Metadata.Should().Be(metadata);
@@ -127,8 +131,8 @@ public sealed class DeserializationTests
         var metadata = WuzEventMetadata.Parse(bytes);
         var envelope = metadata.ToEnvelope<ReceiptEventEnvelope>();
 
-        envelope.Payload.Event.Chat.Should().NotBeNullOrEmpty();
-        envelope.Payload.Event.Sender.Should().NotBeNullOrEmpty();
+        envelope.Payload.Event.Chat.Should().NotBeNull();
+        envelope.Payload.Event.Sender.Should().NotBeNull();
         envelope.Payload.Event.MessageIDs.Should().NotBeNullOrEmpty();
         envelope.Payload.Event.MessageIDs!.Should().Contain(id => !string.IsNullOrEmpty(id));
         envelope.Payload.State.Should().Be("Delivered");

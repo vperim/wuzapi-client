@@ -1,7 +1,8 @@
+using WuzApiClient.Json;
 using System.Text.Json;
 using AwesomeAssertions;
-using WuzApiClient.Json;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Serialization;
+using WuzApiClient.Common.Models;
 
 namespace WuzApiClient.UnitTests.Json;
 
@@ -24,25 +25,25 @@ public sealed class JidConverterTests
     }
 
     [Fact]
-    public void Read_NullJidJson_ThrowsJsonException()
+    public void Read_NullJidJson_ReturnsDefaultJid()
     {
         var json = "null";
 
-        var act = () => JsonSerializer.Deserialize<Jid>(json, this.options);
+        var jid = JsonSerializer.Deserialize<Jid>(json, this.options);
 
-        act.Should().Throw<JsonException>()
-            .WithMessage("*JID cannot be null or empty*");
+        jid.Should().Be(default(Jid));
+        jid.Value.Should().BeNull();
     }
 
     [Fact]
-    public void Read_EmptyJidJson_ThrowsJsonException()
+    public void Read_EmptyJidJson_ReturnsDefaultJid()
     {
         var json = "\"\"";
 
-        var act = () => JsonSerializer.Deserialize<Jid>(json, this.options);
+        var jid = JsonSerializer.Deserialize<Jid>(json, this.options);
 
-        act.Should().Throw<JsonException>()
-            .WithMessage("*JID cannot be null or empty*");
+        jid.Should().Be(default(Jid));
+        jid.Value.Should().BeNull();
     }
 
     [Fact]

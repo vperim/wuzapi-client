@@ -1,8 +1,9 @@
+using WuzApiClient.Json;
 using System.Text.Json;
 using AwesomeAssertions;
 using WuzApiClient.Common.Enums;
-using WuzApiClient.Json;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Serialization;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Requests.Chat;
 using WuzApiClient.Models.Requests.Group;
@@ -59,13 +60,13 @@ public sealed class RequestSerializationTests
         var request = new CreateGroupRequest
         {
             Name = "Test Group",
-            Participants = [Phone.Create("5511999999999"), Phone.Create("5511888888888")]
+            Participants = [Jid.FromPhone(Phone.Create("5511999999999")), Jid.FromPhone(Phone.Create("5511888888888"))]
         };
 
         var json = JsonSerializer.Serialize(request, this.options);
 
         json.Should().Contain("\"name\":\"Test Group\"");
-        json.Should().Contain("\"participants\":[\"5511999999999\",\"5511888888888\"]");
+        json.Should().Contain("\"participants\":[\"5511999999999@s.whatsapp.net\",\"5511888888888@s.whatsapp.net\"]");
     }
 
     [Fact]

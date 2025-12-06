@@ -1,7 +1,7 @@
 using System.Net;
 using AwesomeAssertions;
 using WuzApiClient.Common.Results;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Responses.User;
 using WuzApiClient.UnitTests.TestInfrastructure.Fixtures;
 
@@ -18,10 +18,10 @@ public sealed class WuzApiClientUserTests : WuzApiClientTestBase
     public async Task GetUserInfoAsync_Success_ReturnsUserInfo()
     {
         // Arrange
-        var jid = "5511999999999@s.whatsapp.net";
+        var jid = Jid.Parse("5511999999999@s.whatsapp.net");
         var expectedResponse = new UserInfoResponse
         {
-            Users = new Dictionary<string, UserInfo>
+            Users = new Dictionary<Jid, UserInfo>
             {
                 [jid] = new UserInfo
                 {
@@ -181,16 +181,9 @@ public sealed class WuzApiClientUserTests : WuzApiClientTestBase
     public async Task GetContactsAsync_Success_ReturnsContacts()
     {
         // Arrange
-        var jid = "5511999999999@s.whatsapp.net";
-        var expectedResponse = new Dictionary<string, ContactInfo>
-        {
-            [jid] = new ContactInfo
-            {
-                FullName = "Contact Name",
-                PushName = "Push Name"
-            }
-        };
-        this.MockHandler.EnqueueSuccessResponse(expectedResponse);
+        var jid = new Jid("5511999999999@s.whatsapp.net");
+        var json = """{"data":{"5511999999999@s.whatsapp.net":{"FullName":"Contact Name","PushName":"Push Name","Found":false}}}""";
+        this.MockHandler.EnqueueResponse(System.Net.HttpStatusCode.OK, json);
 
         // Act
         var result = await this.Sut.GetContactsAsync();
@@ -199,14 +192,15 @@ public sealed class WuzApiClientUserTests : WuzApiClientTestBase
         result.IsSuccess.Should().BeTrue();
         result.Value.Contacts.Should().HaveCount(1);
         result.Value.Contacts.Should().ContainKey(jid);
-        result.Value.Contacts[jid].FullName.Should().Be("Contact Name");
+        result.Value.Contacts![jid].FullName.Should().Be("Contact Name");
     }
 
     [Fact]
     public async Task GetContactsAsync_SendsCorrectEndpoint()
     {
         // Arrange
-        this.MockHandler.EnqueueSuccessResponse(new Dictionary<string, ContactInfo>());
+        var json = """{"data":{}}""";
+        this.MockHandler.EnqueueResponse(System.Net.HttpStatusCode.OK, json);
 
         // Act
         await this.Sut.GetContactsAsync();

@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Group;
 using WuzApiClient.Models.Responses.Group;
@@ -30,7 +31,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Groups.Should().HaveCount(1);
-        result.Value.Groups[0].Jid.Should().Be("123456@g.us");
+        result.Value.Groups[0].Jid?.Value.Should().Be("123456@g.us");
         result.Value.Groups[0].Name.Should().Be("Test Group");
     }
 
@@ -68,7 +69,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
         var request = new CreateGroupRequest
         {
             Name = "New Group",
-            Participants = [Phone.Create("5511999999999")]
+            Participants = [Jid.FromPhone(Phone.Create("5511999999999"))]
         };
 
         // Act
@@ -76,7 +77,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Value.Jid.Should().Be("newgroup@g.us");
+        result.Value.Jid?.Value.Should().Be("newgroup@g.us");
         result.Value.Name.Should().Be("New Group");
     }
 
@@ -89,7 +90,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
         var request = new CreateGroupRequest
         {
             Name = "Test Group",
-            Participants = [Phone.Create("5511888888888")]
+            Participants = [Jid.FromPhone(Phone.Create("5511888888888"))]
         };
 
         // Act
@@ -134,7 +135,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Value.Jid.Should().Be("group123@g.us");
+        result.Value.Jid?.Value.Should().Be("group123@g.us");
         result.Value.Name.Should().Be("Info Group");
         result.Value.Participants.Should().HaveCount(1);
     }
@@ -308,8 +309,8 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         var request = new ManageParticipantsRequest
         {
-            GroupId = "group@g.us",
-            Participants = [Phone.Create("5511999999999")],
+            GroupId = new Jid("group@g.us"),
+            Participants = [Jid.FromPhone(Phone.Create("5511999999999"))],
             Action = ParticipantAction.Add
         };
 
@@ -334,8 +335,8 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         var request = new ManageParticipantsRequest
         {
-            GroupId = "group@g.us",
-            Participants = [Phone.Create("5511888888888")],
+            GroupId = new Jid("group@g.us"),
+            Participants = [Jid.FromPhone(Phone.Create("5511888888888"))],
             Action = ParticipantAction.Remove
         };
 
@@ -422,7 +423,7 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Value.Jid.Should().Be("joinedgroup@g.us");
+        result.Value.Jid?.Value.Should().Be("joinedgroup@g.us");
         result.Value.Name.Should().Be("Joined Group");
 
         var httpRequest = this.MockHandler.ReceivedRequests[0];
@@ -453,10 +454,10 @@ public sealed class WuzApiClientGroupTests : WuzApiClientTestBase
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.Value.GroupJid.Should().Be("targetgroup@g.us");
+        result.Value.GroupJid?.Value.Should().Be("targetgroup@g.us");
         result.Value.GroupName.Should().Be("Target Group");
         result.Value.Participants.Should().Be(25);
-        result.Value.Creator.Should().Be("creator@s.whatsapp.net");
+        result.Value.Creator?.Value.Should().Be("creator@s.whatsapp.net");
 
         var httpRequest = this.MockHandler.ReceivedRequests[0];
         httpRequest.RequestUri!.PathAndQuery.Should().Be("/group/inviteinfo");

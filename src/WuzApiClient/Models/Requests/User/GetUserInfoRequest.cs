@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Requests.User;
 
@@ -9,8 +11,9 @@ namespace WuzApiClient.Models.Requests.User;
 public sealed class GetUserInfoRequest
 {
     /// <summary>
-    /// Gets or sets the phone numbers in JID format to get info for.
+    /// Gets or sets the JIDs to get info for.
     /// </summary>
     [JsonPropertyName("Phone")]
-    public string[] Phones { get; set; } = [];
+    [JsonConverter(typeof(JidArrayConverter))]
+    public Jid[] Phones { get; set; } = [];
 }

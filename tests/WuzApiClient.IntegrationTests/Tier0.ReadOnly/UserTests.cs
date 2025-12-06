@@ -2,7 +2,7 @@ using AwesomeAssertions;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Ordering;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 
 namespace WuzApiClient.IntegrationTests.Tier0.ReadOnly;
 

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.Models.Responses.User;
 
@@ -13,7 +15,8 @@ public sealed class UserInfoResponse
     /// Gets or sets the users dictionary (JID -> UserInfo).
     /// </summary>
     [JsonPropertyName("Users")]
-    public Dictionary<string, UserInfo> Users { get; set; } = new();
+    [JsonConverter(typeof(JidDictionaryConverter<UserInfo>))]
+    public Dictionary<Jid, UserInfo>? Users { get; set; }
 }
 
 /// <summary>

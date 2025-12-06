@@ -1,6 +1,6 @@
 using WuzApiClient.Core.Interfaces;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
-using WuzApiClient.Models.Common;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Group;
 
 namespace WuzApiClient.IntegrationTests.TestInfrastructure.Helpers;
@@ -79,7 +79,7 @@ public sealed class TestGroupManager
         var testGroup = groupsResult.Value.Groups
             .FirstOrDefault(g => g.Name?.StartsWith(TestGroupPrefix, StringComparison.Ordinal) == true);
 
-        return testGroup?.Jid;
+        return testGroup?.Jid?.Value;
     }
 
     private async Task<string> CreateTestGroupAsync()
@@ -90,7 +90,7 @@ public sealed class TestGroupManager
         var request = new CreateGroupRequest
         {
             Name = groupName,
-            Participants = [phone]
+            Participants = [Jid.FromPhone(phone)]
         };
 
         var result = await this.client.CreateGroupAsync(request);
@@ -101,6 +101,6 @@ public sealed class TestGroupManager
                 $"Failed to create test group: {result.Error}");
         }
 
-        return result.Value.Jid!;
+        return result.Value.Jid!.Value!;
     }
 }

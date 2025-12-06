@@ -1,7 +1,8 @@
+using WuzApiClient.Json;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using WuzApiClient.Json;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.UnitTests.TestInfrastructure.Mocks;
 

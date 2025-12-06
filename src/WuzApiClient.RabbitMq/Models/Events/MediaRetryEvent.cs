@@ -1,5 +1,7 @@
 using System;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -23,13 +25,15 @@ public sealed record MediaRetryEventData
     /// Gets the chat JID where the media was sent.
     /// </summary>
     [JsonPropertyName("ChatID")]
-    public string? ChatId { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? ChatId { get; init; }
 
     /// <summary>
     /// Gets the sender JID of the media message.
     /// </summary>
     [JsonPropertyName("SenderID")]
-    public string? SenderId { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid? SenderId { get; init; }
 
     /// <summary>
     /// Gets the message ID being retried.

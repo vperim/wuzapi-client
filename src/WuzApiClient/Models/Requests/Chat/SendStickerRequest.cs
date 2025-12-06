@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Models.Requests.Chat;

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Responses.Chat;
 using WuzApiClient.Models.Responses.Group;
 using WuzApiClient.Models.Responses.Session;
@@ -74,9 +76,9 @@ public static class ResponseBuilder
     {
         return new UserInfoResponse
         {
-            Users = new Dictionary<string, UserInfo>
+            Users = new Dictionary<Jid, UserInfo>
             {
-                [jid!] = new UserInfo
+                [new Jid(jid!)] = new UserInfo
                 {
                     Status = status,
                     PictureId = pictureId
