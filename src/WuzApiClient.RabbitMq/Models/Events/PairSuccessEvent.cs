@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Models;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -25,7 +27,8 @@ public sealed record PairSuccessEventData
     /// Gets the JID (Jabber ID) of the paired device.
     /// </summary>
     [JsonPropertyName("ID")]
-    public string? Id { get; init; }
+    [JsonConverter(typeof(JidConverter))]
+    public Jid Jid { get; init; }
 
     /// <summary>
     /// Gets the business account ID (LID).
