@@ -1,10 +1,11 @@
 using System;
 using System.Text.Json;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Common.Extensions;
 
 namespace WuzApiClient.RabbitMq.Models.Wuz;
 
-public sealed record WhatsAppEventMetadata(string Event, string Type)
+public sealed record WhatsAppEventMetadata(string Event, WhatsAppEventType Type)
 {
     public static WhatsAppEventMetadata Parse(JsonElement root)
     {
@@ -13,7 +14,10 @@ public sealed record WhatsAppEventMetadata(string Event, string Type)
         if (typeValue.IsNullOrWhiteSpace())
             throw new WhatsAppEventMetadataException("Type property is null.");
 
-        return new WhatsAppEventMetadata(eventValue, typeValue);
+        if (!Enum.TryParse<WhatsAppEventType>(typeValue, out var eventType))
+            eventType = WhatsAppEventType.Unknown;
+
+        return new WhatsAppEventMetadata(eventValue, eventType);
     }
 }
 

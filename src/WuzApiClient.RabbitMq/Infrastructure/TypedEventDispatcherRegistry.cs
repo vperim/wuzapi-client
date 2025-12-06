@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
@@ -13,7 +14,7 @@ namespace WuzApiClient.RabbitMq.Infrastructure;
 /// </summary>
 public sealed class TypedEventDispatcherRegistry : ITypedEventDispatcherRegistry
 {
-    private readonly Dictionary<string, ITypedEventDispatcher> dispatchers;
+    private readonly Dictionary<WhatsAppEventType, ITypedEventDispatcher> dispatchers;
     private readonly ITypedEventDispatcher unknownDispatcher;
 
     /// <summary>
@@ -27,55 +28,55 @@ public sealed class TypedEventDispatcherRegistry : ITypedEventDispatcherRegistry
 
         this.unknownDispatcher = CreateDispatcher<UnknownEventEnvelope>(loggerFactory);
 
-        this.dispatchers = new Dictionary<string, ITypedEventDispatcher>(StringComparer.Ordinal)
+        this.dispatchers = new Dictionary<WhatsAppEventType, ITypedEventDispatcher>
         {
-            [EventTypes.Message] = CreateDispatcher<MessageEventEnvelope>(loggerFactory),
-            [EventTypes.UndecryptableMessage] = CreateDispatcher<UndecryptableMessageEventEnvelope>(loggerFactory),
-            [EventTypes.Receipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
-            [EventTypes.ReadReceipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
-            [EventTypes.Presence] = CreateDispatcher<PresenceEventEnvelope>(loggerFactory),
-            [EventTypes.ChatPresence] = CreateDispatcher<ChatPresenceEventEnvelope>(loggerFactory),
-            [EventTypes.Connected] = CreateDispatcher<ConnectedEventEnvelope>(loggerFactory),
-            [EventTypes.Disconnected] = CreateDispatcher<DisconnectedEventEnvelope>(loggerFactory),
-            [EventTypes.Qr] = CreateDispatcher<QrCodeEventEnvelope>(loggerFactory),
-            [EventTypes.QrTimeout] = CreateDispatcher<QrTimeoutEventEnvelope>(loggerFactory),
-            [EventTypes.QrScannedWithoutMultidevice] = CreateDispatcher<QrScannedWithoutMultideviceEventEnvelope>(loggerFactory),
-            [EventTypes.PairSuccess] = CreateDispatcher<PairSuccessEventEnvelope>(loggerFactory),
-            [EventTypes.PairError] = CreateDispatcher<PairErrorEventEnvelope>(loggerFactory),
-            [EventTypes.LoggedOut] = CreateDispatcher<LoggedOutEventEnvelope>(loggerFactory),
-            [EventTypes.ConnectFailure] = CreateDispatcher<ConnectFailureEventEnvelope>(loggerFactory),
-            [EventTypes.ClientOutdated] = CreateDispatcher<ClientOutdatedEventEnvelope>(loggerFactory),
-            [EventTypes.TemporaryBan] = CreateDispatcher<TemporaryBanEventEnvelope>(loggerFactory),
-            [EventTypes.StreamError] = CreateDispatcher<StreamErrorEventEnvelope>(loggerFactory),
-            [EventTypes.StreamReplaced] = CreateDispatcher<StreamReplacedEventEnvelope>(loggerFactory),
-            [EventTypes.KeepAliveTimeout] = CreateDispatcher<KeepAliveTimeoutEventEnvelope>(loggerFactory),
-            [EventTypes.KeepAliveRestored] = CreateDispatcher<KeepAliveRestoredEventEnvelope>(loggerFactory),
-            [EventTypes.CallOffer] = CreateDispatcher<CallOfferEventEnvelope>(loggerFactory),
-            [EventTypes.CallAccept] = CreateDispatcher<CallAcceptEventEnvelope>(loggerFactory),
-            [EventTypes.CallTerminate] = CreateDispatcher<CallTerminateEventEnvelope>(loggerFactory),
-            [EventTypes.CallOfferNotice] = CreateDispatcher<CallOfferNoticeEventEnvelope>(loggerFactory),
-            [EventTypes.CallRelayLatency] = CreateDispatcher<CallRelayLatencyEventEnvelope>(loggerFactory),
-            [EventTypes.GroupInfo] = CreateDispatcher<GroupInfoEventEnvelope>(loggerFactory),
-            [EventTypes.JoinedGroup] = CreateDispatcher<JoinedGroupEventEnvelope>(loggerFactory),
-            [EventTypes.Picture] = CreateDispatcher<PictureEventEnvelope>(loggerFactory),
-            [EventTypes.HistorySync] = CreateDispatcher<HistorySyncEventEnvelope>(loggerFactory),
-            [EventTypes.AppState] = CreateDispatcher<AppStateEventEnvelope>(loggerFactory),
-            [EventTypes.AppStateSyncComplete] = CreateDispatcher<AppStateSyncCompleteEventEnvelope>(loggerFactory),
-            [EventTypes.OfflineSyncCompleted] = CreateDispatcher<OfflineSyncCompletedEventEnvelope>(loggerFactory),
-            [EventTypes.OfflineSyncPreview] = CreateDispatcher<OfflineSyncPreviewEventEnvelope>(loggerFactory),
-            [EventTypes.PrivacySettings] = CreateDispatcher<PrivacySettingsEventEnvelope>(loggerFactory),
-            [EventTypes.PushNameSetting] = CreateDispatcher<PushNameSettingEventEnvelope>(loggerFactory),
-            [EventTypes.BlocklistChange] = CreateDispatcher<BlocklistChangeEventEnvelope>(loggerFactory),
-            [EventTypes.Blocklist] = CreateDispatcher<BlocklistEventEnvelope>(loggerFactory),
-            [EventTypes.IdentityChange] = CreateDispatcher<IdentityChangeEventEnvelope>(loggerFactory),
-            [EventTypes.NewsletterJoin] = CreateDispatcher<NewsletterJoinEventEnvelope>(loggerFactory),
-            [EventTypes.NewsletterLeave] = CreateDispatcher<NewsletterLeaveEventEnvelope>(loggerFactory),
-            [EventTypes.NewsletterMuteChange] = CreateDispatcher<NewsletterMuteChangeEventEnvelope>(loggerFactory),
-            [EventTypes.NewsletterLiveUpdate] = CreateDispatcher<NewsletterLiveUpdateEventEnvelope>(loggerFactory),
-            [EventTypes.MediaRetry] = CreateDispatcher<MediaRetryEventEnvelope>(loggerFactory),
-            [EventTypes.UserAbout] = CreateDispatcher<UserAboutEventEnvelope>(loggerFactory),
-            [EventTypes.FbMessage] = CreateDispatcher<FbMessageEventEnvelope>(loggerFactory),
-            [EventTypes.CatRefreshError] = CreateDispatcher<CatRefreshErrorEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Message] = CreateDispatcher<MessageEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.UndecryptableMessage] = CreateDispatcher<UndecryptableMessageEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Receipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.ReadReceipt] = CreateDispatcher<ReceiptEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Presence] = CreateDispatcher<PresenceEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.ChatPresence] = CreateDispatcher<ChatPresenceEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Connected] = CreateDispatcher<ConnectedEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Disconnected] = CreateDispatcher<DisconnectedEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.QR] = CreateDispatcher<QrCodeEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.QRTimeout] = CreateDispatcher<QrTimeoutEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.QRScannedWithoutMultidevice] = CreateDispatcher<QrScannedWithoutMultideviceEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.PairSuccess] = CreateDispatcher<PairSuccessEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.PairError] = CreateDispatcher<PairErrorEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.LoggedOut] = CreateDispatcher<LoggedOutEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.ConnectFailure] = CreateDispatcher<ConnectFailureEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.ClientOutdated] = CreateDispatcher<ClientOutdatedEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.TemporaryBan] = CreateDispatcher<TemporaryBanEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.StreamError] = CreateDispatcher<StreamErrorEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.StreamReplaced] = CreateDispatcher<StreamReplacedEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.KeepAliveTimeout] = CreateDispatcher<KeepAliveTimeoutEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.KeepAliveRestored] = CreateDispatcher<KeepAliveRestoredEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CallOffer] = CreateDispatcher<CallOfferEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CallAccept] = CreateDispatcher<CallAcceptEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CallTerminate] = CreateDispatcher<CallTerminateEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CallOfferNotice] = CreateDispatcher<CallOfferNoticeEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CallRelayLatency] = CreateDispatcher<CallRelayLatencyEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.GroupInfo] = CreateDispatcher<GroupInfoEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.JoinedGroup] = CreateDispatcher<JoinedGroupEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Picture] = CreateDispatcher<PictureEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.HistorySync] = CreateDispatcher<HistorySyncEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.AppState] = CreateDispatcher<AppStateEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.AppStateSyncComplete] = CreateDispatcher<AppStateSyncCompleteEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.OfflineSyncCompleted] = CreateDispatcher<OfflineSyncCompletedEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.OfflineSyncPreview] = CreateDispatcher<OfflineSyncPreviewEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.PrivacySettings] = CreateDispatcher<PrivacySettingsEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.PushNameSetting] = CreateDispatcher<PushNameSettingEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.BlocklistChange] = CreateDispatcher<BlocklistChangeEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.Blocklist] = CreateDispatcher<BlocklistEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.IdentityChange] = CreateDispatcher<IdentityChangeEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.NewsletterJoin] = CreateDispatcher<NewsletterJoinEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.NewsletterLeave] = CreateDispatcher<NewsletterLeaveEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.NewsletterMuteChange] = CreateDispatcher<NewsletterMuteChangeEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.NewsletterLiveUpdate] = CreateDispatcher<NewsletterLiveUpdateEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.MediaRetry] = CreateDispatcher<MediaRetryEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.UserAbout] = CreateDispatcher<UserAboutEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.FBMessage] = CreateDispatcher<FbMessageEventEnvelope>(loggerFactory),
+            [WhatsAppEventType.CATRefreshError] = CreateDispatcher<CatRefreshErrorEventEnvelope>(loggerFactory),
         };
     }
 
@@ -86,7 +87,7 @@ public sealed class TypedEventDispatcherRegistry : ITypedEventDispatcherRegistry
     }
 
     /// <inheritdoc/>
-    public ITypedEventDispatcher GetDispatcher(string eventType)
+    public ITypedEventDispatcher GetDispatcher(WhatsAppEventType eventType)
     {
         return this.dispatchers.TryGetValue(eventType, out var dispatcher)
             ? dispatcher

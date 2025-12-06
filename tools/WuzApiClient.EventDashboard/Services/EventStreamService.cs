@@ -147,7 +147,7 @@ public sealed class EventStreamService : IEventStreamService, IDisposable
         {
             Id = Guid.NewGuid().ToString(),
             Timestamp = envelope.ReceivedAt,
-            EventType = envelope.Metadata.WaEventMetadata.Type,
+            EventType = envelope.Metadata.WaEventMetadata.Type.ToString(),
             Category = metadata.Category,
             UserId = envelope.Metadata.WuzEnvelope.UserId,
             InstanceName = envelope.Metadata.WuzEnvelope.InstanceName,

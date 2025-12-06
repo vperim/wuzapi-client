@@ -1,4 +1,5 @@
 using System.Text.Json;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.EventDashboard.Models;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
@@ -12,7 +13,7 @@ public static class MessageContentExtractor
         // All message details must be extracted from RawEvent
         return envelope.Metadata.WaEventMetadata.Type switch
         {
-            "Message" => ExtractMessage(envelope),
+            WhatsAppEventType.Message => ExtractMessage(envelope),
             _ => new MessagePreviewResult($"[{envelope.Metadata.WaEventMetadata.Type}]", "unknown-message")
         };
     }

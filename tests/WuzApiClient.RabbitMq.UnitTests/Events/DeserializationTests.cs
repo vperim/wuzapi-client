@@ -48,7 +48,7 @@ public sealed class DeserializationTests
         metadata.RawJson.Should().NotBeNullOrEmpty();
 
         metadata.WaEventMetadata.Should().NotBeNull();
-        metadata.WaEventMetadata.Type.Should().Be(expectedEventType);
+        metadata.WaEventMetadata.Type.ToString().Should().Be(expectedEventType);
         metadata.WaEventMetadata.Event.Should().NotBeNullOrEmpty();
     }
 
