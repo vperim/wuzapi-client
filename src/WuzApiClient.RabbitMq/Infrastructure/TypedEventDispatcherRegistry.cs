@@ -80,7 +80,7 @@ public sealed class TypedEventDispatcherRegistry : ITypedEventDispatcherRegistry
     }
 
     private static TypedEventDispatcher<TEvent> CreateDispatcher<TEvent>(ILoggerFactory loggerFactory)
-        where TEvent : class, IWhatsAppEnvelope
+        where TEvent : class, IWhatsAppEventEnvelope
     {
         return new TypedEventDispatcher<TEvent>(loggerFactory.CreateLogger<TypedEventDispatcher<TEvent>>());
     }

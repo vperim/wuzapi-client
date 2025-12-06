@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AwesomeAssertions;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Json;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Admin;
@@ -73,7 +74,7 @@ public sealed class RequestSerializationTests
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
+            Events = [WhatsAppEventType.Message, WhatsAppEventType.Presence]
         };
 
         var json = JsonSerializer.Serialize(request, this.options);
@@ -106,7 +107,7 @@ public sealed class RequestSerializationTests
     {
         var request = new ConnectSessionRequest
         {
-            Subscribe = [SubscribableEvent.Message, SubscribableEvent.Presence],
+            Subscribe = [WhatsAppEventType.Message, WhatsAppEventType.Presence],
             Immediate = true
         };
 

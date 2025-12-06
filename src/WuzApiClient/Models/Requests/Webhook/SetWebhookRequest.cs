@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Json;
 using WuzApiClient.Models.Common;
 
@@ -20,5 +21,5 @@ public sealed class SetWebhookRequest
     /// </summary>
     [JsonPropertyName("events")]
     [JsonConverter(typeof(SubscribableEventArrayConverter))]
-    public SubscribableEvent[]? Events { get; set; }
+    public WhatsAppEventType[]? Events { get; set; }
 }

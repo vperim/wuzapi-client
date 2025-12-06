@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
@@ -11,7 +12,7 @@ namespace WuzApiClient.RabbitMq.Core.Interfaces;
 /// </summary>
 /// <typeparam name="TEvent">The event type to handle.</typeparam>
 public interface IEventHandler<in TEvent>
-    where TEvent : class, IWhatsAppEnvelope
+    where TEvent : class, IWhatsAppEventEnvelope
 {
     /// <summary>
     /// Handles the event asynchronously.

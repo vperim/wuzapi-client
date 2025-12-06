@@ -1,23 +1,22 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WuzApiClient.RabbitMq.Models.Events;
 
-namespace WuzApiClient.RabbitMq.Models;
+namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
 /// Fallback event envelope for unknown or failed event types.
 /// Provides forward compatibility when wuzapi adds new event types.
 /// </summary>
-public sealed record UnknownEventEnvelope : WhatsAppEventEnvelope<UnknownEventData>
+public sealed record UnknownEventEnvelope : WhatsAppEventEnvelope<UnknownEvent>
 {
-    public override required UnknownEventData Event { get; init; }
+    public override required UnknownEvent Event { get; init; }
 }
 
 /// <summary>
 /// Fallback event data for unknown or failed event types.
 /// Provides forward compatibility when wuzapi adds new event types.
 /// </summary>
-public sealed record UnknownEventData
+public sealed record UnknownEvent
 {
     /// <summary>
     /// Gets the raw JSON of the entire event payload.

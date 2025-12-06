@@ -1,12 +1,14 @@
-namespace WuzApiClient.Models.Common;
+namespace WuzApiClient.Common.Enums;
 
 /// <summary>
 /// Event types that can be subscribed to when connecting a session.
 /// Enum member names match wuzapi's expected string values exactly (case-sensitive).
 /// Source: wuzapi/constants.go supportedEventTypes
 /// </summary>
-public enum SubscribableEvent
+public enum WhatsAppEventType
 {
+    Unknown,
+
     // ==================== Special ====================
 
     /// <summary>Subscribe to all events.</summary>
@@ -69,7 +71,7 @@ public enum SubscribableEvent
     KeepAliveTimeout,
 
     /// <summary>QR code expired without successful scan.</summary>
-    QrTimeout,
+    QRTimeout,
 
     /// <summary>User was logged out.</summary>
     LoggedOut,
@@ -93,10 +95,10 @@ public enum SubscribableEvent
     PairError,
 
     /// <summary>QR code generated for pairing.</summary>
-    Qr,
+    QR,
 
     /// <summary>QR code scanned but multidevice not enabled on phone.</summary>
-    QrScannedWithoutMultidevice,
+    QRScannedWithoutMultidevice,
 
     // ==================== Privacy and Settings ====================
 
@@ -159,7 +161,7 @@ public enum SubscribableEvent
     // ==================== Errors ====================
 
     /// <summary>CAT (Client Access Token) refresh error.</summary>
-    CatRefreshError,
+    CATRefreshError,
 
     // ==================== Newsletter (WhatsApp Channels) ====================
 
@@ -178,5 +180,5 @@ public enum SubscribableEvent
     // ==================== Facebook/Meta Bridge ====================
 
     /// <summary>Facebook/Meta integration message.</summary>
-    FbMessage
+    FBMessage
 }

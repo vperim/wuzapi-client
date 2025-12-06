@@ -2,16 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Json;
 
 /// <summary>
-/// Converts SubscribableEvent[] to/from JSON string array using enum member names.
+/// Converts WhatsAppEventType[] to/from JSON string array using enum member names.
 /// </summary>
-public sealed class SubscribableEventArrayConverter : JsonConverter<SubscribableEvent[]>
+public sealed class SubscribableEventArrayConverter : JsonConverter<WhatsAppEventType[]>
 {
-    public override SubscribableEvent[] Read(
+    public override WhatsAppEventType[] Read(
         ref Utf8JsonReader reader,
         Type typeToConvert,
         JsonSerializerOptions options)
@@ -26,11 +27,11 @@ public sealed class SubscribableEventArrayConverter : JsonConverter<Subscribable
             throw new JsonException("Expected array");
         }
 
-        var list = new List<SubscribableEvent>();
+        var list = new List<WhatsAppEventType>();
         while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
         {
             var value = reader.GetString();
-            if (Enum.TryParse<SubscribableEvent>(value, ignoreCase: false, out var evt))
+            if (Enum.TryParse<WhatsAppEventType>(value, ignoreCase: false, out var evt))
             {
                 list.Add(evt);
             }
@@ -41,7 +42,7 @@ public sealed class SubscribableEventArrayConverter : JsonConverter<Subscribable
 
     public override void Write(
         Utf8JsonWriter writer,
-        SubscribableEvent[] value,
+        WhatsAppEventType[] value,
         JsonSerializerOptions options)
     {
         writer.WriteStartArray();

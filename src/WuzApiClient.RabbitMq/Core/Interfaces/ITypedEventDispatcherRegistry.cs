@@ -7,7 +7,7 @@ namespace WuzApiClient.RabbitMq.Core.Interfaces;
 /// This singleton registry maps wuzapi event type strings to their
 /// corresponding typed dispatchers, enabling O(1) dispatch routing
 /// without reflection. Unknown event types are handled by a fallback
-/// dispatcher that creates UnknownEventData envelopes.
+/// dispatcher that creates UnknownEvent envelopes.
 /// </remarks>
 public interface ITypedEventDispatcherRegistry
 {

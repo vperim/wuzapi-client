@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WuzApiClient.RabbitMq.Core.Interfaces;
+using WuzApiClient.RabbitMq.Models;
 using WuzApiClient.RabbitMq.Models.Events;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
@@ -16,7 +17,7 @@ namespace WuzApiClient.RabbitMq.Infrastructure;
 /// </summary>
 /// <typeparam name="TEvent">The event type this dispatcher handles.</typeparam>
 public sealed class TypedEventDispatcher<TEvent> : ITypedEventDispatcher
-    where TEvent : class, IWhatsAppEnvelope
+    where TEvent : class, IWhatsAppEventEnvelope
 {
     private readonly ILogger<TypedEventDispatcher<TEvent>> logger;
 

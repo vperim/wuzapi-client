@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Json;
 using WuzApiClient.Models.Common;
 
@@ -12,16 +13,16 @@ public sealed class ConnectSessionRequest
     /// <summary>
     /// Default subscription: all events.
     /// </summary>
-    private static readonly SubscribableEvent[] DefaultSubscription = [SubscribableEvent.All];
+    private static readonly WhatsAppEventType[] DefaultSubscription = [WhatsAppEventType.All];
 
     /// <summary>
     /// Gets or sets the events to subscribe to.
-    /// Default: [SubscribableEvent.All] (subscribes to all events).
+    /// Default: [WhatsAppEventType.All] (subscribes to all events).
     /// To opt-out of event subscriptions, set to an empty array: [].
     /// </summary>
     [JsonPropertyName("subscribe")]
     [JsonConverter(typeof(SubscribableEventArrayConverter))]
-    public SubscribableEvent[] Subscribe { get; set; } = DefaultSubscription;
+    public WhatsAppEventType[] Subscribe { get; set; } = DefaultSubscription;
 
     /// <summary>
     /// Gets or sets a value indicating whether to connect immediately.

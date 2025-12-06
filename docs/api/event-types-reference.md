@@ -21,12 +21,12 @@ public sealed record WuzEventEnvelope<TPayload> : IWuzEventEnvelope<TPayload>
 // Payload structure - event-specific (example: MessageEventEnvelope)
 public sealed record MessageEventEnvelope : IWhatsAppEnvelope
 {
-    public required string Type { get; init; }               // Event type identifier (e.g., "Message")
-    public required MessageEventData Event { get; init; }    // Actual event data
+    public required WhatsAppEventType EventType { get; init; }  // Event type (e.g., WhatsAppEventType.Message)
+    public required MessageEventData Event { get; init; }       // Actual event data
     // Additional envelope-level properties (varies by event type)
-    public string? Base64 { get; init; }                     // Base64-encoded media (MessageEventEnvelope only)
-    public S3MediaInfo? S3 { get; init; }                    // S3 media info (MessageEventEnvelope only)
-    public string? State { get; init; }                      // Receipt state (ReceiptEventEnvelope only)
+    public string? Base64 { get; init; }                        // Base64-encoded media (MessageEventEnvelope only)
+    public S3MediaInfo? S3 { get; init; }                       // S3 media info (MessageEventEnvelope only)
+    public string? State { get; init; }                         // Receipt state (ReceiptEventEnvelope only)
 }
 ```
 
@@ -54,13 +54,13 @@ Triggered when a message is received (text, image, document, audio, video, etc.)
 // Payload structure
 public sealed record MessageEventEnvelope : IWhatsAppEnvelope
 {
-    public required string Type { get; init; }       // "Message"
-    public required MessageEventData Event { get; init; }  // Actual event data
+    public required WhatsAppEventType EventType { get; init; }  // WhatsAppEventType.Message
+    public required MessageEventData Event { get; init; }       // Actual event data
     // Envelope-level properties
-    public string? Base64 { get; init; }             // Base64-encoded media content
-    public string? MimeType { get; init; }           // Media MIME type
-    public string? FileName { get; init; }           // Media file name
-    public S3MediaInfo? S3 { get; init; }            // S3 media information
+    public string? Base64 { get; init; }                        // Base64-encoded media content
+    public string? MimeType { get; init; }                      // Media MIME type
+    public string? FileName { get; init; }                      // Media file name
+    public S3MediaInfo? S3 { get; init; }                       // S3 media information
 }
 
 // Event data
@@ -119,9 +119,9 @@ Triggered when message delivery or read receipts are received.
 // Payload structure
 public sealed record ReceiptEventEnvelope : IWhatsAppEnvelope
 {
-    public required string Type { get; init; }       // "Receipt"
-    public required ReceiptEventData Event { get; init; }  // Actual event data
-    public string? State { get; init; }              // Receipt state: "Read", "ReadSelf", "Delivered"
+    public required WhatsAppEventType EventType { get; init; }  // WhatsAppEventType.Receipt
+    public required ReceiptEventData Event { get; init; }       // Actual event data
+    public string? State { get; init; }                         // Receipt state: "Read", "ReadSelf", "Delivered"
 }
 
 // Event data
@@ -186,8 +186,8 @@ Triggered when contact's online/offline status changes.
 // Payload structure
 public sealed record PresenceEventEnvelope : IWhatsAppEnvelope
 {
-    public required string Type { get; init; }       // "Presence"
-    public required PresenceEventData Event { get; init; }  // Actual event data
+    public required WhatsAppEventType EventType { get; init; }  // WhatsAppEventType.Presence
+    public required PresenceEventData Event { get; init; }      // Actual event data
 }
 
 // Event data
@@ -240,8 +240,8 @@ Triggered when group information (name, topic) is updated.
 // Payload structure
 public sealed record GroupInfoEventEnvelope : IWhatsAppEnvelope
 {
-    public required string Type { get; init; }       // "GroupInfo"
-    public required GroupInfoEventData Event { get; init; }  // Actual event data
+    public required WhatsAppEventType EventType { get; init; }  // WhatsAppEventType.GroupInfo
+    public required GroupInfoEventData Event { get; init; }     // Actual event data
 }
 
 // Event data

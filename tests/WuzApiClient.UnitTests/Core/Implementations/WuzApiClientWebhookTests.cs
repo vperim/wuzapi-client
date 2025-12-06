@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Models.Common;
 using WuzApiClient.Models.Requests.Webhook;
 using WuzApiClient.Models.Responses.Webhook;
@@ -17,7 +18,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
+            Events = [WhatsAppEventType.Message, WhatsAppEventType.Presence]
         };
 
         // Act
@@ -35,7 +36,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var request = new SetWebhookRequest
         {
             Url = "https://example.com/webhook",
-            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
+            Events = [WhatsAppEventType.Message, WhatsAppEventType.Presence]
         };
 
         // Act
@@ -62,7 +63,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         var expectedResponse = new WebhookConfigResponse
         {
             Url = "https://example.com/webhook",
-            Events = [SubscribableEvent.Message, SubscribableEvent.Presence]
+            Events = [WhatsAppEventType.Message, WhatsAppEventType.Presence]
         };
         this.MockHandler.EnqueueSuccessResponse(expectedResponse);
 
@@ -72,7 +73,7 @@ public sealed class WuzApiClientWebhookTests : WuzApiClientTestBase
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Value.Url.Should().Be("https://example.com/webhook");
-        result.Value.Events.Should().BeEquivalentTo([SubscribableEvent.Message, SubscribableEvent.Presence]);
+        result.Value.Events.Should().BeEquivalentTo([WhatsAppEventType.Message, WhatsAppEventType.Presence]);
     }
 
     [Fact]

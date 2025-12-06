@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
+using WuzApiClient.RabbitMq.Models.Common;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 

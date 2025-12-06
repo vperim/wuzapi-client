@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace WuzApiClient.RabbitMq.Models;
+namespace WuzApiClient.RabbitMq.Models.Common;
 
 /// <summary>
 /// S3 media information for uploaded media.

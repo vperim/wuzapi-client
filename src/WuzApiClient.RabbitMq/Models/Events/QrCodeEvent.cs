@@ -4,29 +4,6 @@ using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
-public interface IWhatsAppEnvelope
-{
-    public string Type { get; }
-}
-
-public interface IWhatsAppEnvelope<out TEvent> : IWhatsAppEnvelope
-    where TEvent : class
-{
-    public TEvent Event { get; }
-}
-
-
-
-public abstract record WhatsAppEventEnvelope<TEvent> : IWhatsAppEnvelope<TEvent>
-    where TEvent : class
-{
-    [JsonPropertyName("type")]
-    public required string Type { get; init; }
-
-    [JsonPropertyName("event")]
-    public abstract required TEvent Event { get; init;  }
-}
-
 /// <summary>
 /// Event when a QR code is generated for pairing.
 /// Corresponds to whatsmeow events.QR.

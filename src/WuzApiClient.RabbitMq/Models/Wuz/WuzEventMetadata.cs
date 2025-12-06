@@ -44,11 +44,11 @@ public sealed record WuzEventMetadata(
     /// <summary>
     /// Creates a typed event envelope from this metadata.
     /// </summary>
-    /// <typeparam name="TPayload">The payload type implementing IWhatsAppEnvelope.</typeparam>
+    /// <typeparam name="TPayload">The payload type implementing IWhatsAppEventEnvelope.</typeparam>
     /// <returns>A typed event envelope.</returns>
     /// <exception cref="WuzEventMetadataException">Thrown when deserialization fails.</exception>
     public WuzEventEnvelope<TPayload> ToEnvelope<TPayload>()
-        where TPayload : class, IWhatsAppEnvelope
+        where TPayload : class, IWhatsAppEventEnvelope
     {
         // Deserialize the payload directly from the flattened JSON
         var payload = JsonSerializer.Deserialize<TPayload>(this.RawJson, Options);

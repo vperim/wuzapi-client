@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace WuzApiClient.RabbitMq.Models;
+namespace WuzApiClient.RabbitMq.Models.Common;
 
 /// <summary>
 /// Message content within a MessageEvent.
