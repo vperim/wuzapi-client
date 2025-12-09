@@ -106,7 +106,11 @@ public sealed class TypedEventDispatcher<TEvent> : ITypedEventDispatcher
         }
         catch (JsonException ex)
         {
-            this.logger.LogError(ex, "JSON error while processing event type '{EventType}'", metadata.WaEventMetadata.Type);
+            this.logger.LogError(
+                ex,
+                "JSON error while processing event type '{EventType}'. Raw JSON: {RawJson}",
+                metadata.WaEventMetadata.Type,
+                metadata.RawJson);
         }
     }
 }

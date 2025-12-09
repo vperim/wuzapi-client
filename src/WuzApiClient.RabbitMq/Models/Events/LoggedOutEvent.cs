@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Enums;
+using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
@@ -10,10 +12,10 @@ public sealed record LoggedOutEventData
 {
     /// <summary>
     /// Gets the reason for logout.
-    /// From whatsmeow Reason field (converted to string).
     /// </summary>
     [JsonPropertyName("reason")]
-    public string? Reason { get; init; }
+    [JsonConverter(typeof(ConnectFailureReasonConverter))]
+    public ConnectFailureReason Reason { get; init; }
 }
 
 /// <summary>

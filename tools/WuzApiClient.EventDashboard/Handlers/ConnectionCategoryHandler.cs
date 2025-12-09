@@ -63,7 +63,7 @@ public sealed class ConnectionCategoryHandler :
         {
             Category = EventCategory.Connection,
             ConnectionEvent = "LoggedOut",
-            Reason = evt.Reason
+            Reason = evt.Reason.ToString()
         };
 
         eventStream.AddEvent(envelope, metadata);
