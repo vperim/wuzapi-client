@@ -29,8 +29,8 @@ public sealed class ReceiptCategoryHandler : IEventHandler<ReceiptEventEnvelope>
             SenderJid = evt.Sender ?? string.Empty,
             MessageIds = evt.MessageIDs ?? [],
             ReceiptTimestamp = evt.Timestamp,
-            ReceiptType = evt.ReceiptType ?? "unknown",
-            State = envelope.Payload.State ?? "unknown",
+            ReceiptType = evt.ReceiptType.ToString(),
+            State = envelope.Payload.State.ToString(),
             IsGroup = evt.IsGroup
         };
 

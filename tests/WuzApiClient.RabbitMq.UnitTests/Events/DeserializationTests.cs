@@ -1,4 +1,5 @@
 using AwesomeAssertions;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.RabbitMq.Models.Events;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
@@ -135,7 +136,7 @@ public sealed class DeserializationTests
         envelope.Payload.Event.Sender.Should().NotBeNull();
         envelope.Payload.Event.MessageIDs.Should().NotBeNullOrEmpty();
         envelope.Payload.Event.MessageIDs!.Should().Contain(id => !string.IsNullOrEmpty(id));
-        envelope.Payload.State.Should().Be("Delivered");
+        envelope.Payload.State.Should().Be(ReceiptState.Delivered);
 
         envelope.Metadata.Should().Be(metadata);
         envelope.ReceivedAt.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(5));

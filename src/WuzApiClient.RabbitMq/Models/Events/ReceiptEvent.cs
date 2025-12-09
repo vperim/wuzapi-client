@@ -1,16 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using WuzApiClient.Common.Enums;
 using WuzApiClient.Common.Models;
 using WuzApiClient.Common.Serialization;
 
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 
+/// <summary>
+/// Envelope for receipt events containing state and event data.
+/// </summary>
 public sealed record ReceiptEventEnvelope : WhatsAppEventEnvelope<ReceiptEvent>
 {
+    /// <summary>
+    /// Gets the receipt state (Read, ReadSelf, or Delivered).
+    /// </summary>
+    /// <remarks>
+    /// Wuzapi only sends webhooks for these three states.
+    /// All other receipt types are discarded before reaching the webhook.
+    /// </remarks>
     [JsonPropertyName("state")]
-    public required string State { get; init; }
+    [JsonConverter(typeof(ReceiptStateConverter))]
+    public required ReceiptState State { get; init; }
 
     [JsonPropertyName("event")]
     public override required ReceiptEvent Event { get; init; }
@@ -65,10 +77,11 @@ public sealed record ReceiptEvent
     public DateTimeOffset? Timestamp { get; init; }
 
     /// <summary>
-    /// Gets the receipt type from whatsmeow (e.g., "read", "played").
+    /// Gets the receipt type from whatsmeow (e.g., Read, Played).
     /// </summary>
     [JsonPropertyName("Type")]
-    public string? ReceiptType { get; init; }
+    [JsonConverter(typeof(ReceiptTypeConverter))]
+    public ReceiptType ReceiptType { get; init; }
 
     /// <summary>
     /// Gets the message sender JID for group receipts.
