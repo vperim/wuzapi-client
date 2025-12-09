@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <!-- Package-specific metadata -->
+        <PackageId>WuzApiClient.Extensions</PackageId>
+        <Description>Extension methods for WuzAPI Client. Provides convenience methods for existing APIs.</Description>
+        <PackageTags>whatsapp;wuzapi;api;extensions</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="WuzApiClient.Extensions.UnitTests" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="..\WuzApiClient.Common\CompatibilityShim.cs" Link="CompatibilityShim.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WuzApiClient\WuzApiClient.csproj" />
+    </ItemGroup>
+
+</Project>

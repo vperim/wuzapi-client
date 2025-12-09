@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace WuzApiClient.Utilities;
+namespace WuzApiClient.Extensions.Utilities;
 
 /// <summary>
 /// Internal utility for detecting MIME types from file extensions.

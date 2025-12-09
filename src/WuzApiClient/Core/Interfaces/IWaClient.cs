@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.Common.Results;
@@ -111,50 +110,6 @@ public interface IWaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sends an image message from a file.
-    /// </summary>
-    /// <param name="phone">Recipient phone number.</param>
-    /// <param name="filePath">Path to the image file.</param>
-    /// <param name="caption">Optional caption.</param>
-    /// <param name="quotedId">Optional message ID to reply to.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>WuzResult containing send response or error.</returns>
-    Task<WuzResult<SendMessageResponse>> SendImageFromFileAsync(
-        Phone phone,
-        string filePath,
-        string? caption = null,
-        string? quotedId = null,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Sends an image message from a stream.
-    /// </summary>
-    /// <param name="phone">Recipient phone number.</param>
-    /// <param name="imageStream">
-    /// Stream containing the image data. The caller retains ownership and is responsible
-    /// for disposing the stream after this method returns.
-    /// </param>
-    /// <param name="mimeType">
-    /// MIME type (e.g., "image/png"). If null, defaults to "image/jpeg".
-    /// </param>
-    /// <param name="caption">Optional caption.</param>
-    /// <param name="quotedId">Optional message ID to reply to.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>WuzResult containing send response or error.</returns>
-    /// <remarks>
-    /// This method reads the entire stream content but does NOT dispose it.
-    /// Wrap the stream in a using block or dispose it manually after calling this method.
-    /// Peak memory usage is approximately 3.5x the file size during encoding.
-    /// </remarks>
-    Task<WuzResult<SendMessageResponse>> SendImageFromStreamAsync(
-        Phone phone,
-        Stream imageStream,
-        string? mimeType = null,
-        string? caption = null,
-        string? quotedId = null,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Sends a document.
     /// </summary>
     /// <param name="request">The document message request.</param>
@@ -162,53 +117,6 @@ public interface IWaClient
     /// <returns>WuzResult containing send response or error.</returns>
     Task<WuzResult<SendMessageResponse>> SendDocumentAsync(
         SendDocumentRequest request,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Sends a document message from a file.
-    /// </summary>
-    /// <param name="phone">Recipient phone number.</param>
-    /// <param name="filePath">Path to the document file.</param>
-    /// <param name="caption">Optional caption.</param>
-    /// <param name="quotedId">Optional message ID to reply to.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>WuzResult containing send response or error.</returns>
-    Task<WuzResult<SendMessageResponse>> SendDocumentFromFileAsync(
-        Phone phone,
-        string filePath,
-        string? caption = null,
-        string? quotedId = null,
-        CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Sends a document message from a stream.
-    /// </summary>
-    /// <param name="phone">Recipient phone number.</param>
-    /// <param name="documentStream">
-    /// Stream containing the document data. The caller retains ownership and is responsible
-    /// for disposing the stream after this method returns.
-    /// </param>
-    /// <param name="fileName">
-    /// File name displayed to recipient in WhatsApp (e.g., "report.pdf").
-    /// Used to detect MIME type if mimeType parameter is null.
-    /// </param>
-    /// <param name="mimeType">MIME type (auto-detected from fileName extension if null).</param>
-    /// <param name="caption">Optional caption.</param>
-    /// <param name="quotedId">Optional message ID to reply to.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>WuzResult containing send response or error.</returns>
-    /// <remarks>
-    /// This method reads the entire stream content but does NOT dispose it.
-    /// Wrap the stream in a using block or dispose it manually after calling this method.
-    /// Peak memory usage is approximately 3.5x the file size during encoding.
-    /// </remarks>
-    Task<WuzResult<SendMessageResponse>> SendDocumentFromStreamAsync(
-        Phone phone,
-        Stream documentStream,
-        string fileName,
-        string? mimeType = null,
-        string? caption = null,
-        string? quotedId = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

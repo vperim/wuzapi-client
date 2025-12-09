@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace WuzApiClient.Utilities
+namespace WuzApiClient.Extensions.Utilities
 {
     /// <summary>
     /// Result of file encoding operation.

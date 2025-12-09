@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WuzApiClient\WuzApiClient.csproj" />
+    <ProjectReference Include="..\..\src\WuzApiClient.Extensions\WuzApiClient.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

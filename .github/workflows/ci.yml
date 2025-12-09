@@ -73,6 +73,12 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults
 
+          dotnet test tests/WuzApiClient.Extensions.UnitTests/WuzApiClient.Extensions.UnitTests.csproj \
+            --configuration Release \
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./TestResults
+
       - name: Publish coverage summary
         if: always()
         run: |
@@ -149,6 +155,13 @@ jobs:
             -p:ContinuousIntegrationBuild=true
 
           dotnet pack src/WuzApiClient.RabbitMq/WuzApiClient.RabbitMq.csproj \
+            --configuration Release \
+            --no-build \
+            --output ${{ env.NUGET_DIRECTORY }} \
+            -p:PackageVersion=${{ steps.version.outputs.VERSION }} \
+            -p:ContinuousIntegrationBuild=true
+
+          dotnet pack src/WuzApiClient.Extensions/WuzApiClient.Extensions.csproj \
             --configuration Release \
             --no-build \
             --output ${{ env.NUGET_DIRECTORY }} \

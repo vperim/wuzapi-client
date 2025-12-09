@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WuzApiClient.Utilities;
+namespace WuzApiClient.Extensions.Utilities;
 
 /// <summary>
 /// Internal utility for encoding files and streams to base64 data URLs.

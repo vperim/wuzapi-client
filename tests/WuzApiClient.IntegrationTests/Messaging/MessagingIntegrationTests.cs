@@ -1,5 +1,6 @@
 using AwesomeAssertions;
 using WuzApiClient.Common.Results;
+using WuzApiClient.Extensions;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Configuration;
 using WuzApiClient.IntegrationTests.TestInfrastructure.Fixtures;
 using WuzApiClient.Common.Models;
