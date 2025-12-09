@@ -1,7 +1,6 @@
 using WuzApiClient.Json;
 using System.Text.Json;
 using AwesomeAssertions;
-using WuzApiClient.Common.Serialization;
 using WuzApiClient.Models.Responses.Admin;
 using WuzApiClient.Models.Responses.Chat;
 using WuzApiClient.Models.Responses.Download;

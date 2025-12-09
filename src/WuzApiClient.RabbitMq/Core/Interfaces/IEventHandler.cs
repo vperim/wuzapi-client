@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.RabbitMq.Models;
-using WuzApiClient.RabbitMq.Models.Events;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.RabbitMq.Core.Interfaces;

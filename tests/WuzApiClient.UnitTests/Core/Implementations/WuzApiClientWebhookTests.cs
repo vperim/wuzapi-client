@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 using WuzApiClient.Common.Enums;
-using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Webhook;
 using WuzApiClient.Models.Responses.Webhook;
 using WuzApiClient.UnitTests.TestInfrastructure.Fixtures;

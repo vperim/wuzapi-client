@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Responses.Chat;
 using WuzApiClient.Models.Responses.Group;

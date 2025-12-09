@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using WuzApiClient.RabbitMq.Models;
-using WuzApiClient.RabbitMq.Models.Events;
 using WuzApiClient.RabbitMq.Models.Wuz;
 
 namespace WuzApiClient.RabbitMq.Infrastructure;

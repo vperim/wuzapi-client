@@ -5,7 +5,6 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.Common.Results;
-using WuzApiClient.Common.Serialization;
 using WuzApiClient.Json;
 
 namespace WuzApiClient.Core.Internal;

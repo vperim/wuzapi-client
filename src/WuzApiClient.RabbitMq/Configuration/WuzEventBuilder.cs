@@ -4,7 +4,6 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using WuzApiClient.RabbitMq.Core.Interfaces;
 using WuzApiClient.RabbitMq.Models;
-using WuzApiClient.RabbitMq.Models.Events;
 
 namespace WuzApiClient.RabbitMq.Configuration;
 

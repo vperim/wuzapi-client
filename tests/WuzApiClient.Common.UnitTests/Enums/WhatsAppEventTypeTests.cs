@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using AwesomeAssertions;
 using WuzApiClient.Common.Enums;
 

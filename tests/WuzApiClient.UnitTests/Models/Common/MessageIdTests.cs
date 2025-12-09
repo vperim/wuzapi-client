@@ -1,5 +1,4 @@
 using AwesomeAssertions;
-using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.UnitTests.Models.Common;

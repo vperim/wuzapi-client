@@ -1,12 +1,8 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using AwesomeAssertions;
 using NSubstitute;
 using WuzApiClient.Common.Models;
 using WuzApiClient.Common.Results;
 using WuzApiClient.Core.Interfaces;
-using WuzApiClient.Extensions;
 using WuzApiClient.Extensions.Options;
 using WuzApiClient.Models.Requests.Chat;
 using WuzApiClient.Models.Responses.Chat;

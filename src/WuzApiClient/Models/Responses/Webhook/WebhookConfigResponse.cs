@@ -1,7 +1,5 @@
 using System.Text.Json.Serialization;
 using WuzApiClient.Common.Enums;
-using WuzApiClient.Common.Serialization;
-using WuzApiClient.Common.Models;
 using WuzApiClient.Json;
 
 namespace WuzApiClient.Models.Responses.Webhook;

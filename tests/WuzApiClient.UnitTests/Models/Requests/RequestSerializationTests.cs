@@ -2,7 +2,6 @@ using WuzApiClient.Json;
 using System.Text.Json;
 using AwesomeAssertions;
 using WuzApiClient.Common.Enums;
-using WuzApiClient.Common.Serialization;
 using WuzApiClient.Common.Models;
 using WuzApiClient.Models.Requests.Admin;
 using WuzApiClient.Models.Requests.Chat;
