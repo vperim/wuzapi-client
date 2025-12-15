@@ -212,4 +212,40 @@ public sealed class WuzApiAdminClientTests : IAsyncLifetime
         sentRequest.Method.Should().Be(HttpMethod.Delete);
         sentRequest.Headers.GetValues("Authorization").Should().ContainSingle().Which.Should().Be(TestAdminToken);
     }
+
+    [Fact]
+    public async Task DeleteUserFullAsync_Success_ReturnsDeletedUserInfo()
+    {
+        // Arrange
+        var expectedResponse = new DeletedUserResponse
+        {
+            Id = "user123",
+            Name = "testuser",
+            Jid = null
+        };
+        this.mockHandler.EnqueueSuccessResponse(expectedResponse);
+
+        // Act
+        var result = await this.sut.DeleteUserFullAsync("user123");
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Id.Should().Be("user123");
+        result.Value.Name.Should().Be("testuser");
+    }
+
+    [Fact]
+    public async Task DeleteUserFullAsync_UsesFullEndpoint()
+    {
+        // Arrange
+        this.mockHandler.EnqueueSuccessResponse(new DeletedUserResponse { Id = "user123", Name = "test" });
+
+        // Act
+        await this.sut.DeleteUserFullAsync("user123");
+
+        // Assert
+        this.mockHandler.ReceivedRequests.Should().ContainSingle();
+        var sentRequest = this.mockHandler.ReceivedRequests[0];
+        sentRequest.RequestUri!.PathAndQuery.Should().Be("/admin/users/user123/full");
+    }
 }

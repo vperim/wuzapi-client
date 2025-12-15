@@ -83,4 +83,18 @@ public sealed class WuzApiAdminClient : IWuzApiAdminClient
             this.AdminToken,
             cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public Task<WuzResult<DeletedUserResponse>> DeleteUserFullAsync(
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        return this.httpClient.SendAsync<DeletedUserResponse>(
+            HttpMethod.Delete,
+            $"/admin/users/{userId}/full",
+            AuthHeader,
+            this.AdminToken,
+            null,
+            cancellationToken);
+    }
 }

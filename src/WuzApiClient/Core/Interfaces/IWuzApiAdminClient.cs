@@ -38,4 +38,14 @@ public interface IWuzApiAdminClient
     Task<WuzResult> DeleteUserAsync(
         string userId,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Deletes a user (instance) with full cleanup including logout, file deletion, and S3 cleanup.
+    /// </summary>
+    /// <param name="userId">The user ID to delete.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>WuzResult containing the deleted user information or error.</returns>
+    Task<WuzResult<DeletedUserResponse>> DeleteUserFullAsync(
+        string userId,
+        CancellationToken cancellationToken = default);
 }

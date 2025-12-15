@@ -66,4 +66,50 @@ public sealed class AdminManagementTests
             }
         }
     }
+
+    [Fact]
+    [TestTier(TestTiers.StateModifying, order: 21)]
+    [Trait("Category", "LiveApi")]
+    public async Task CreateUser_ThenDeleteFull_Succeeds()
+    {
+        // Arrange
+        var testUserName = $"integration-test-{Guid.NewGuid():N}";
+        var testUserToken = Guid.NewGuid().ToString("N");
+        var request = new CreateUserRequest
+        {
+            Name = testUserName,
+            Token = testUserToken
+        };
+
+        WuzResult<UserResponse> createResult = default;
+        var userCreated = false;
+
+        try
+        {
+            // Act - Create
+            createResult = await this.fixture.AdminClient.CreateUserAsync(request);
+            userCreated = createResult.IsSuccess;
+
+            // Assert - Created
+            createResult.IsSuccess.Should().BeTrue();
+            createResult.Value.Name.Should().Be(testUserName);
+
+            // Act - Delete Full
+            var deleteResult = await this.fixture.AdminClient.DeleteUserFullAsync(createResult.Value.Id);
+
+            // Assert - Deleted with user info returned
+            deleteResult.IsSuccess.Should().BeTrue();
+            deleteResult.Value.Id.Should().Be(createResult.Value.Id);
+            deleteResult.Value.Name.Should().Be(testUserName);
+            userCreated = false;
+        }
+        finally
+        {
+            // Cleanup on failure
+            if (userCreated)
+            {
+                await this.fixture.AdminClient.DeleteUserAsync(createResult.Value.Id);
+            }
+        }
+    }
 }
