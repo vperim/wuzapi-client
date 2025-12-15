@@ -2,7 +2,27 @@
 
 Reference for all 46 WhatsApp event types available in `WuzApiClient.RabbitMq`.
 
-> **Note:** The most commonly used event types (`MessageEventEnvelope`, `ReceiptEventEnvelope`, `PresenceEventEnvelope`, `GroupInfoEventEnvelope`) include detailed code examples below. For all other event types, see the [Complete Event Type Catalog](#complete-event-type-catalog).
+## Index
+
+- [Event Envelope Structure](#Event%20Envelope%20Structure)
+- [Commonly Used Events](#Commonly%20Used%20Events%20(Detailed%20Examples))
+  - [MessageEventEnvelope](#MessageEventEnvelope)
+  - [ReceiptEventEnvelope](#ReceiptEventEnvelope)
+  - [PresenceEventEnvelope](#PresenceEventEnvelope)
+  - [GroupInfoEventEnvelope](#GroupInfoEventEnvelope)
+- [Complete Event Type Catalog](#Complete%20Event%20Type%20Catalog)
+  - [Connection Events](#Connection%20Events)
+  - [Message Events](#Message%20Events)
+  - [Call Events](#Call%20Events)
+  - [Group Events](#Group%20Events)
+  - [Newsletter Events](#Newsletter%20Events)
+  - [Presence Events](#Presence%20Events)
+  - [Sync Events](#Sync%20Events)
+  - [Privacy & Settings Events](#Privacy%20&%20Settings%20Events)
+- [Handling Multiple Event Types](#Handling%20Multiple%20Event%20Types)
+- [Filtering Events in Handlers](#Filtering%20Events%20in%20Handlers)
+
+---
 
 ## Event Envelope Structure
 
@@ -466,10 +486,4 @@ public sealed class MessageHandler : IEventHandler<MessageEventEnvelope>
     }
 }
 ```
-
-## Next Steps
-
-- **Implement Handlers** → [Event Handling Guide](../usage/event-handling.md)
-- **HTTP Client Methods** → [HTTP Client Reference](http-client-reference.md)
-- **Extension Patterns** → [Extension Patterns Guide](../usage/extension-patterns.md)
 

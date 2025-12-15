@@ -4,7 +4,7 @@
 [![NuGet](https://img.shields.io/nuget/v/WuzApiClient.svg)](https://www.nuget.org/packages/WuzApiClient)
 [![License](https://img.shields.io/github/license/vperim/wuzapi-client)](LICENSE)
 
-> A .NET client library for WhatsApp operations via the WuzAPI gateway, featuring strongly-typed event handling and railway-oriented error handling.
+> A .NET client library for WhatsApp operations via the WuzAPI gateway, featuring strongly-typed event handling.
 
 ## 1. What is this?
 
@@ -20,7 +20,6 @@ The library uses `Microsoft.Extensions.*` for dependency injection, configuratio
 - **API Reference:** [docs/api/http-client-reference.md](docs/api/http-client-reference.md)
 - **Integration Testing:** [scripts/README.md](scripts/README.md)
 - **Event Dashboard:** [tools/WuzApiClient.EventDashboard/README.md](tools/WuzApiClient.EventDashboard/README.md) - Real-time event visualization tool
-- **Documentation Map:** [docs_map.md](docs_map.md)
 
 ## 3. Getting Started (Quick Start)
 
@@ -84,42 +83,15 @@ public sealed class WhatsAppService
 
 See [Getting Started](docs/intro/getting-started.md) for a full guide.
 
-## 4. Key Features
-
-- **Factory-First Multi-Account Design** – Create clients dynamically via `IWaClientFactory` with per-request tokens
-- **Clean REST API Client** – Send messages, manage contacts, groups, and channels via `IWaClient`
-- **Strongly-Typed Event Handling** – Process 44 WhatsApp event types with generic `IEventHandler<TEvent>`
-- **Railway-Oriented Error Handling** – Uses `WuzResult<T>` monad instead of exceptions for predictable error flows
-- **Microsoft.Extensions Integration** – Built on `Microsoft.Extensions.*` (DI, Options, HostedService, Logging)
-- **HttpClientFactory Integration** – Proper handler pooling with extensible pipeline (Polly, logging, etc.)
-- **Event Filtering Pipeline** – Filter events before processing with `IEventFilter`
-- **RabbitMQ Event Consumer** – Background service consumes WhatsApp events from message queue
-- **.NET Standard 2.0** – Broad compatibility across .NET platforms
-
-## 5. High-Level Architecture
+## 4. High-Level Architecture
 
 The library consists of two main components:
 
 1. **WuzApiClient** – HTTP client wrapping the asternic/wuzapi REST API for outbound WhatsApp operations (sending messages, managing contacts, etc.)
 2. **WuzApiClient.RabbitMq** – Event consumer that processes incoming WhatsApp events from a RabbitMQ queue
 
-The architecture follows clean separation of concerns:
-- **Factory Pattern** – `IWaClientFactory` and `IWuzApiAdminClientFactory` create clients with dynamic tokens
-- **Interfaces** define public contracts (`IWaClient`, `IWuzApiAdminClient`, `IEventHandler<T>`)
-- **Implementation** handles HTTP communication and RabbitMQ consumption
-- **Result Pattern** (`WuzResult<T>`) eliminates exception-based error handling
-- **Dependency Injection** via `Microsoft.Extensions.DependencyInjection`
-
-This library sits between your .NET application and the asternic/wuzapi gateway, which in turn communicates with WhatsApp servers.
-
-```
-Your .NET App → WuzApiClient → asternic/wuzapi Gateway → WhatsApp
-                       ↑
-                   RabbitMQ (events)
-```
-
 For more details, see the [Overview](docs/intro/overview.md).
 
-## 6. Documentation
+## 5. Documentation
 
 Full documentation is available in the [docs/](docs/) folder. See [docs_map.md](docs_map.md) for the full index.

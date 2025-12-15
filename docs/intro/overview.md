@@ -1,172 +1,82 @@
 # WuzAPI Client Overview
 
-WuzAPI Client is a .NET Standard 2.0 library that provides a type-safe interface for WhatsApp operations through the asternic/wuzapi gateway. It enables .NET applications to send messages, manage WhatsApp resources, and process incoming events.
-
-## What Problem Does It Solve?
-
-Integrating WhatsApp functionality into .NET applications typically requires:
-- Managing HTTP communication with WhatsApp gateways
-- Handling complex event payloads from WebSocket connections
-- Implementing error handling and retry logic
-- Processing incoming messages and events asynchronously
-
-WuzAPI Client abstracts these complexities, providing:
-- A clean, strongly-typed API for WhatsApp operations
-- Railway-oriented error handling (Result pattern) instead of exceptions
-- Automatic event deserialization to 44 strongly-typed event classes
-- Integration with `Microsoft.Extensions.*` (DI, logging, configuration)
+WuzAPI Client is a .NET Standard 2.0 library for WhatsApp operations via the [asternic/wuzapi](https://github.com/asternic/wuzapi) gateway.
 
 ## Core Components
 
-### 1. WuzApiClient (HTTP Client)
+### WuzApiClient (HTTP Client)
 
-The main client library for outbound WhatsApp operations:
+Outbound WhatsApp operations via REST API.
 
 ```csharp
 public interface IWaClient
 {
-    Task<WuzResult<SendMessageResponse>> SendTextMessageAsync(
-        Phone phone,
-        string message,
-        string? quotedId = null,
-        CancellationToken cancellationToken = default);
-    Task<WuzResult<ContactsResponse>> GetContactsAsync(
-        CancellationToken cancellationToken = default);
-    Task<WuzResult<GroupListResponse>> GetGroupsAsync(
-        CancellationToken cancellationToken = default);
-    // ... 45 additional methods
+    Task<WuzResult<SendMessageResponse>> SendTextMessageAsync(Phone phone, string message, ...);
+    Task<WuzResult<ContactsResponse>> GetContactsAsync(...);
+    Task<WuzResult<GroupListResponse>> GetGroupsAsync(...);
+    // ... 45+ methods
 }
 ```
 
-**Key Features:**
-- RESTful API wrapper for asternic/wuzapi gateway
-- Partial class architecture organized by feature area (Messages, Contacts, Groups, etc.)
+- Uses Result pattern instead of exceptions
 - Built on `Microsoft.Extensions.Http` with `IHttpClientFactory`
-- Returns `WuzResult<T>` for predictable error handling
+- Partial class architecture organized by feature area
 
-### 2. WuzApiClient.RabbitMq (Event Consumer)
+### WuzApiClient.RabbitMq (Event Consumer)
 
-Background service for processing incoming WhatsApp events from RabbitMQ:
+Background service for incoming WhatsApp events from RabbitMQ.
 
 ```csharp
-public interface IEventHandler<in TEvent>
-    where TEvent : WuzEvent
+public interface IEventHandler<in TEvent> where TEvent : WuzEvent
 {
     Task HandleAsync(TEvent evt, CancellationToken cancellationToken = default);
 }
 ```
 
-**Key Features:**
-- Consumes events from RabbitMQ queue
 - Dispatches to registered `IEventHandler<T>` implementations
-- Supports event filtering via `IEventFilter`
-- Configurable concurrency with `MaxConcurrentMessages`
-- Scoped DI per message for proper service lifetime management
+- Supports event filtering and configurable concurrency
+- Scoped DI per message
 
 ## System Context
 
-WuzAPI Client sits between .NET applications and the asternic/wuzapi gateway:
-
 ```mermaid
 graph TD
-    A[Your .NET App<br/>Consumer]
-    B[WuzApiClient<br/>HTTP Client + Event Consumer]
-    C[asternic/wuzapi<br/>WhatsApp Gateway]
-    D[WhatsApp Servers]
-    E[RabbitMQ<br/>Events]
-
-    A -->|IWaClient<br/>IEventHandler&lt;T&gt;| B
-    B -->|HTTP REST| C
-    C -->|WhatsApp Protocol| D
-    E -->|AMQP| B
-    C -.->|Publishes Events| E
-
-    style B fill:#e1f5ff,stroke:#0366d6,stroke-width:3px
-    style A fill:#f6f8fa,stroke:#586069
-    style C fill:#f6f8fa,stroke:#586069
-    style D fill:#f6f8fa,stroke:#586069
-    style E fill:#f6f8fa,stroke:#586069
+    A[Your .NET App] --> B[WuzApiClient]
+    B --> C[asternic/wuzapi]
+    C --> D[WhatsApp]
+    D -.->|events| E[RabbitMQ]
+    E -.-> B
 ```
 
 | Dependency | Required | Purpose |
 |------------|----------|---------|
-| asternic/wuzapi | Yes | WhatsApp gateway providing REST API and event publishing |
-| RabbitMQ | Only for events | Message broker for WhatsApp events (if using `WuzApiClient.RabbitMq`) |
-
-You **must** run an asternic/wuzapi gateway instance for this library to function. See [asternic/wuzapi documentation](https://github.com/asternic/wuzapi/blob/main/API.md) for gateway setup.
+| asternic/wuzapi | Yes | WhatsApp gateway |
+| RabbitMQ | For events only | Message broker |
 
 ## Target Framework
 
-WuzAPI Client targets **.NET Standard 2.0**, providing compatibility with:
-- .NET Core 2.0+
-- .NET Framework 4.6.1+
-- .NET 5+
+**.NET Standard 2.0** - Compatible with .NET Core 2.0+, .NET Framework 4.6.1+, .NET 5+.
 
-## Design Philosophy
+## Result Pattern
 
-### Railway-Oriented Programming
-
-Instead of throwing exceptions for business logic errors, the library uses the Result pattern:
+The library uses Result pattern instead of exceptions:
 
 ```csharp
-// Traditional approach (exceptions)
-try {
-    var response = await client.SendMessageAsync(...);
-} catch (HttpRequestException ex) {
-    // Handle network error
-}
-
-// WuzApiClient approach (Result pattern)
 var result = await client.SendTextMessageAsync(...);
-if (result.IsSuccess) {
+if (result.IsSuccess)
     // Use result.Value
-} else {
-    // Handle result.Error (WuzApiError with Code, Message, HttpStatusCode, etc.)
-}
+else
+    // Handle result.Error (WuzApiError with Code, Message, HttpStatusCode)
 ```
 
-This makes error handling explicit, predictable, and composable. See [Error Handling Guide](../usage/error-handling.md) for details.
-
-### Microsoft.Extensions Patterns
-
-The library uses standard `Microsoft.Extensions.*` patterns:
-
-- **Dependency Injection** – Register with `AddWuzApiClient()` (3 overloads: IConfiguration, IConfigurationSection, or Action\<WuzApiOptions>) and `AddWuzEvents()` (3 overloads: Action\<WuzEventOptions>, IConfiguration + sectionName, or Action\<WuzEventBuilder>)
-- **Options Pattern** – Configure via `IOptions<WuzApiOptions>` and `IOptions<WuzEventOptions>`
-- **Hosted Services** – RabbitMQ consumer runs as `IHostedService`
-- **Logging** – Integrated with `ILogger<T>` throughout
-
-
-### Clean Architecture
-
-The codebase maintains clear separation of concerns:
-
-| Layer | Responsibility | Examples |
-|-------|----------------|----------|
-| Interfaces | Public contracts | `IWaClient`, `IEventHandler<T>` |
-| Configuration | DI registration and options | `ServiceCollectionExtensions`, `WuzApiOptions` |
-| Implementation | HTTP/RabbitMQ logic | `WuzApiHttpClient`, `EventConsumer` |
-| Models | Data transfer objects | Request/Response DTOs, Event types |
-
-Consumer code depends only on interfaces, not concrete implementations.
-
-## When to Use This Library
+## When to Use
 
 **Good Fit:**
-- Building .NET applications requiring WhatsApp messaging
-- Processing WhatsApp events in real-time via RabbitMQ
-- Need type-safe API with strong IntelliSense support
-- Already using `Microsoft.Extensions.*` DI and Options patterns
-- Want predictable error handling without exceptions
+- .NET applications requiring WhatsApp messaging
+- Real-time event processing via RabbitMQ
+- Already using `Microsoft.Extensions.*` patterns
 
 **Not a Fit:**
-- Need direct WhatsApp Business API integration (this requires asternic/wuzapi gateway)
-- Building non-.NET applications (use asternic/wuzapi REST API directly)
-- Require webhook-based event delivery (this library uses RabbitMQ)
-
-## Next Steps
-
-- **New to the library?** → [Getting Started](getting-started.md)
-- **Ready to handle events?** → [Event Handling Guide](../usage/event-handling.md)
-- **Need configuration reference?** → [Configuration Guide](../usage/configuration.md)
-
+- Direct WhatsApp Business API (requires asternic/wuzapi gateway)
+- Non-.NET applications (use REST API directly)
+- Webhook-based event delivery (this library uses RabbitMQ)

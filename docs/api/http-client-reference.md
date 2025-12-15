@@ -2,6 +2,22 @@
 
 Reference for all methods available in `IWaClient` and `IWuzApiAdminClient`.
 
+## Index
+
+- [Session Management](#Session%20Management)
+- [Messaging](#Messaging)
+- [Chat Operations](#Chat%20Operations)
+- [User Information](#User%20Information)
+- [Group Management](#Group%20Management)
+- [Media Download](#Media%20Download)
+- [Webhook Configuration](#Webhook%20Configuration)
+- [HMAC Configuration](#HMAC%20Configuration)
+- [IWuzApiAdminClient](#IWuzApiAdminClient)
+- [Error Handling](#Error%20Handling)
+- [DataUri](#DataUri)
+
+---
+
 ## IWaClient
 
 Main interface for WhatsApp operations via the asternic/wuzapi gateway.
@@ -1256,60 +1272,7 @@ Task<WuzResult> DeleteUserAsync(
 
 ## Error Handling
 
-All methods return `WuzResult<T>` or `WuzResult`. Always check `IsSuccess` before accessing `Value`:
-
-```csharp
-var result = await client.SendTextMessageAsync(phone, message);
-
-if (result.IsSuccess)
-{
-    // Use result.Value
-    var messageId = result.Value.MessageId;
-}
-else
-{
-    // Handle error
-    _logger.LogError("Send failed: {Error}", result.Error.Message);
-
-    // Pattern match on error code
-    switch (result.Error.Code)
-    {
-        case WuzApiErrorCode.SessionNotReady:
-            _logger.LogWarning("Session not ready, please connect first");
-            break;
-        case WuzApiErrorCode.Unauthorized:
-            _logger.LogError("Invalid token");
-            break;
-        default:
-            _logger.LogError("Error code: {Code}", result.Error.Code);
-            break;
-    }
-}
-```
-
-## Error Codes
-
-Common `WuzApiErrorCode` values:
-
-| Code | Value | Description |
-|------|-------|-------------|
-| `Unknown` | 0 | Unknown error occurred |
-| `NetworkError` | 1 | Network connection error |
-| `Timeout` | 2 | Request timed out |
-| `DeserializationError` | 3 | Response deserialization failed |
-| `BadRequest` | 400 | Bad request - invalid parameters |
-| `Unauthorized` | 401 | Unauthorized - invalid token |
-| `Forbidden` | 403 | Forbidden - insufficient permissions |
-| `NotFound` | 404 | Resource not found |
-| `Conflict` | 409 | Conflict - resource already exists |
-| `RateLimitExceeded` | 429 | Rate limit exceeded |
-| `InternalServerError` | 500 | Internal server error |
-| `SessionNotReady` | 1000 | Session not ready (not connected/logged in) |
-| `AlreadyLoggedIn` | 1001 | Session already logged in |
-| `InvalidPhoneNumber` | 1002 | Invalid phone number format |
-| `InvalidFile` | 1003 | Invalid file format or size |
-| `InvalidRequest` | 1004 | Invalid request parameters |
-| `UnexpectedResponse` | 9999 | Unexpected response from API |
+See [Error Handling](../usage/error-handling.md) for Result pattern usage and error codes.
 
 ## Data Types
 
@@ -1506,11 +1469,4 @@ var restoredBytes = parsedUri.GetBytes();
 await File.WriteAllBytesAsync("restored.pdf", restoredBytes);
 ```
 
----
-
-## Next Steps
-
-- **Handle Events** → [Event Types Reference](event-types-reference.md)
-- **Error Handling** → [Error Handling Guide](../usage/error-handling.md)
-- **Getting Started** → [Getting Started Guide](../intro/getting-started.md)
 
