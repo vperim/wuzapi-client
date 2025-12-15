@@ -64,7 +64,7 @@ public sealed class TypedEventDispatcher<TEvent> : ITypedEventDispatcher
                         handler.GetType().Name,
                         typeof(TEvent).Name);
 
-                 
+
                 }
             }
 
