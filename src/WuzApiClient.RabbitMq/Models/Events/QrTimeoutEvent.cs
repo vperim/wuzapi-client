@@ -3,16 +3,11 @@ using System.Text.Json.Serialization;
 namespace WuzApiClient.RabbitMq.Models.Events;
 
 /// <summary>
-/// Event when the QR code pairing times out.
-/// Corresponds to whatsmeow events.QRTimeout.
-/// </summary>
-public sealed record QrTimeoutEventData;
-
-/// <summary>
 /// Envelope for QR timeout event.
+/// The event field is a plain string ("timeout") from whatsmeow, not a structured object.
 /// </summary>
-public sealed record QrTimeoutEventEnvelope : WhatsAppEventEnvelope<QrTimeoutEventData>
+public sealed record QrTimeoutEventEnvelope : WhatsAppEventEnvelope<string>
 {
     [JsonPropertyName("event")]
-    public override required QrTimeoutEventData Event { get; init; }
+    public override required string Event { get; init; }
 }
