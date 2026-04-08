@@ -98,12 +98,12 @@ public sealed partial class WaClient
     }
 
     /// <inheritdoc/>
-    public async Task<WuzResult<SendMessageResponse>> SendTemplateAsync(
-        SendTemplateRequest request,
+    public async Task<WuzResult<SendMessageResponse>> SendButtonsAsync(
+        SendButtonsRequest request,
         CancellationToken cancellationToken = default)
     {
         return await this.httpClient.PostAsync<SendMessageResponse>(
-            "/chat/send/template",
+            "/chat/send/buttons",
             "Token",
             this.UserToken,
             request,

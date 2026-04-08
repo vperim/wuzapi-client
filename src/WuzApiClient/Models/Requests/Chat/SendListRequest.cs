@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using WuzApiClient.Common.Models;
+using WuzApiClient.Models.Common;
 
 namespace WuzApiClient.Models.Requests.Chat;
 
@@ -49,6 +50,12 @@ public sealed class SendListRequest
     /// </summary>
     [JsonPropertyName("Id")]
     public string? QuotedId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the context information for quoted messages.
+    /// </summary>
+    [JsonPropertyName("ContextInfo")]
+    public ContextInfo? ContextInfo { get; set; }
 }
 
 /// <summary>

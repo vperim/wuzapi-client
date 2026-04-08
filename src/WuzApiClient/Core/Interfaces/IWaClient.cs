@@ -150,13 +150,13 @@ public interface IWaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sends a template message with buttons.
+    /// Sends an interactive button message.
     /// </summary>
-    /// <param name="request">The template message request.</param>
+    /// <param name="request">The button message request.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>WuzResult containing send response or error.</returns>
-    Task<WuzResult<SendMessageResponse>> SendTemplateAsync(
-        SendTemplateRequest request,
+    Task<WuzResult<SendMessageResponse>> SendButtonsAsync(
+        SendButtonsRequest request,
         CancellationToken cancellationToken = default);
 
     /// <summary>

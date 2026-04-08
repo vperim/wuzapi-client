@@ -246,6 +246,35 @@ public sealed class WuzApiClientMessagingTests : WuzApiClientTestBase
 
     #endregion
 
+    #region SendButtonsAsync Tests
+
+    [Fact]
+    public async Task SendButtonsAsync_Success_ReturnsSendMessageResponse()
+    {
+        // Arrange
+        var expectedResponse = new SendMessageResponse { Id = "btn-123", Timestamp = 1700000009 };
+        this.MockHandler.EnqueueSuccessResponse(expectedResponse);
+        var request = new SendButtonsRequest
+        {
+            Phone = TestPhone,
+            Body = "Choose an option",
+            Buttons =
+            [
+                new ButtonDefinition { Type = WuzApiClient.Models.Common.ButtonType.Reply, Title = "Yes", Id = "btn-yes" },
+                new ButtonDefinition { Type = WuzApiClient.Models.Common.ButtonType.Reply, Title = "No", Id = "btn-no" }
+            ]
+        };
+
+        // Act
+        var result = await this.Sut.SendButtonsAsync(request);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.Value.Id.Should().Be("btn-123");
+    }
+
+    #endregion
+
     #region EditMessageAsync Tests
 
     [Fact]
