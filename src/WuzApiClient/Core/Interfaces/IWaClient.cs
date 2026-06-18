@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WuzApiClient.Common.Results;
@@ -229,6 +230,52 @@ public interface IWaClient
     /// <returns>WuzResult indicating success or failure.</returns>
     Task<WuzResult> SetPresenceAsync(
         SetPresenceRequest request,
+        CancellationToken cancellationToken = default);
+
+    // ==================== MESSAGE HISTORY ====================
+
+    /// <summary>
+    /// Gets the persisted message history for a chat (GET /chat/history).
+    /// </summary>
+    /// <param name="chatJid">The chat JID to read history for.</param>
+    /// <param name="limit">Maximum number of messages to return (default 50).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>WuzResult containing the messages (newest-first as returned by the gateway) or error.</returns>
+    Task<WuzResult<HistoryMessageResponse[]>> GetChatHistoryAsync(
+        string chatJid,
+        int limit = 50,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the index of chats that have persisted history, keyed by user id
+    /// (GET /chat/history?chat_jid=index).
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>WuzResult containing the chat index or error.</returns>
+    Task<WuzResult<Dictionary<string, ChatHistoryIndexEntry[]>>> GetChatHistoryIndexAsync(
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Asks WhatsApp to backfill message history (GET /session/history). Messages arrive
+    /// asynchronously and become readable via <see cref="GetChatHistoryAsync"/>.
+    /// </summary>
+    /// <param name="count">Number of messages to request (default 50).</param>
+    /// <param name="chatJid">Optional chat JID to scope the sync to.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>WuzResult acknowledging the request or error.</returns>
+    Task<WuzResult<RequestHistorySyncResponse>> RequestHistorySyncAsync(
+        int count = 50,
+        string? chatJid = null,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Configures how many messages of history the gateway retains (POST /session/history).
+    /// </summary>
+    /// <param name="history">Retention limit (0 disables retention).</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>WuzResult containing the applied configuration or error.</returns>
+    Task<WuzResult<SetHistoryResponse>> SetHistoryAsync(
+        int history,
         CancellationToken cancellationToken = default);
 
     // ==================== USER INFORMATION ====================

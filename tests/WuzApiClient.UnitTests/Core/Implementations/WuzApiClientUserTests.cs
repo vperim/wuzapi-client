@@ -158,7 +158,7 @@ public sealed class WuzApiClientUserTests : WuzApiClientTestBase
     }
 
     [Fact]
-    public async Task GetAvatarAsync_IncludesPhoneInRequest()
+    public async Task GetAvatarAsync_PostsPhoneInBody()
     {
         // Arrange
         this.MockHandler.EnqueueSuccessResponse(new AvatarResponse());
@@ -166,11 +166,16 @@ public sealed class WuzApiClientUserTests : WuzApiClientTestBase
         // Act
         await this.Sut.GetAvatarAsync(TestPhone);
 
-        // Assert
+        // Assert: gateway exposes /user/avatar as POST with a {Phone, Preview} body.
         this.MockHandler.ReceivedRequests.Should().ContainSingle();
         var request = this.MockHandler.ReceivedRequests[0];
-        request.Method.Should().Be(HttpMethod.Get);
-        request.RequestUri!.PathAndQuery.Should().Be("/user/avatar?Phone=5511999999999");
+        request.Method.Should().Be(HttpMethod.Post);
+        request.RequestUri!.PathAndQuery.Should().Be("/user/avatar");
+
+        var content = this.MockHandler.ReceivedRequestContents[0];
+        content.Should().Contain("\"Phone\"");
+        content.Should().Contain("5511999999999");
+        content.Should().Contain("\"Preview\"");
     }
 
     #endregion

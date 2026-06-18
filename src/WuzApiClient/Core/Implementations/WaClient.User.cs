@@ -47,10 +47,15 @@ public sealed partial class WaClient
         Phone phone,
         CancellationToken cancellationToken = default)
     {
-        return await this.httpClient.GetAsync<AvatarResponse>(
-            $"/user/avatar?Phone={phone.Value}",
+        // The gateway exposes /user/avatar as POST with a JSON body ({Phone, Preview}),
+        // not GET with a query string. Preview=true returns the low-res picture.
+        var request = new GetAvatarRequest { Phone = phone, Preview = true };
+
+        return await this.httpClient.PostAsync<AvatarResponse>(
+            "/user/avatar",
             "Token",
             this.UserToken,
+            request,
             cancellationToken).ConfigureAwait(false);
     }
 
