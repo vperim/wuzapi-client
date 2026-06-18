@@ -30,29 +30,23 @@ internal static class ResponseParser
             using var doc = JsonDocument.Parse(rawContent);
             var root = doc.RootElement;
 
-            // The "data" envelope unwrap only applies to object roots. Some endpoints
-            // (e.g. GET /chat/history) return a bare JSON array, where TryGetProperty
-            // would throw — those are deserialized directly below.
-            if (root.ValueKind == JsonValueKind.Object)
+            // First, try to extract from "data" property (asternic/wuzapi pattern)
+            if (root.TryGetProperty("data", out var dataElement))
             {
-                // First, try to extract from "data" property (asternic/wuzapi pattern)
-                if (root.TryGetProperty("data", out var dataElement))
+                var data = dataElement.Deserialize<T>(jsonOptions);
+                if (data is not null)
                 {
-                    var data = dataElement.Deserialize<T>(jsonOptions);
-                    if (data is not null)
-                    {
-                        return WuzResult<T>.Success(data);
-                    }
+                    return WuzResult<T>.Success(data);
                 }
+            }
 
-                // Also try "Data" (PascalCase variant)
-                if (root.TryGetProperty("Data", out var dataElementPascal))
+            // Also try "Data" (PascalCase variant)
+            if (root.TryGetProperty("Data", out var dataElementPascal))
+            {
+                var data = dataElementPascal.Deserialize<T>(jsonOptions);
+                if (data is not null)
                 {
-                    var data = dataElementPascal.Deserialize<T>(jsonOptions);
-                    if (data is not null)
-                    {
-                        return WuzResult<T>.Success(data);
-                    }
+                    return WuzResult<T>.Success(data);
                 }
             }
 
